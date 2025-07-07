@@ -1,0 +1,75 @@
+name: Action Version
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.PAT }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Get commit message
+        id: get_commit_message
+        run: echo "message=$COMMIT_MESSAGE" >> $GITHUB_OUTPUT
+        env:
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+
+      - name: Bump version based on commit message
+        id: action_version
+        run: |
+          node -e '
+            const fs = require("fs");
+            const packageJsonPath = "./package.json";
+            const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
+            const version = packageJson.version.split(".");
+            let major = parseInt(version[0]);
+            let minor = parseInt(version[1]);
+            let patch = parseInt(version[2]);
+            let newVersion = packageJson.version;
+            let changed = false;
+
+            const commitMessage = "${{ steps.get_commit_message.outputs.message }}";
+
+            if (commitMessage.toLowerCase().includes("breaking change")) {
+              major++;
+              minor = 0;
+              patch = 0;
+              changed = true;
+            } else if (commitMessage.toLowerCase().startsWith("feat") || commitMessage.toLowerCase().startsWith("upgrade")) {
+              minor++;
+              patch = 0;
+              changed = true;
+            } else if (commitMessage.toLowerCase().startsWith("fix") || commitMessage.toLowerCase().startsWith("refactor")) {
+              patch++;
+              changed = true;
+            }
+
+            if (changed) {
+              newVersion = `${major}.${minor}.${patch}`;
+              packageJson.version = newVersion;
+              fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
+            }
+            
+            console.log(`::set-output name=new_version::${newVersion}`);
+            console.log(`::set-output name=changed::${changed}`);
+          '
+      
+      - name: Commit changes
+        if: steps.action_version.outputs.changed == 'true'
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add package.json
+          git commit -m "chore: Bump version to ${{ steps.action_version.outputs.new_version }}"
+          git push
