@@ -23,13 +23,13 @@ interface AuthContextType {
   }) => Promise<void>
   logout: () => void
   requestPasswordReset: (correo_electronico: string) => Promise<void>
-  confirmPasswordReset: (token: string, newPassword: string) => Promise<void>
+  confirmPasswordReset: (token: string, newPassword: string) => Promise<void> // Verificar si tienes esta ruta en backend
   deleteAccount: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_AUTH_URL || "https://montesion.me/auth"
+const API_BASE_URL = process.env.NEXT_PUBLIC_AUTH_URL || "https://montesion-backend.onrender.com/auth"
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null)
@@ -156,6 +156,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }
 
+  // Nota: Verifica que tengas implementada esta ruta en backend
   async function confirmPasswordReset(token: string, newPassword: string): Promise<void> {
     setLoading(true)
     setError(null)
@@ -184,7 +185,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setLoading(true)
     setError(null)
     try {
-      const response = await fetch(`${API_BASE_URL}/users/me`, {
+      const response = await fetch(`${API_BASE_URL}/delete`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` || "" },
       })

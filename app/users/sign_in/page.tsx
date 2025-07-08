@@ -11,7 +11,7 @@ import Link from "next/link"
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
-  const [email, setEmail] = useState("")
+  const [correo_electronico, setCorreoElectronico] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
@@ -24,30 +24,26 @@ export default function LoginPage() {
     }
   }, [user, authLoading, router])
 
-  // Validación simple de email
-  function isValidEmail(email: string) {
-    return /\S+@\S+\.\S+/.test(email)
-  }
+  const isValidEmail = (email: string) => /\S+@\S+\.\S+/.test(email)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
 
-    // Validaciones básicas antes de enviar
-    if (!email || !password) {
+    if (!correo_electronico || !password) {
       setError("Por favor, completa todos los campos")
       return
     }
 
-    if (!isValidEmail(email)) {
+    if (!isValidEmail(correo_electronico)) {
       setError("Por favor, ingresa un correo electrónico válido")
       return
     }
 
     setLoading(true)
     try {
-      await login(email, password)
-      // No necesitas router.push aquí, el useEffect lo manejará
+      await login(correo_electronico, password)
+      // La redirección la maneja el useEffect arriba
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message || "Error al iniciar sesión")
@@ -74,23 +70,23 @@ export default function LoginPage() {
 
         <form className="space-y-5" onSubmit={handleSubmit} noValidate>
           <div>
-            <Label htmlFor="email" className="text-sm font-medium">
+            <Label htmlFor="correo_electronico" className="text-sm font-medium">
               Correo electrónico
             </Label>
             <Input
-              id="email"
+              id="correo_electronico"
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={correo_electronico}
+              onChange={(e) => setCorreoElectronico(e.target.value)}
               placeholder="Correo electrónico"
               className={`${inputClass} border-gray-300 dark:border-neutral-600`}
               autoComplete="email"
               required
               disabled={loading}
-              aria-invalid={!!error && !isValidEmail(email)}
+              aria-invalid={!!error && !isValidEmail(correo_electronico)}
               aria-describedby="email-error"
             />
-            {error && !isValidEmail(email) && (
+            {error && !isValidEmail(correo_electronico) && (
               <p id="email-error" className="text-red-500 text-sm mt-1">
                 {error}
               </p>
@@ -136,7 +132,7 @@ export default function LoginPage() {
             )}
           </div>
 
-          {error && email && password && (
+          {error && correo_electronico && password && (
             <p className="text-red-500 text-sm text-center">{error}</p>
           )}
 

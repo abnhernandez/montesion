@@ -14,7 +14,7 @@ export default function RegisterPage() {
   const [formData, setFormData] = useState({
     nombre: "",
     apellido: "",
-    email: "",
+    correo_electronico: "",
     password: "",
   })
   const [error, setError] = useState("")
@@ -46,15 +46,15 @@ export default function RegisterPage() {
 
     const nombre = formData.nombre.trim()
     const apellido = formData.apellido.trim()
-    const email = formData.email.trim()
+    const correo_electronico = formData.correo_electronico.trim()
     const password = formData.password
 
-    if (!nombre || !apellido || !email || !password) {
+    if (!nombre || !apellido || !correo_electronico || !password) {
       setError("Todos los campos son obligatorios")
       return
     }
 
-    if (!isValidEmail(email)) {
+    if (!isValidEmail(correo_electronico)) {
       setError("Por favor, ingresa un correo electrónico válido")
       return
     }
@@ -69,7 +69,7 @@ export default function RegisterPage() {
       await register({
         nombre,
         apellido,
-        correo_electronico: email,
+        correo_electronico,
         password,
       })
       router.push("/dashboard")
@@ -93,7 +93,11 @@ export default function RegisterPage() {
   }
 
   const RuleItem = ({ valid, children }: { valid: boolean; children: React.ReactNode }) => (
-    <li className={`flex items-center gap-2 text-sm ${valid ? "text-green-600 dark:text-green-400" : "text-gray-500 dark:text-gray-400"}`}>
+    <li
+      className={`flex items-center gap-2 text-sm ${
+        valid ? "text-green-600 dark:text-green-400" : "text-gray-500 dark:text-gray-400"
+      }`}
+    >
       {valid ? <CheckCircle className="w-4 h-4" /> : <XCircle className="w-4 h-4" />}
       {children}
     </li>
@@ -102,9 +106,7 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen bg-background text-foreground transition-colors duration-300 flex items-center justify-center relative">
       <main className="w-full max-w-md px-4 space-y-7 z-10">
-        <h1 className="text-3xl font-semibold text-center tracking-tight drop-shadow-sm">
-          Regístrate
-        </h1>
+        <h1 className="text-3xl font-semibold text-center tracking-tight drop-shadow-sm">Regístrate</h1>
 
         {error && (
           <div
@@ -118,7 +120,10 @@ export default function RegisterPage() {
         <form className="space-y-5" onSubmit={handleSubmit} noValidate>
           <div className="lg:flex lg:gap-4 space-y-4 lg:space-y-0">
             <div className="lg:flex-1">
-              <Label htmlFor="nombre" className="text-sm font-semibold text-gray-700 dark:text-gray-200">
+              <Label
+                htmlFor="nombre"
+                className="text-sm font-semibold text-gray-700 dark:text-gray-200"
+              >
                 Nombre
               </Label>
               <Input
@@ -134,7 +139,10 @@ export default function RegisterPage() {
               />
             </div>
             <div className="lg:flex-1">
-              <Label htmlFor="apellido" className="text-sm font-semibold text-gray-700 dark:text-gray-200">
+              <Label
+                htmlFor="apellido"
+                className="text-sm font-semibold text-gray-700 dark:text-gray-200"
+              >
                 Apellido
               </Label>
               <Input
@@ -152,15 +160,18 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <Label htmlFor="email" className="text-sm font-semibold text-gray-700 dark:text-gray-200">
+            <Label
+              htmlFor="correo_electronico"
+              className="text-sm font-semibold text-gray-700 dark:text-gray-200"
+            >
               Correo electrónico
             </Label>
             <div className="relative">
               <Input
-                id="email"
+                id="correo_electronico"
                 type="email"
-                value={formData.email}
-                onChange={(e) => handleInputChange("email", e.target.value)}
+                value={formData.correo_electronico}
+                onChange={(e) => handleInputChange("correo_electronico", e.target.value)}
                 placeholder="Correo electrónico"
                 className={`mt-1 w-full px-3 py-3 border rounded-lg text-base placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-blue-300 focus:border-blue-400 dark:focus:ring-blue-600 dark:focus:border-blue-600 transition-all duration-150 bg-white dark:bg-neutral-900 ${
                   error.toLowerCase().includes("correo") || error.toLowerCase().includes("email")
@@ -170,7 +181,11 @@ export default function RegisterPage() {
                 required
                 disabled={loading}
                 aria-invalid={!!error && (error.toLowerCase().includes("correo") || error.toLowerCase().includes("email"))}
-                aria-describedby={error && (error.toLowerCase().includes("correo") || error.toLowerCase().includes("email")) ? "email-error" : undefined}
+                aria-describedby={
+                  error && (error.toLowerCase().includes("correo") || error.toLowerCase().includes("email"))
+                    ? "email-error"
+                    : undefined
+                }
               />
               {(error.toLowerCase().includes("correo") || error.toLowerCase().includes("email")) && (
                 <div
@@ -194,7 +209,10 @@ export default function RegisterPage() {
           </div>
 
           <div className="relative">
-            <Label htmlFor="password" className="text-sm font-semibold text-gray-700 dark:text-gray-200">
+            <Label
+              htmlFor="password"
+              className="text-sm font-semibold text-gray-700 dark:text-gray-200"
+            >
               Contraseña
             </Label>
             <div className="relative mt-1">
@@ -219,10 +237,14 @@ export default function RegisterPage() {
                 aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
                 disabled={loading}
               >
-                {showPassword ? <EyeOff className="h-5 w-5 text-blue-500 dark:text-blue-400" /> : <Eye className="h-5 w-5 text-blue-500 dark:text-blue-400" />}
+                {showPassword ? (
+                  <EyeOff className="h-5 w-5 text-blue-500 dark:text-blue-400" />
+                ) : (
+                  <Eye className="h-5 w-5 text-blue-500 dark:text-blue-400" />
+                )}
               </button>
 
-              {/* Tooltip flotante de reglas */}
+              {/* Tooltip reglas de contraseña */}
               {passwordFocused && (
                 <div
                   id="password-rules"
