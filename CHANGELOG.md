@@ -1,4 +1,4 @@
-# 🔄 Changelog - Monte Sion
+# 🔄 Registro de cambios - Monte Sion
 
 *Un registro completo de todos los cambios notables en este proyecto.*
 
