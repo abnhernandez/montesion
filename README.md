@@ -15,7 +15,7 @@ Una plataforma web moderna y completa para la Iglesia Cristiana Monte Sion, desa
 - **Animaciones Fluidas**: Implementadas con Framer Motion y GSAP
 - **Accesibilidad**: Cumple con estándares WCAG para inclusión digital
 
-### ⛪ **Funcionalidades de Iglesia**
+### ⛪ **Funcionalidades del sitio web**
 - **Sistema de Autenticación**: Registro, login y gestión de usuarios
 - **Localizador de Templos**: Mapa interactivo con Google Maps para encontrar ubicaciones
 - **Peticiones de Oración**: Sistema de envío y gestión de solicitudes espirituales
