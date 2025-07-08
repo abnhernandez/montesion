@@ -438,10 +438,8 @@ Cada paso incluye:
 - [ ] **Dashboard de Usuario** - Panel personalizado
 - [ ] **Sistema de Eventos** - Calendario y inscripciones
 - [ ] **Campus Online** - Plataforma de aprendizaje
-- [ ] **App Móvil** - React Native companion
 - [ ] **Notificaciones Push** - Alertas en tiempo real
-- [ ] **Chat en Vivo** - Soporte instantáneo
-- [ ] **Streaming en Vivo** - Transmisiones de servicios
+- [ ] **Streaming en Vivo** - Transmisiones de servicios con Apoyo del Software de YouVersion Church
 - [ ] **Donaciones Online** - Integración con pasarelas de pago
 
 ### **Mejoras Planificadas**
@@ -469,21 +467,18 @@ Cada paso incluye:
 
 ## 📞 Contacto y Soporte
 
-### **Iglesia Monte Sion**
-- **Dirección**: Cuicatlán #186, Col. Niños Héroes, Santa María Atzompa, 71222, Oaxaca, México
-- **Email**: ministeriomontesionoaxaca@gmail.com
-- **WhatsApp**: +52 55 8644 9993
-- **Instagram**: [@montesionoaxaca](https://instagram.com/montesionoaxaca)
-- **YouTube**: [@montesionoaxacatv](https://www.youtube.com/@montesionoaxacatv)
+
+- **Email**: abnerhernandez.x@gmail.com
 
 ### **Desarrollo Técnico**
 - **Issues**: Reportar bugs o solicitar features
 - **Discussions**: Preguntas y propuestas
-- **Email técnico**: root.montesion@gmail.com
+- **Email técnico**: abnerhernandez.x@gmail.com
 
 ## 📄 Licencia
 
-Este proyecto es propiedad de la Iglesia Cristiana Monte Sion. Todos los derechos reservados.
+Este proyecto es desarrollado y gestionado por Abner Daniel Hernández Ruiz, estudiante de Código Facilito como forma de demostrar lo aprendiendo en el Bootcamp de Redes e Infraestructura para Frontends.
+Todos los derechos reservados.
 
 ---
 
