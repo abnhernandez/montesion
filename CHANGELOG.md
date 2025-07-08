@@ -9,9 +9,9 @@
 ### ✨ Nuevas Características
 
 #### 🔐 Mejoras en Autenticación
-- **Reset de Contraseña Completo**: Sistema completo de recuperación de contraseña por email
+- **Reset de Contraseña Completo**: Sistema completo de recuperación de contraseña por email a nivel frontend, se trabaja para seguir mejorando la lógica de backend.
 - **Validación Avanzada**: Validación de contraseñas con reglas de seguridad estrictas
-- **Gestión de Cuentas**: Funcionalidad para eliminar cuentas de usuario
+- **Gestión de Cuentas**: Funcionalidad para eliminar cuentas de usuario, se trabaja para seguir mejorando la lógica de backend.
 - **Persistencia Mejorada**: Mejor manejo de sesiones y tokens JWT
 
 #### 🎨 Mejoras de UI/UX
@@ -313,169 +313,15 @@ monte-sion/
 4. **Deploy**: Production deployment con rollback automático
 5. **Monitor**: Health checks y metrics post-deployment
 
-### 🚀 Roadmap 2025
-
-#### Q1 2025
-- [ ] **Dashboard de Usuario Personalizado**
-  - Panel de control para usuarios registrados
-  - Historial de peticiones de oración
-  - Preferencias de notificaciones
-  - Estadísticas personales de participación
-
-- [ ] **Sistema de Eventos y Calendario**
-  - Calendario interactivo de eventos
-  - Sistema de registro a eventos
-  - Notificaciones automáticas de recordatorios
-  - Integración con calendarios externos (Google, Outlook)
-
-- [ ] **Mejoras en Performance y SEO**
-  - Implementación de ISR (Incremental Static Regeneration)
-  - Optimización avanzada de imágenes con WebP/AVIF
-  - Structured data completo para SEO
-  - Mejoras en Core Web Vitals
-
-- [ ] **PWA Completa**
-  - Funcionalidad offline robusta
-  - Push notifications implementadas
-  - Sincronización en background
-  - App store deployment (TWA)
-
-#### Q2 2025
-- [ ] **App Móvil Nativa (React Native)**
-  - App híbrida iOS/Android
-  - Funcionalidad offline completa
-  - Push notifications nativas
-  - Integración con calendarios móviles
-
-- [ ] **Sistema de Donaciones Online**
-  - Pasarela de pagos segura (Stripe/PayPal)
-  - Donaciones recurrentes
-  - Dashboard de donaciones para usuarios
-  - Reportes financieros automatizados
-
-- [ ] **Chat en Vivo con Pastores**
-  - Sistema de chat en tiempo real
-  - Horarios de disponibilidad
-  - Cola de atención organizada
-  - Historial de conversaciones
-
-- [ ] **Notificaciones Push Avanzadas**
-  - Segmentación de audiencia
-  - Personalización de contenido
-  - Scheduling automático
-  - A/B testing de notificaciones
-
-#### Q3 2025
-- [ ] **Plataforma de Cursos Online**
-  - LMS integrado para estudios bíblicos
-  - Video streaming optimizado
-  - Progreso de cursos tracking
-  - Certificaciones digitales
-
-- [ ] **Streaming en Vivo de Servicios**
-  - Transmisión en vivo de servicios
-  - Chat interactivo durante servicios
-  - Grabaciones automáticas
-  - Múltiples calidades de video
-
-- [ ] **Sistema de Grupos Pequeños**
-  - Gestión de grupos de conexión
-  - Registro automático a grupos
-  - Comunicación intra-grupo
-  - Recursos compartidos
-
-- [ ] **Dashboard Administrativo**
-  - Panel de control para líderes
-  - Analytics avanzados de la comunidad
-  - Gestión de contenido CMS
-  - Reportes automatizados
-
-#### Q4 2025
-- [ ] **Integración con Sistemas de Iglesia**
-  - API para sistemas de gestión eclesiástica
-  - Sincronización de datos de membresía
-  - Integración con sistemas de contabilidad
-  - Exportación de reportes
-
-- [ ] **Analytics Avanzados**
-  - Machine learning para insights
-  - Predicción de tendencias de participación
-  - Segmentación automática de audiencia
-  - ROI tracking de iniciativas
-
-- [ ] **Multi-idioma (i18n)**
-  - Soporte completo para español/inglés
-  - Localización cultural
-  - Content management multiidioma
-  - SEO internacional
-
-- [ ] **Offline Functionality Completa**
-  - Sincronización bi-direccional
-  - Conflict resolution automático
-  - Cache inteligente de contenido
-  - Experiencia offline rica
-
-### 🏆 Métricas de Éxito
-
-#### User Engagement (Objetivo Q1 2025)
-- **Monthly Active Users**: 1,000+
-- **Session Duration**: 3+ minutos promedio
-- **Return Rate**: 40%+ usuarios recurrentes
-- **Prayer Requests**: 50+ peticiones mensuales
-- **Event Registrations**: 20+ registros por evento
-
-#### Technical Performance (Mantenimiento Continuo)
-- **Lighthouse Score**: 95+ mantenido
-- **Uptime**: 99.9% SLA
-- **API Response Time**: < 200ms promedio
-- **Error Rate**: < 0.1%
-- **Security Score**: A+ en SSL Labs
-
-#### Community Growth (Objetivo 2025)
-- **Registered Users**: 500+ usuarios activos
-- **Geographic Reach**: 5+ ciudades
-- **Social Media Engagement**: 1,000+ seguidores
-- **Content Views**: 10,000+ vistas mensuales
-- **Feedback Score**: 4.5/5 promedio
-
-### 🤝 Reconocimientos
-
-#### Equipo de Desarrollo
-- **Lead Developer**: Desarrollador principal del sistema
-- **UI/UX Design**: Diseño de experiencia de usuario
-- **Backend Development**: Arquitectura de servicios
-- **DevOps Engineering**: Infraestructura y deployment
-- **Quality Assurance**: Testing y validación
-
-#### Comunidad Monte Sion
-- **Pastoral Team**: Visión y dirección espiritual
-- **Administrative Team**: Coordinación y gestión
-- **Volunteer Team**: Testing y feedback invaluable
-- **Community Members**: Feedback continuo y apoyo
-
-#### Open Source Community
-- **Next.js Team**: Framework extraordinario
-- **Vercel**: Platform de deployment excepcional
-- **Tailwind CSS**: Sistema de diseño flexible
-- **Shadcn/ui**: Componentes de alta calidad
-- **Contributors**: Todos los que han contribuido al proyecto
-
 ### 📧 Contacto y Soporte
 
 #### Para Desarrolladores
 - **GitHub Issues**: Reportes de bugs y feature requests
 - **Documentation**: Guías técnicas completas
-- **Community Discord**: Chat para desarrolladores
 - **Code Reviews**: Proceso de contribución abierto
-
-#### Para Usuarios
-- **Support Email**: support@montesion.me
-- **WhatsApp**: +52-951-XXX-XXXX
-- **Social Media**: @montesionoaxaca
-- **FAQ**: Preguntas frecuentes en el sitio
 
 ---
 
 **¡Gracias por ser parte de la comunidad Monte Sion! 🙏**
 
-*Este changelog se actualiza con cada release. Para sugerencias o reportes de bugs, por favor utiliza nuestros canales oficiales de comunicación.*
+Para sugerencias o reportes de bugs, por favor utiliza los issues de GitHub.*
