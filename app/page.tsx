@@ -497,7 +497,7 @@ export default function Page() {
 								animateBy="letters"
 							/>
 							<p className="text-lg text-muted-foreground text-center flex-1 flex items-center justify-center">
-								Somos una comunidad y familia de familias en la que eres bienvenid@, valorad@ y acompañad@ con amor ❤️ en Jesús 🙌🏻.
+								Somos una comunidad y una familia de familias en la que eres bienvenid@, valorad@ y acompañad@ con amor ❤️ en Jesús 🙌🏻.
 							</p>
 						</button>
 					</SpotlightCard>
