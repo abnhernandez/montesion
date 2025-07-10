@@ -539,10 +539,10 @@ const HeroDeclaracionDeFe = () => {
             Declaración de Fe
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-400 mb-6">
-            En MásVida creemos firmemente que cada persona es amada por Dios y
-            llamada a vivir una vida plena en Él. Nuestro fundamento es la
-            Palabra de Dios, la Biblia, que reconocemos como la única autoridad
-            suprema e inspirada para nuestras vidas.
+            En Monte Sion creemos firmemente que eres amad@ por Dios y
+            llamad@ a vivir una vida plena en Él. Nuestro fundamento es la
+            Palabra de Dios, la Biblia, que reconocemos como el manual perfecto para la vida, 
+            nuestra única autoridad suprema e inspirada para nuestras vidas.
           </p>
           <Button asChild variant="outline" className="rounded-full bg-transparent border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black">
             <Link href="#💖">
@@ -552,8 +552,8 @@ const HeroDeclaracionDeFe = () => {
         </div>
         <div className="md:w-1/2 flex justify-center items-center">
           {/* Placeholder for the circular text animation */}
-          <div className="w-48 h-48 rounded-full border-2 border-gray-400 dark:border-gray-500 flex items-center justify-center">
-            <p className="text-gray-500 dark:text-gray-400">creemos</p>
+          <div className="w-48 h-48 rounded-full border-gray-400 dark:border-gray-500 flex items-center justify-center">
+            <p className="text-gray-500 dark:text-gray-400">💕</p>
           </div>
         </div>
       </div>
