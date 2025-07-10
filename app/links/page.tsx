@@ -29,7 +29,7 @@ function useDynamicGradient(ref: React.RefObject<HTMLDivElement | null>) {
       const px = x / w, py = y / h;
       el.style.background = `
         radial-gradient(ellipse 120% 80% at ${px * 100}% ${py * 100}%,
-          #00d9ff99 0%, #490048cc 40%, #000000ee 90%
+          #000000ee 90%
         ),
         linear-gradient(120deg, #00ffaa66, #bf40bf66)
       `;
