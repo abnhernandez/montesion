@@ -76,4 +76,4 @@ jobs:
           git push
         env:
           # Usa el token integrado para tener permisos de push
-          GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.ACTION_VERSION }}
