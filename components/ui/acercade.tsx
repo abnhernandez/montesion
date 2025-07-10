@@ -51,7 +51,9 @@ export default function TestimonialSection() {
             <blockquote className="text-lg sm:text-xl leading-relaxed italic relative">
               <span className="absolute -left-4 -top-2 text-4xl text-blue-400 dark:text-blue-300 select-none">“</span>
               <span className="inline-block mr-2 align-middle text-blue-500 dark:text-blue-300"><MessageCircle size={32} /></span>
-              Somos una comunidad cristocéntrica apasionada por proclamar las buenas nuevas de Jesús. En Monte Sion, creemos en el poder transformador del Evangelio y en el amor que une a cada persona. Nuestro propósito es acompañarte, inspirarte y crecer juntos en fe, esperanza y servicio.
+              En Monte Sion, Jesús es nuestro centro y la razón de nuestra pasión.
+              Somos una comunidad cristocéntrica que desea caminar contigo de la mano, compartiendo las buenas nuevas de Su amor transformador. Aquí encontrarás un espacio donde tu vida importa, donde te acompañamos, te escuchamos y te apoyamos para crecer juntos en fe, esperanza y servicio.
+              Creemos que el poder del Evangelio cambia vidas y une corazones, y queremos que experimentes ese amor vivo que renueva y fortalece. En Monte Sion, no solo eres parte de una iglesia, sino de una familia que te acoge y camina contigo en cada paso.
               <span className="absolute -right-4 -bottom-2 text-4xl text-blue-400 dark:text-blue-300 select-none">”</span>
             </blockquote>
 
