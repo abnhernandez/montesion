@@ -99,10 +99,10 @@ const discipleshipSteps = [
 		title: "Nuevos Creyentes",
 		description: "Primeros pasos en la fe cristiana.",
 		details:
-			"Aprende sobre la salvación, el arrepentimiento y la vida cristiana en nuestras clases para nuevos creyentes.",
-		verse: "2 Corintios 5:17",
+			"Aprende sobre la salvación, el arrepentimiento y la vida cristiana.",
+		verse: "Proverbios 9:10 ",
 		verseText:
-			"De modo que si alguno está en Cristo, nueva criatura es; las cosas viejas pasaron; he aquí todas son hechas nuevas.",
+			"El comienzo de la sabiduría es el temor del SEÑOR; conocer al Santo es tener entendimiento."
 		verses: [
 			"2 Corintios 5:17",
 			"Juan 3:3",
@@ -115,8 +115,9 @@ const discipleshipSteps = [
 		title: "Bautismo en Agua",
 		description: "Un compromiso público con Cristo.",
 		details:
+			"De modo que si alguno está en Cristo, nueva criatura es; las cosas viejas pasaron; he aquí todas son hechas nuevas.",
 			"El bautismo simboliza tu decisión de seguir a Jesús y representa una nueva vida en Él.",
-		verse: "Romanos 6:4",
+		verse: "2 Corintios 5:17, Romanos 6:4",
 		verseText:
 			"Porque somos sepultados juntamente con él para muerte por el bautismo, a fin de que como Cristo resucitó de los muertos por la gloria del Padre, así también nosotros andemos en vida nueva.",
 		verses: [
@@ -129,9 +130,9 @@ const discipleshipSteps = [
 	{
 		step: "Paso 3",
 		title: "Fundamentos de la Fe",
-		description: "Crece en el conocimiento bíblico.",
+		description: "Crece en tu relación con el Creador, JESÚS 💕",
 		details:
-			"Descubre los principios fundamentales del cristianismo, incluyendo la oración, la Biblia y la comunión con Dios.",
+			"Oración, Biblia y comunión con Dios.",
 		verse: "Hebreos 6:1",
 		verseText:
 			"Por tanto, dejando ya los rudimentos de la doctrina de Cristo, vamos adelante a la perfección...",
@@ -248,7 +249,7 @@ export default function Page() {
 
 				<section className="w-full max-w-5xl mx-auto px-4 py-10 flex flex-col items-center justify-center">
 					<BlurText
-						text="¿Por qué unirte a nuestra iglesia?"
+						text="¿Por qué unirte a la iglesia?"
 						className="text-2xl md:text-3xl font-bold text-center mb-6"
 						animateBy="words"
 						direction="top"
@@ -274,17 +275,17 @@ export default function Page() {
 								{
 									icon: "🔍",
 									text: "Estudio Bíblico",
-									desc: "Oportunidades para profundizar en el conocimiento de las Escrituras y fortalecer nuestra fe."
+									desc: "Oportunidades para que puedas profundizar en el conocimiento de las Escrituras y fortalecer tu fe."
 								},
 								{
 									icon: "📖",
 									text: "Mensajes",
-									desc: "Enseñanzas inspiradoras basadas en la Palabra de Dios para nuestra vida diaria."
+									desc: "Enseñanzas basadas en la Palabra de Dios para tu vida diaria."
 								},
 								{
 									icon: "🤝",
 									text: "Grupos",
-									desc: "Grupos pequeños donde compartimos, oramos y crecemos en nuestra fe juntos."
+									desc: "Grupos pequeños donde puedes compartir, orar y crecer en tu fe junto a otros hermanos."
 								},
 								{
 									icon: "🌍",
@@ -541,7 +542,7 @@ export default function Page() {
 								animateBy="letters"
 							/>
 							<p className="text-lg text-muted-foreground text-center flex-1 flex items-center justify-center">
-								Cremos en el poder transformador de la fe en Jesús y en la esperanza para cada persona.
+								Creemos en el poder de Jesús para levantarte, sanarte y darte salvación. Sabemos que Dios tiene un propósito en tu vida.
 							</p>
 						</button>
 					</SpotlightCard>
@@ -561,7 +562,7 @@ export default function Page() {
 								animateBy="letters"
 							/>
 							<p className="text-lg text-muted-foreground text-center flex-1 flex items-center justify-center">
-								Somos una familia espiritual donde cada persona es bienvenida, valorada y acompañada.
+								Somos una comunidad y familia de familias en la que eres bienvenid@, valorad@ y acompañad@ con amor ❤️ en Jesús 🙌🏻.
 							</p>
 						</button>
 					</SpotlightCard>
@@ -581,7 +582,7 @@ export default function Page() {
 								animateBy="letters"
 							/>
 							<p className="text-lg text-muted-foreground text-center flex-1 flex items-center justify-center">
-								Servimos con amor y excelencia, impactando positivamente a nuestra ciudad y más allá.
+								Servimos a Jesús con todo, porque fuimos llamados a ir, amar y hacer discípulos. Queremos llevar Su esperanza a nuestra ciudad… y hasta lo último de la tierra 🌎.
 							</p>
 						</button>
 					</SpotlightCard>
@@ -601,7 +602,7 @@ export default function Page() {
 								animateBy="letters"
 							/>
 							<p className="text-lg text-muted-foreground text-center flex-1 flex items-center justify-center">
-								Descubre el regalo de la salvación y el nuevo comienzo en Cristo.
+								Jesús te ofrece salvación la cuál es un regalo, no por lo que haces, sino por lo que Él hizo. Acéptalo y empieza de nuevo.
 							</p>
 						</button>
 					</SpotlightCard>
@@ -610,7 +611,7 @@ export default function Page() {
 				<section className="w-full max-w-6xl mx-auto px-2 py-14 flex flex-col items-center">
 				<div className="w-full max-w-2xl mx-auto mb-6">
 					<h3 className="text-3xl font-semibold text-center mb-4 text-green-600">
-						Visítanos, ¡todos son bienvenidos!
+						Jesús te espera con los brazos abiertos… y nosotros también. ¡Visítanos, nos encantaría conocerte! ❤️
 					</h3>
     			</div>
 					<div className="flex-1 w-full h-[350px] rounded-3xl overflow-hidden shadow-2xl border border-border bg-background">
@@ -636,7 +637,7 @@ export default function Page() {
 								/>
 							)}
 						</div>
-						<div className="mt-2 text-sm text-center text-muted-foreground">{bibleModal.ref} en bible.com</div>
+						<div className="mt-2 text-sm text-center text-muted-foreground">{bibleModal.ref} en bible.com un proyecto de YouVersion 🙌🏻</div>
 					</div>
 				</div>
 			)}
