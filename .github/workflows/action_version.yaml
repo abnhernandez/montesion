@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write  # <--- Permite hacer push con GITHUB_TOKEN
+
 jobs:
   bump-version:
     runs-on: ubuntu-latest
@@ -57,7 +60,6 @@ jobs:
               fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
             }
 
-            // Escribe los outputs de manera compatible con GitHub Actions
             fs.appendFileSync(process.env.GITHUB_OUTPUT, `new_version=${newVersion}\n`);
             fs.appendFileSync(process.env.GITHUB_OUTPUT, `changed=${changed}\n`);
           '
@@ -72,3 +74,6 @@ jobs:
           git add package.json
           git commit -m "chore: Bump version to ${{ steps.action_version.outputs.new_version }}"
           git push
+        env:
+          # Usa el token integrado para tener permisos de push
+          GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
