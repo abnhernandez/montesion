@@ -20,7 +20,7 @@ const socialLinks = [
 ];
 
 // Gradiente dinámico con Tailwind + style dinámico (JS)
-function useDynamicGradient(ref: React.RefObject<HTMLDivElement>) {
+function useDynamicGradient(ref: React.RefObject<HTMLDivElement | null>) {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
@@ -65,7 +65,7 @@ function AnimatedAvatar() {
 }
 
 export default function LinksPage() {
-  const bgRef = useRef<HTMLDivElement>(null);
+  const bgRef = useRef<HTMLDivElement | null>(null);
   useDynamicGradient(bgRef);
 
   return (
