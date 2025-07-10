@@ -12,6 +12,29 @@ export default function HeroSection() {
 
   return (
     <div className="relative min-h-screen w-full flex flex-col justify-center items-center bg-background text-foreground overflow-hidden transition-colors duration-500">
+      {/* Blobs decorativos */}
+      <img
+        src="/assets/blob_bottom_left_973fc0f8fe.svg"
+        alt=""
+        className="pointer-events-none select-none absolute left-0 bottom-0 w-48 md:w-72 lg:w-96"
+        aria-hidden="true"
+        style={{ zIndex: 1 }}
+      />
+      <img
+        src="/assets/blob_bottom_right_09262cc692.svg"
+        alt=""
+        className="pointer-events-none select-none absolute right-0 bottom-0 w-40 md:w-60 lg:w-80"
+        aria-hidden="true"
+        style={{ zIndex: 1 }}
+      />
+      <img
+        src="/assets/blob_top_right_0c15bd8efb.svg"
+        alt=""
+        className="pointer-events-none select-none absolute right-0 top-0 w-32 md:w-52 lg:w-64"
+        aria-hidden="true"
+        style={{ zIndex: 1 }}
+      />
+
       {/* Fondo: video + overlay */}
       <div className="absolute top-0 left-0 w-full h-full -z-10">
         <video
@@ -53,7 +76,7 @@ export default function HeroSection() {
           >
             <Link href="/planifica-visita" aria-label="Programa tu visita" className="w-full">
               <motion.button
-                className="w-full bg-primary text-primary-foreground px-4 py-3 md:px-7 md:py-4 rounded-2xl font-bold text-base md:text-lg shadow-2xl flex items-center justify-center gap-2 md:gap-3 overflow-hidden relative focus:ring-2 focus:ring-primary min-h-[48px] md:min-h-[56px] ring-2 ring-primary/60 md:ring-4 md:ring-primary/70"
+                className="w-full bg-primary text-primary-foreground px-4 py-3 md:px-7 md:py-4 rounded-2xl font-bold text-base md:text-lg shadow-2xl flex items-center justify-center gap-2 md:gap-3 overflow-hidden"
                 whileHover={{ scale: 1.08, boxShadow: "0 0 0 12px rgba(59,130,246,0.25)" }}
                 whileTap={{ scale: 0.97 }}
                 animate={{
@@ -88,7 +111,7 @@ export default function HeroSection() {
           >
             <Link href="/experiencia" aria-label="Experiencia Monte Sion" className="w-full">
               <motion.button
-                className="w-full bg-background text-primary px-4 py-3 md:px-7 md:py-4 rounded-2xl font-bold text-base md:text-lg shadow-xl flex items-center justify-center gap-2 md:gap-3 overflow-hidden transition-all focus:ring-2 focus:ring-primary min-h-[48px] md:min-h-[56px] border border-primary"
+                className="w-full bg-background text-primary px-4 py-3 md:px-7 md:py-4 rounded-2xl font-bold text-base md:text-lg shadow-xl flex items-center justify-center gap-2 md:gap-3 overflow-hidden"
                 whileHover={{ scale: 1.08, boxShadow: "0 0 0 8px rgba(59,130,246,0.10)", backgroundColor: "#2563eb", color: "#fff" }}
                 whileTap={{ scale: 0.97 }}
                 animate={{
@@ -120,7 +143,7 @@ export default function HeroSection() {
       {/* Botón de contacto flotante estilo moderno con react-icons */}
       <div className="fixed bottom-6 right-6 z-30 flex flex-col items-end gap-3">
         <button
-          className="bg-primary text-primary-foreground rounded-full w-20 h-20 flex items-center justify-center shadow-4xl hover:bg-primary/90 active:bg-primary/80 transition-all outline-none focus:outline-none border-none text-4xl md:text-4xl p-4"
+          className="bg-primary text-primary-foreground rounded-full w-20 h-20 flex items-center justify-center shadow-4xl hover:bg-primary/90 active:bg-primary/80 transition-all outline-none focus:outline-2 focus:outline-primary"
           style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
           onClick={() => setShowContacts((v) => !v)}
           aria-label={showContacts ? "Cerrar menú de contacto" : "Abrir menú de contacto"}
@@ -141,15 +164,15 @@ export default function HeroSection() {
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
             className="flex flex-col gap-4 mb-2 p-4 rounded-3xl bg-background/90 shadow-2xl border border-border min-w-[200px] backdrop-blur-xl"
           >
-            <a href="https://wa.me/" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="flex items-center gap-4 px-4 py-3 rounded-2xl hover:bg-green-100 dark:hover:bg-green-900/30 transition-all group focus:ring-2 focus:ring-green-400 text-lg font-semibold text-green-700 dark:text-green-400">
+            <a href="https://wa.me/" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="flex items-center gap-4 px-4 py-3 rounded-2xl hover:bg-green-100 dark:hover:bg-green-900/30 transition-all group focus:ring-2 focus:ring-green-500">
               <FaWhatsapp className="text-2xl group-hover:scale-110 transition-transform" />
               WhatsApp
             </a>
-            <a href="https://m.me/" target="_blank" rel="noopener noreferrer" aria-label="Messenger" className="flex items-center gap-4 px-4 py-3 rounded-2xl hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-all group focus:ring-2 focus:ring-blue-400 text-lg font-semibold text-blue-700 dark:text-blue-400">
+            <a href="https://m.me/" target="_blank" rel="noopener noreferrer" aria-label="Messenger" className="flex items-center gap-4 px-4 py-3 rounded-2xl hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-all group focus:ring-2 focus:ring-blue-500">
               <FaFacebookMessenger className="text-2xl group-hover:scale-110 transition-transform" />
               Messenger
             </a>
-            <a href="tel:+123456789" aria-label="Llamar" className="flex items-center gap-4 px-4 py-3 rounded-2xl hover:bg-gray-100 dark:hover:bg-gray-900/30 transition-all group focus:ring-2 focus:ring-gray-400 text-lg font-semibold text-gray-700 dark:text-gray-200">
+            <a href="tel:+123456789" aria-label="Llamar" className="flex items-center gap-4 px-4 py-3 rounded-2xl hover:bg-gray-100 dark:hover:bg-gray-900/30 transition-all group focus:ring-2 focus:ring-gray-500">
               <FaPhoneAlt className="text-2xl group-hover:scale-110 transition-transform" />
               Llamar
             </a>
