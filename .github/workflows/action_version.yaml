@@ -21,9 +21,7 @@ jobs:
 
       - name: Get commit message
         id: get_commit_message
-        run: echo "message=$COMMIT_MESSAGE" >> $GITHUB_OUTPUT
-        env:
-          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+        run: echo "message=${{ github.event.head_commit.message }}" >> $GITHUB_OUTPUT
 
       - name: Bump version based on commit message
         id: action_version
@@ -39,18 +37,18 @@ jobs:
             let newVersion = packageJson.version;
             let changed = false;
 
-            const commitMessage = "${{ steps.get_commit_message.outputs.message }}";
+            const commitMessage = process.env.COMMIT_MESSAGE;
 
-            if (commitMessage.toLowerCase().includes("breaking change")) {
+            if (commitMessage && commitMessage.toLowerCase().includes("breaking change")) {
               major++;
               minor = 0;
               patch = 0;
               changed = true;
-            } else if (commitMessage.toLowerCase().startsWith("feat") || commitMessage.toLowerCase().startsWith("upgrade")) {
+            } else if (commitMessage && (commitMessage.toLowerCase().startsWith("feat") || commitMessage.toLowerCase().startsWith("upgrade"))) {
               minor++;
               patch = 0;
               changed = true;
-            } else if (commitMessage.toLowerCase().startsWith("fix") || commitMessage.toLowerCase().startsWith("refactor")) {
+            } else if (commitMessage && (commitMessage.toLowerCase().startsWith("fix") || commitMessage.toLowerCase().startsWith("refactor"))) {
               patch++;
               changed = true;
             }
@@ -60,10 +58,13 @@ jobs:
               packageJson.version = newVersion;
               fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
             }
-            
-            console.log(`::set-output name=new_version::${newVersion}`);
-            console.log(`::set-output name=changed::${changed}`);
+
+            // Escribe los outputs de manera compatible con GitHub Actions
+            fs.appendFileSync(process.env.GITHUB_OUTPUT, `new_version=${newVersion}\n`);
+            fs.appendFileSync(process.env.GITHUB_OUTPUT, `changed=${changed}\n`);
           '
+        env:
+          COMMIT_MESSAGE: ${{ steps.get_commit_message.outputs.message }}
       
       - name: Commit changes
         if: steps.action_version.outputs.changed == 'true'
