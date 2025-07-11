@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Handshake, Mail } from "lucide-react";
-import { FaWhatsapp, FaFacebookMessenger, FaPhoneAlt, FaComments, FaTimes } from "react-icons/fa";
+import { FaWhatsapp, FaPhoneAlt, FaComments, FaTimes } from "react-icons/fa";
 import CarrouselLetrasMonteSion from '@/components/ui/AnimationCarruselLetras';
 import { useState } from "react";
 
@@ -35,32 +35,16 @@ export default function HeroSection() {
         style={{ zIndex: 1 }}
       />
 
-      {/* Fondo: video + overlay */}
-      <div className="absolute top-0 left-0 w-full h-full -z-10">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="w-full h-full object-cover opacity-60"
-        >
-          <source src="/assets/promoapp.webm" type="video/webm" />
-          <source src="/assets/promoapp.mp4" type="video/mp4" />
-          Tu navegador no soporta el elemento de video.
-        </video>
-        <div className="absolute inset-0 bg-black/70 dark:bg-black/80" />
-      </div>
-
       {/* Contenido principal */}
       <main className="relative z-10 w-full flex flex-col items-center justify-center px-4 py-12 gap-8 max-w-2xl mx-auto">
-        {/* Marquee animado: nombre iglesia */}
-        <div className="w-full flex justify-center mb-2">
-          <CarrouselLetrasMonteSion />
-        </div>
         {/* Mensaje de bienvenida */}
         <h1 className="text-3xl md:text-5xl font-extrabold uppercase tracking-tight text-foreground text-center leading-tight drop-shadow-lg mb-2">
           Bienvenido a la iglesia
         </h1>
+        {/* Marquee animado: nombre iglesia */}
+        <div className="w-full flex justify-center mb-2">
+          <CarrouselLetrasMonteSion />
+        </div>
         {/* Versículo */}
         <p className="text-base md:text-lg text-muted-foreground font-medium text-center max-w-md mx-auto drop-shadow italic mb-2">
           Jesús te dice: Venid en pos de mí, y os haré pescadores de hombres. Mat. 11:19
@@ -164,15 +148,11 @@ export default function HeroSection() {
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
             className="flex flex-col gap-4 mb-2 p-4 rounded-3xl bg-background/90 shadow-2xl border border-border min-w-[200px] backdrop-blur-xl"
           >
-            <a href="https://wa.me/" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="flex items-center gap-4 px-4 py-3 rounded-2xl hover:bg-green-100 dark:hover:bg-green-900/30 transition-all group focus:ring-2 focus:ring-green-500">
+            <a href="https://bit.ly/3NFICPy" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="flex items-center gap-4 px-4 py-3 rounded-2xl hover:bg-green-100 dark:hover:bg-green-900/30 transition-all group focus:ring-2 focus:ring-green-500">
               <FaWhatsapp className="text-2xl group-hover:scale-110 transition-transform" />
               WhatsApp
             </a>
-            <a href="https://m.me/" target="_blank" rel="noopener noreferrer" aria-label="Messenger" className="flex items-center gap-4 px-4 py-3 rounded-2xl hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-all group focus:ring-2 focus:ring-blue-500">
-              <FaFacebookMessenger className="text-2xl group-hover:scale-110 transition-transform" />
-              Messenger
-            </a>
-            <a href="tel:+123456789" aria-label="Llamar" className="flex items-center gap-4 px-4 py-3 rounded-2xl hover:bg-gray-100 dark:hover:bg-gray-900/30 transition-all group focus:ring-2 focus:ring-gray-500">
+            <a href="tel:9512091644" aria-label="Llamar" className="flex items-center gap-4 px-4 py-3 rounded-2xl hover:bg-gray-100 dark:hover:bg-gray-900/30 transition-all group focus:ring-2 focus:ring-gray-500">
               <FaPhoneAlt className="text-2xl group-hover:scale-110 transition-transform" />
               Llamar
             </a>
