@@ -3,9 +3,9 @@
 import { motion } from 'framer-motion';
 import Head from 'next/head';
 import { FaWhatsapp, FaInstagram, FaYoutube } from 'react-icons/fa';
+import { Sparkles } from 'lucide-react';
 
 export default function Home() {
-  // Mensaje prellenado para WhatsApp
   const whatsappMsg = encodeURIComponent(
     "¡Hola! 🙌 Me gustaría saber más sobre la comunidad Monte Sion y cómo puedo participar. ✨🙏"
   );
@@ -48,7 +48,6 @@ export default function Home() {
           className="flex items-center justify-center w-12 h-12 rounded-full bg-white/10 text-green-500 hover:text-green-600 hover:bg-green-50/60 hover:shadow-lg hover:scale-110 transition-all duration-200"
           title="WhatsApp"
         >
-          {/* WhatsApp Icon */}
           <FaWhatsapp size={28} />
         </a>
         <a
@@ -78,57 +77,28 @@ export default function Home() {
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 text-green-500 hover:text-green-600 hover:bg-green-50/60 active:scale-110 transition-all duration-200"
+            className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 text-green-500 hover:text-green-600 hover:bg-green-50/60 hover:shadow-lg hover:scale-110 transition-all duration-200"
             title="WhatsApp"
           >
-            <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M20.52 3.48A12 12 0 0 0 3.48 20.52l-1.32 4.84a1 1 0 0 0 1.22 1.22l4.84-1.32A12 12 0 1 0 20.52 3.48ZM12 22a10 10 0 1 1 0-20 10 10 0 0 1 0 20Zm5.2-7.19c-.27-.14-1.61-.79-1.86-.88-.25-.09-.43-.13-.61.13s-.7.87-.86 1.05c-.16.18-.32.2-.59.07-.27-.14-1.11-.41-2.12-1.31a7.99 7.99 0 0 1-1.48-1.84c-.15-.25-.02-.39.11-.53.12-.12.27-.32.4-.48.13-.16.18-.27.27-.45.09-.18.05-.34-.02-.48-.07-.14-.61-1.48-.83-2.02-.22-.53-.45-.46-.61-.47-.16-.01-.34-.01-.52-.01-.18 0-.47.07-.72.33-.25.27-.96.93-.96 2.26 0 1.33.98 2.62 1.12 2.8.14.18 1.93 2.95 4.68 3.7.49.13.87.21 1.16.27.49.08.93.07 1.28.04.39-.04 1.21-.5 1.38-.98.17-.49.17-.91.12-.99-.05-.08-.22-.13-.48-.26Z"/></svg>
+            <FaWhatsapp size={24} />
           </a>
           <a
             href="https://instagram.com/montesionoaxaca"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 text-pink-500 hover:text-pink-600 hover:bg-pink-50/60 active:scale-110 transition-all duration-200"
+            className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 text-pink-500 hover:text-pink-600 hover:bg-pink-50/60 hover:shadow-lg hover:scale-110 transition-all duration-200"
             title="Instagram"
           >
             <FaInstagram size={24} />
           </a>
           <a
-            href="https://www.youtube.com/@montesionoaxatv/shorts"
+            href="https://www.youtube.com/@montesionoaxacatv"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 text-red-500 hover:text-red-600 hover:bg-red-50/60 active:scale-110 transition-all duration-200"
+            className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 text-red-500 hover:text-red-600 hover:bg-red-50/60 hover:shadow-lg hover:scale-110 transition-all duration-200"
             title="YouTube"
           >
             <FaYoutube size={24} />
-          </a>
-          <a
-            href="https://x.com/OaxacaSion33110"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 text-gray-700 dark:text-gray-200 hover:text-[#831111] hover:bg-gray-100/60 active:scale-110 transition-all duration-200"
-            title="X"
-          >
-            <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M17.53 3H21.5l-7.19 8.21L22.5 21h-6.56l-5.18-6.13L4.47 21H.5l7.61-8.7L1.5 3h6.69l4.7 5.56L17.53 3Zm-1.06 15h2.08l-5.61-6.65-2.37 2.73L16.47 18ZM4.91 5l5.62 6.66L18.38 5h-2.1l-3.74 4.31L7.09 5H4.91Zm-1.41 12h2.13l3.15-3.64-1.97-2.33L3.5 17ZM12 13.08l1.13-1.31L19.56 19H21l-5.78-6.67L21 5h-2.07l-3.75 4.31L7.13 5H5.56l5.85 6.66L3.5 19h2.12l6.38-6.92Z"/></svg>
-          </a>
-          <a
-            href="https://join.slack.com/t/montesionoaxaca/shared_invite/zt-1xyz12345-abcdefg"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 text-purple-500 hover:text-purple-700 hover:bg-purple-50/60 active:scale-110 transition-all duration-200"
-            title="Slack"
-          >
-            <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M5.1 15.9a2.1 2.1 0 1 1-2.1-2.1h2.1v2.1Zm1.05 0a2.1 2.1 0 1 1 4.2 0v5.1a2.1 2.1 0 1 1-4.2 0v-5.1Zm2.1-7.95A2.1 2.1 0 1 1 10.35 5.1v2.1h-2.1Zm0 1.05a2.1 2.1 0 1 1 0 4.2H3.15a2.1 2.1 0 1 1 0-4.2h5.1Zm7.95 2.1a2.1 2.1 0 1 1 2.1-2.1v2.1h-2.1Zm-1.05 0a2.1 2.1 0 1 1 0 4.2h-5.1a2.1 2.1 0 1 1 0-4.2h5.1ZM19.8 15.9a2.1 2.1 0 1 1-2.1 2.1v-2.1h2.1Zm0-1.05a2.1 2.1 0 1 1 0-4.2h-5.1a2.1 2.1 0 1 1 0 4.2h5.1Z" /></svg>
-          </a>
-          <a
-            href="/auth"
-            className="flex flex-col items-center gap-0.5 text-xs font-semibold tracking-widest text-blue-600 hover:text-blue-800 transition-colors select-none w-full"
-            aria-label="Únete a nuestra comunidad"
-            style={{ minHeight: 32 }}
-          >
-            <svg className="w-5 h-5 mb-0.5 animate-bounce text-blue-600 group-hover:text-blue-800 transition-colors" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5.59 7.41L11 15l-1.41-1.41L12.17 12l-3.58-3.59L9 7l5 5z" />
-            </svg>
-            <span className="leading-tight text-center">Únete<br />comunidad</span>
           </a>
         </div>
       </div>
@@ -143,16 +113,6 @@ export default function Home() {
           transition={{ duration: 0.8, ease: 'easeOut' }}
           className="w-full max-w-xl mx-auto rounded-3xl bg-card shadow-2xl p-6 sm:p-10 flex flex-col items-center text-center gap-6 border border-border backdrop-blur-md"
         >
-          <motion.div
-            initial={{ rotate: 0 }}
-            animate={{ rotate: [0, 10, -10, 0] }}
-            transition={{ repeat: Infinity, duration: 2 }}
-            className="text-primary mb-2"
-            aria-hidden="true"
-          >
-            {/* <Sparkles size={40} /> */}
-          </motion.div>
-
           <motion.h1
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -188,6 +148,9 @@ export default function Home() {
           </motion.a>
         </motion.section>
       </main>
+      <div className="fixed bottom-4 right-4 z-30 text-primary/70">
+          <Sparkles size={32} />
+      </div>
     </>
   );
 }
