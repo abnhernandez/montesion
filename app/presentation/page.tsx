@@ -45,7 +45,7 @@ export default function Home() {
           href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-green-500 hover:text-green-600 transition-transform duration-200 hover:scale-125"
+          className="flex items-center justify-center w-12 h-12 rounded-full bg-white/10 text-green-500 hover:text-green-600 hover:bg-green-50/60 hover:shadow-lg hover:scale-110 transition-all duration-200"
           title="WhatsApp"
         >
           {/* WhatsApp Icon */}
@@ -55,7 +55,7 @@ export default function Home() {
           href="https://instagram.com/montesionoaxaca"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-pink-500 hover:text-pink-600 transition-transform duration-200 hover:scale-125"
+          className="flex items-center justify-center w-12 h-12 rounded-full bg-white/10 text-pink-500 hover:text-pink-600 hover:bg-pink-50/60 hover:shadow-lg hover:scale-110 transition-all duration-200"
           title="Instagram"
         >
           <FaInstagram size={28} />
@@ -64,7 +64,7 @@ export default function Home() {
           href="https://www.youtube.com/@montesionoaxatv/shorts"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-red-500 hover:text-red-600 transition-transform duration-200 hover:scale-125"
+          className="flex items-center justify-center w-12 h-12 rounded-full bg-white/10 text-red-500 hover:text-red-600 hover:bg-red-50/60 hover:shadow-lg hover:scale-110 transition-all duration-200"
           title="YouTube"
         >
           <FaYoutube size={28} />
@@ -73,7 +73,7 @@ export default function Home() {
           href="https://x.com/OaxacaSion33110"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-gray-700 dark:text-gray-200 hover:text-[#831111] transition-transform duration-200 hover:scale-125"
+          className="flex items-center justify-center w-12 h-12 rounded-full bg-white/10 text-gray-700 dark:text-gray-200 hover:text-[#831111] hover:bg-gray-100/60 hover:shadow-lg hover:scale-110 transition-all duration-200"
           title="X"
         >
           {/* X Icon */}
@@ -83,7 +83,7 @@ export default function Home() {
           href="https://join.slack.com/t/montesionoaxaca/shared_invite/zt-1xyz12345-abcdefg"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-purple-500 hover:text-purple-700 transition-transform duration-200 hover:scale-125"
+          className="flex items-center justify-center w-12 h-12 rounded-full bg-white/10 text-purple-500 hover:text-purple-700 hover:bg-purple-50/60 hover:shadow-lg hover:scale-110 transition-all duration-200"
           title="Slack"
         >
           {/* Slack Icon */}
@@ -109,7 +109,7 @@ export default function Home() {
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-green-500 hover:text-green-600 transition-transform duration-200 active:scale-110"
+            className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 text-green-500 hover:text-green-600 hover:bg-green-50/60 active:scale-110 transition-all duration-200"
             title="WhatsApp"
           >
             <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M20.52 3.48A12 12 0 0 0 3.48 20.52l-1.32 4.84a1 1 0 0 0 1.22 1.22l4.84-1.32A12 12 0 1 0 20.52 3.48ZM12 22a10 10 0 1 1 0-20 10 10 0 0 1 0 20Zm5.2-7.19c-.27-.14-1.61-.79-1.86-.88-.25-.09-.43-.13-.61.13s-.7.87-.86 1.05c-.16.18-.32.2-.59.07-.27-.14-1.11-.41-2.12-1.31a7.99 7.99 0 0 1-1.48-1.84c-.15-.25-.02-.39.11-.53.12-.12.27-.32.4-.48.13-.16.18-.27.27-.45.09-.18.05-.34-.02-.48-.07-.14-.61-1.48-.83-2.02-.22-.53-.45-.46-.61-.47-.16-.01-.34-.01-.52-.01-.18 0-.47.07-.72.33-.25.27-.96.93-.96 2.26 0 1.33.98 2.62 1.12 2.8.14.18 1.93 2.95 4.68 3.7.49.13.87.21 1.16.27.49.08.93.07 1.28.04.39-.04 1.21-.5 1.38-.98.17-.49.17-.91.12-.99-.05-.08-.22-.13-.48-.26Z"/></svg>
@@ -118,7 +118,7 @@ export default function Home() {
             href="https://instagram.com/montesionoaxaca"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-pink-500 hover:text-pink-600 transition-transform duration-200 active:scale-110"
+            className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 text-pink-500 hover:text-pink-600 hover:bg-pink-50/60 active:scale-110 transition-all duration-200"
             title="Instagram"
           >
             <FaInstagram size={24} />
@@ -127,7 +127,7 @@ export default function Home() {
             href="https://www.youtube.com/@montesionoaxatv/shorts"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-red-500 hover:text-red-600 transition-transform duration-200 active:scale-110"
+            className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 text-red-500 hover:text-red-600 hover:bg-red-50/60 active:scale-110 transition-all duration-200"
             title="YouTube"
           >
             <FaYoutube size={24} />
@@ -136,7 +136,7 @@ export default function Home() {
             href="https://x.com/OaxacaSion33110"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-gray-700 dark:text-gray-200 hover:text-[#831111] transition-transform duration-200 active:scale-110"
+            className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 text-gray-700 dark:text-gray-200 hover:text-[#831111] hover:bg-gray-100/60 active:scale-110 transition-all duration-200"
             title="X"
           >
             <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M17.53 3H21.5l-7.19 8.21L22.5 21h-6.56l-5.18-6.13L4.47 21H.5l7.61-8.7L1.5 3h6.69l4.7 5.56L17.53 3Zm-1.06 15h2.08l-5.61-6.65-2.37 2.73L16.47 18ZM4.91 5l5.62 6.66L18.38 5h-2.1l-3.74 4.31L7.09 5H4.91Zm-1.41 12h2.13l3.15-3.64-1.97-2.33L3.5 17ZM12 13.08l1.13-1.31L19.56 19H21l-5.78-6.67L21 5h-2.07l-3.75 4.31L7.13 5H5.56l5.85 6.66L3.5 19h2.12l6.38-6.92Z"/></svg>
@@ -145,7 +145,7 @@ export default function Home() {
             href="https://join.slack.com/t/montesionoaxaca/shared_invite/zt-1xyz12345-abcdefg"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-purple-500 hover:text-purple-700 transition-transform duration-200 active:scale-110"
+            className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 text-purple-500 hover:text-purple-700 hover:bg-purple-50/60 active:scale-110 transition-all duration-200"
             title="Slack"
           >
             <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M5.1 15.9a2.1 2.1 0 1 1-2.1-2.1h2.1v2.1Zm1.05 0a2.1 2.1 0 1 1 4.2 0v5.1a2.1 2.1 0 1 1-4.2 0v-5.1Zm2.1-7.95A2.1 2.1 0 1 1 10.35 5.1v2.1h-2.1Zm0 1.05a2.1 2.1 0 1 1 0 4.2H3.15a2.1 2.1 0 1 1 0-4.2h5.1Zm7.95 2.1a2.1 2.1 0 1 1 2.1-2.1v2.1h-2.1Zm-1.05 0a2.1 2.1 0 1 1 0 4.2h-5.1a2.1 2.1 0 1 1 0-4.2h5.1ZM19.8 15.9a2.1 2.1 0 1 1-2.1 2.1v-2.1h2.1Zm0-1.05a2.1 2.1 0 1 1 0-4.2h-5.1a2.1 2.1 0 1 1 0 4.2h5.1Z" /></svg>
@@ -212,10 +212,10 @@ export default function Home() {
             rel="noopener noreferrer"
             whileHover={{ x: 8, scale: 1.04 }}
             transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-            className="mt-4 inline-flex items-center gap-2 px-7 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 hover:shadow-xl transition focus:outline-none focus:ring-2 focus:ring-green-400"
+            className="mt-4 inline-flex items-center gap-2 px-7 py-3 border-2 border-white bg-transparent text-white font-semibold rounded-full shadow-lg hover:bg-white/10 hover:shadow-xl transition focus:outline-none focus:ring-2 focus:ring-white/70 focus:ring-offset-2"
           >
             <span>Quiero saber más</span>
-            <span className="group-hover:translate-x-1 transition-transform duration-200">→</span>
+            <span className="transition-transform duration-200">→</span>
           </motion.a>
         </motion.section>
       </main>
