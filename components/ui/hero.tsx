@@ -20,10 +20,10 @@ export default function HeroSection() {
         aria-hidden="true"
         style={{ zIndex: 1 }}
       />
-      <img
-        src="/assets/blob_top_right_0c15bd8efb.svg"
+        <img
+        src="/assets/blob_bottom_left_973fc0f8fe.svg"
         alt=""
-        className="pointer-events-none select-none absolute right-0 top-0 w-32 md:w-52 lg:w-64"
+        className="pointer-events-none select-none absolute left-0 bottom-0 w-48 md:w-72 lg:w-96"
         aria-hidden="true"
         style={{ zIndex: 1 }}
       />
