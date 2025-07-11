@@ -1,9 +1,7 @@
-# robots.txt para montesion.me y montesion.vercel.app
-# Este archivo controla el acceso de los motores de búsqueda a las páginas del sitio.
-# Permite el acceso a la mayoría de las páginas públicas
-User-agent: *
+# robots.txt para montesion.me
+# Control de acceso a rastreadores y motores de búsqueda
 
-# Bloquear rutas sensibles, privadas o irrelevantes
+User-agent: *
 Disallow: /users/
 Disallow: /users/sign_in/
 Disallow: /users/sign_up/
@@ -27,6 +25,5 @@ Allow: /robots.txt
 # Permitir todo lo demás
 Allow: /
 
-# Sitemap para ambos dominios públicos
+# Solo un sitemap válido
 Sitemap: https://montesion.me/sitemap.xml
-Sitemap: https://montesion.vercel.app/sitemap.xml
