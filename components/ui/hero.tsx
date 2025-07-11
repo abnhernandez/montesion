@@ -21,13 +21,6 @@ export default function HeroSection() {
         style={{ zIndex: 1 }}
       />
       <img
-        src="/assets/blob_bottom_right_09262cc692.svg"
-        alt=""
-        className="pointer-events-none select-none absolute right-0 bottom-0 w-40 md:w-60 lg:w-80"
-        aria-hidden="true"
-        style={{ zIndex: 1 }}
-      />
-      <img
         src="/assets/blob_top_right_0c15bd8efb.svg"
         alt=""
         className="pointer-events-none select-none absolute right-0 top-0 w-32 md:w-52 lg:w-64"
