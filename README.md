@@ -22,7 +22,7 @@ Una plataforma web moderna y completa para la Iglesia Cristiana Monte Sion, desa
 - **Planificación de Visitas**: Herramientas para que nuevos visitantes se integren
 - **Declaraciones de Fe**: Documentación teológica interactiva con referencias bíblicas
 
-### 📚 **Recursos Espirituales**
+### 📚 **Recursos**
 - **Biblia Integrada**: Visor en línea de Bible.com
 - **Proceso de Discipulado**: Sistema de 7 pasos para crecimiento espiritual
 - **Talleres y Cursos**: Registro y gestión de actividades educativas

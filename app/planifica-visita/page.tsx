@@ -58,7 +58,7 @@ export default function PlanificaVisitaPage() {
           </ul>
           <div className="mb-6 w-full max-w-2xl mx-auto">
             <div className="text-xs lg:text-base text-muted-foreground mb-1 text-center">
-              Domingos a las 02:30 PM · Cuicatlán 184, Colonia Niños Héroes, Santa María Atzompa, 71222 Oaxaca de Juárez, Oax.
+              Domingos 02:30 PM · Cuicatlán 184, Colonia Niños Héroes, Santa María Atzompa, 71222 Oaxaca de Juárez, Oax.
             </div>
             <div className="flex justify-center">
               <a
@@ -175,6 +175,9 @@ export default function PlanificaVisitaPage() {
               >
                 <span className="text-2xl">×</span>
               </button>
+              <div className="text-xs text-gray-500 dark:text-gray-400 text-center">
+                Si tienes alguna pregunta o necesitas más información, visita nuestra sección de <a href="/faq" className="underline text-[#831111] dark:text-[#e57373] hover:text-[#a13a3a] dark:hover:text-[#ffb3b3]">Preguntas Frecuentes</a> o no dudes en contactarnos.
+              </div>
               <div className="flex items-center gap-2 text-[#831111] dark:text-[#e57373] text-2xl font-semibold text-center">
                 <HelpCircle className="w-7 h-7 text-[#831111] dark:text-[#e57373]" />
                 ¿Tienes dudas?

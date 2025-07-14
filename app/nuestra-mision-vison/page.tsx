@@ -156,7 +156,7 @@ export default function AboutPage() {
         {/* CTA final */}
         <motion.div variants={fadeInUp} className="text-center space-y-4 pt-10 sm:pt-12">
           <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Visítanos</h2>
-          <p className="text-gray-500 dark:text-gray-400 text-sm sm:text-base">Domingos a las 02:30 PM · Calle Cuicatlán #186, Niños Heroés, 71222, Santa María Atzompa, Oaxaca, México.</p>
+          <p className="text-gray-500 dark:text-gray-400 text-sm sm:text-base">Domingos 02:30 PM · Calle Cuicatlán #186, Niños Heroés, 71222, Santa María Atzompa, Oaxaca, México.</p>
           <motion.a
             whileHover={{ x: 8, scale: 1.04 }}
             transition={{ type: 'spring', stiffness: 400, damping: 20 }}
