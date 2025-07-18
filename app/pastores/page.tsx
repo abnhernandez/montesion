@@ -1,7 +1,8 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
-import { Sun, Moon, MapPin, Clock } from 'lucide-react';
+import Image from 'next/image';
+import { MapPin, Clock } from 'lucide-react';
 
 export default function PastoresPage() {
   const [theme, setTheme] = useState('light');
@@ -13,8 +14,7 @@ export default function PastoresPage() {
     document.documentElement.classList.toggle('dark', theme === 'dark');
     localStorage.setItem('theme', theme);
   }, [theme]);
-  const toggleTheme = () => setTheme(t => (t === 'light' ? 'dark' : 'light'));
-
+  
   return (
     <div className="min-h-screen bg-white dark:bg-[#000] text-gray-900 dark:text-gray-100 flex flex-col font-sans">
       <main className="flex-1 flex items-center justify-center px-4 py-8 md:py-16">
@@ -22,7 +22,7 @@ export default function PastoresPage() {
           <div className="flex-shrink-0 w-full md:w-2/5 flex justify-center md:justify-end">
             <div className="relative w-full max-w-xs md:max-w-md h-56 md:h-80 flex items-center justify-center overflow-hidden rounded-xl shadow-xl">
               <span className="absolute inset-0 bg-gradient-to-t from-blue-400 via-yellow-300 to-pink-400 opacity-40"></span>
-              <img src="/assets/pastores.svg" alt="Pastores" className="relative w-full h-full object-cover object-top z-10" style={{borderRadius: '1rem 1rem 0 0'}} />
+              <Image src="/assets/pastores.svg" alt="Pastores" fill priority className="relative w-full h-full object-cover object-top z-10" style={{borderRadius: '1rem 1rem 0 0'}} />
             </div>
           </div>
           <div className="w-full md:w-3/5 flex flex-col gap-6">
