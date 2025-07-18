@@ -209,7 +209,7 @@ export default function PrimerPasoPage() {
               </div>
               <h4 className="text-xl font-bold mb-4">Acompañamiento según la Palabra</h4>
               <p className="text-foreground/70 leading-relaxed">
-                Jesús prometió: <span className="italic">"Y yo estaré con ustedes todos los días, hasta el fin del mundo"</span> (Mateo 28:20). En este proceso, te acompañamos para que experimentes el amor y la guía de Dios en comunidad, conforme a Su Palabra.
+                Jesús prometió: <span className="italic">&quot;Y yo estaré con ustedes todos los días, hasta el fin del mundo&quot;</span> (Mateo 28:20). En este proceso, te acompañamos para que experimentes el amor y la guía de Dios en comunidad, conforme a Su Palabra.
               </p>
             </div>
           </div>
@@ -221,7 +221,7 @@ export default function PrimerPasoPage() {
               </div>
               <h4 className="text-xl font-bold mb-4">Comunidad Cristocéntrica</h4>
               <p className="text-foreground/70 leading-relaxed">
-                "En esto conocerán todos que son mis discípulos, si se aman los unos a los otros" (Juan 13:35). Aquí encontrarás una comunidad que te recibe y te anima a crecer en Cristo, viviendo el amor y la unidad que enseña la Biblia.
+                &quot;En esto conocerán todos que son mis discípulos, si se aman los unos a los otros&quot; (Juan 13:35). Aquí encontrarás una comunidad que te recibe y te anima a crecer en Cristo, viviendo el amor y la unidad que enseña la Biblia.
               </p>
             </div>
           </div>
@@ -233,7 +233,7 @@ export default function PrimerPasoPage() {
               </div>
               <h4 className="text-xl font-bold mb-4">Crecimiento Integral en Cristo</h4>
               <p className="text-foreground/70 leading-relaxed">
-                "Antes bien, creced en la gracia y el conocimiento de nuestro Señor y Salvador Jesucristo" (2 Pedro 3:18). Queremos ayudarte a descubrir tu propósito y a crecer espiritualmente, fundamentando cada paso en la Palabra de Dios.
+                &quot;Antes bien, creced en la gracia y el conocimiento de nuestro Señor y Salvador Jesucristo&quot; (2 Pedro 3:18). Queremos ayudarte a descubrir tu propósito y a crecer espiritualmente, fundamentando cada paso en la Palabra de Dios.
               </p>
             </div>
           </div>
@@ -258,7 +258,7 @@ export default function PrimerPasoPage() {
               question: "¿Quién puede dar el Primer Paso?",
               answer: (
                 <span>
-                  Toda persona que desee conocer a Jesús y crecer en su fe es bienvenida. Jesús dijo: <span className="italic">"Vengan a mí todos los que están cansados y cargados, y yo les daré descanso"</span> (Mateo 11:28). Aquí hay un lugar para ti, sin importar tu trasfondo.
+                  Toda persona que desee conocer a Jesús y crecer en su fe es bienvenida. Jesús dijo: <span className="italic">&quot;Vengan a mí todos los que están cansados y cargados, y yo les daré descanso&quot;</span> (Mateo 11:28). Aquí hay un lugar para ti, sin importar tu trasfondo.
                 </span>
               ),
             },
@@ -267,7 +267,7 @@ export default function PrimerPasoPage() {
               question: "¿Tiene algún costo?",
               answer: (
                 <span>
-                  No, todos nuestros servicios son gratuitos. "De gracia recibisteis, dad de gracia" (Mateo 10:8). Queremos compartir el amor de Dios sin barreras económicas.
+                  No, todos nuestros servicios son gratuitos. &quot;De gracia recibisteis, dad de gracia&quot; (Mateo 10:8). Queremos compartir el amor de Dios sin barreras económicas.
                 </span>
               ),
             },
@@ -276,7 +276,7 @@ export default function PrimerPasoPage() {
               question: "¿Qué sucede después?",
               answer: (
                 <span>
-                  Te invitamos a seguir creciendo en comunidad, como enseña Hebreos 10:24-25: <span className="italic">"Y considerémonos unos a otros para estimularnos al amor y a las buenas obras... no dejando de congregarnos"</span>. Además, puedes consultar más preguntas generales en <a href="/faq" className="text-primary underline">/faq</a>.
+                  Te invitamos a seguir creciendo en comunidad, como enseña Hebreos 10:24-25: <span className="italic">&quot;Y considerémonos unos a otros para estimularnos al amor y a las buenas obras... no dejando de congregarnos&quot;</span>. Además, puedes consultar más preguntas generales en <a href="/faq" className="text-primary underline">/faq</a>.
                 </span>
               ),
             },
@@ -285,7 +285,7 @@ export default function PrimerPasoPage() {
               question: "¿Cuánto tiempo dura?",
               answer: (
                 <span>
-                  La reunión de bienvenida es breve, pero el caminar con Cristo es para toda la vida. "Enseñándoles que guarden todas las cosas que os he mandado" (Mateo 28:20). Si tienes más dudas, visita <a href="/faq" className="text-primary underline">/faq</a>.
+                  La reunión de bienvenida es breve, pero el caminar con Cristo es para toda la vida. &quot;Enseñándoles que guarden todas las cosas que os he mandado&quot; (Mateo 28:20). Si tienes más dudas, visita <a href="/faq" className="text-primary underline">/faq</a>.
                 </span>
               ),
             },

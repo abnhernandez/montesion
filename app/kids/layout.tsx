@@ -11,7 +11,6 @@ export const metadata: Metadata = {
 };
 
 export default function KidsLayout({
-  children,
 }: {
   children: React.ReactNode;
 }) {
