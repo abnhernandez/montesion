@@ -76,29 +76,20 @@ export function BarradeNavegacion() {
                 >
                   <Link href="/nuestra-mision-vison" className="hover:underline">Nuestra Misión / Visión</Link>
                   <Link href="/declaraciondefe" className="hover:underline">Declaraciones de Fe</Link>
-                  <Link href="/lemuelacosta" className="hover:underline">Nuestros Pastores</Link>
+                  <Link href="/pastores" className="hover:underline">Nuestros Pastores</Link>
                 </div>
               )}
             </div>
             <div
               className="relative"
-              onMouseEnter={() => handleDropdownEnter('ubicaciones')}
+              onMouseEnter={() => handleDropdownEnter('Templos')}
               onMouseLeave={handleDropdownLeave}
             >
-              <button className="text-base hover:text-primary flex items-center gap-1">
-              Ubicaciones <span>+</span>
-              </button>
-              {dropdown === 'ubicaciones' && (
-              <div
-                className="absolute left-0 mt-2 bg-black text-white dark:bg-white dark:text-black rounded-2xl shadow-lg py-4 px-8 min-w-[220px] z-50 flex flex-col gap-3 animate-fade-in"
-                onMouseEnter={() => handleDropdownEnter('ubicaciones')}
-                onMouseLeave={handleDropdownLeave}
-              >
-                <Link href="/templos" className="hover:underline">Nuestros Campus</Link>
-                <Link href="/campus-online" className="hover:underline">Campus en Línea</Link>
-              </div>
-              )}
-              </div>
+            {/* TEMPLOS (no dropdown) */}
+            <Link href="/templos" onClick={toggleMenu} className="text-base hover:text-primary flex items-center gap-1">
+              Templos
+            </Link>
+            </div>
             {/* INVOLÚCRATE dropdown */}
             <div
               className="relative"
@@ -193,19 +184,13 @@ export function BarradeNavegacion() {
               <div className="flex flex-col gap-2 pl-4 w-full">
                 <Link href="/nuestra-mision-vision" onClick={toggleMenu} className="text-white text-lg">Nuestra Misión/Visión</Link>
                 <Link href="/declaraciondefe" onClick={toggleMenu} className="text-white text-lg">Declaraciones de Fe</Link>
-                <Link href="/lemuelacosta" onClick={toggleMenu} className="text-white text-lg">Nuestros Pastores</Link>
+                <Link href="/pastores" onClick={toggleMenu} className="text-white text-lg">Nuestros Pastores</Link>
               </div>
             )}
-            {/* UBICACIONES (dropdown) */}
-            <button onClick={() => handleMobileDropdown('ubicaciones')} className="text-white text-2xl tracking-wide flex items-center gap-2 uppercase w-full justify-between">
-              Ubicaciones <span className={`transition-transform ${mobileDropdown==='ubicaciones' ? 'rotate-45' : ''}`}>+</span>
-            </button>
-            {mobileDropdown==='ubicaciones' && (
-              <div className="flex flex-col gap-2 pl-4 w-full">
-                <Link href="/templos" onClick={toggleMenu} className="text-white text-lg">Nuestros Campus</Link>
-                <Link href="/campus-online" onClick={toggleMenu} className="text-white text-lg">Campus en Línea</Link>
-              </div>
-            )}
+            {/* TEMPLOS (no dropdown) */}
+            <Link href="/templos" onClick={toggleMenu} className="text-white text-2xl tracking-wide uppercase w-full py-2">
+              Templos
+            </Link>
             {/* INVOLÚCRATE (dropdown) */}
             <button onClick={() => handleMobileDropdown('involucrate')} className="text-white text-2xl tracking-wide flex items-center gap-2 uppercase w-full justify-between">
               Involúcrate <span className={`transition-transform ${mobileDropdown==='involucrate' ? 'rotate-45' : ''}`}>+</span>

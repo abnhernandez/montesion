@@ -12,6 +12,16 @@ import type { Templo } from '@/components/MapaTemplos';
 const MapaTemplos = dynamic(() => import('@/components/MapaTemplos'), { ssr: false });
 
 export default function TemplosBanner() {
+  // Detectar tema para CircularText
+  const [isDark, setIsDark] = useState(false);
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const mq = window.matchMedia('(prefers-color-scheme: dark)');
+      setIsDark(mq.matches);
+      mq.addEventListener('change', (e) => setIsDark(e.matches));
+      return () => mq.removeEventListener('change', (e) => setIsDark(e.matches));
+    }
+  }, []);
   const [showBanner, setShowBanner] = useState(true);
   // Estados para el buscador
   type Direccion = {
@@ -197,11 +207,12 @@ export default function TemplosBanner() {
               onHover="speedUp"
               spinDuration={20}
               className="custom-class"
+              color={isDark ? "#fff" : "#000"}
               text="CONOCE·NUESTROS·TEMPLOS·"
             />
           </div>
-          <div className="relative z-10 text-white max-w-full sm:max-w-2xl p-6 sm:p-10 rounded-xl shadow-xl w-full">
-            <div className="border-l-4 border-white pl-4 sm:pl-6">
+          <div className="relative z-10 text-black dark:text-white max-w-full sm:max-w-2xl p-6 sm:p-10 rounded-xl w-full">
+            <div className="border-l-4 border-black dark:border-white pl-4 sm:pl-6">
               <h1 className="text-3xl sm:text-5xl font-semibold mb-2 sm:mb-4 leading-tight text-left">Templos</h1>
                 <p className="text-base sm:text-lg leading-relaxed text-left">
                 Somos parte del Cuerpo de Cristo, llamados a ser Su morada y a vivir en unidad como familia de fe. 
