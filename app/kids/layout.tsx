@@ -11,7 +11,6 @@ export const metadata: Metadata = {
 };
 
 export default function KidsLayout({
-  children,
 }: {
   children: React.ReactNode;
 }) {
@@ -21,7 +20,6 @@ export default function KidsLayout({
         <link rel="canonical" href="https://montesion.me/kids" />
         <link rel="icon" href="/favicon.ico" />
       </head>
-      <body>{children}</body>
     </html>
   );
 }

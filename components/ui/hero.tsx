@@ -12,21 +12,6 @@ export default function HeroSection() {
 
   return (
     <div className="relative min-h-screen w-full flex flex-col justify-center items-center bg-background text-foreground overflow-hidden transition-colors duration-500">
-      {/* Blobs decorativos */}
-      <img
-        src="/assets/blob_bottom_left_973fc0f8fe.svg"
-        alt=""
-        className="pointer-events-none select-none absolute left-0 bottom-0 w-48 md:w-72 lg:w-96"
-        aria-hidden="true"
-        style={{ zIndex: 1 }}
-      />
-        <img
-        src="/assets/blob_bottom_left_973fc0f8fe.svg"
-        alt=""
-        className="pointer-events-none select-none absolute left-0 bottom-0 w-48 md:w-72 lg:w-96"
-        aria-hidden="true"
-        style={{ zIndex: 1 }}
-      />
 
       {/* Contenido principal */}
       <main className="relative z-10 w-full flex flex-col items-center justify-center px-4 py-12 gap-8 max-w-2xl mx-auto">
