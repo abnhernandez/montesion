@@ -6,7 +6,7 @@ import SpotlightCard from "../components/ui/SpotlightCard";
 import Maps from "../components/ui/maps";
 import Acercade from "../components/ui/acercade";
 import { motion } from "framer-motion";
-import HeroSection from "../components/Conf";
+import HeroSection from "../components/ui/hero";
 
 
 export default function Page() {
