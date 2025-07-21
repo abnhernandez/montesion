@@ -17,10 +17,9 @@ export default function RegisterPage() {
     correo_electronico: "",
     password: "",
   })
-  const [error, setError] = useState("")
-  const [loading, setLoading] = useState(false)
   const [passwordFocused, setPasswordFocused] = useState(false)
-  const { register } = useAuth()
+  
+  const { signUp, loading, error } = useAuth()
   const router = useRouter()
 
   const handleInputChange = (field: string, value: string) => {
@@ -42,7 +41,6 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError("")
 
     const nombre = formData.nombre.trim()
     const apellido = formData.apellido.trim()
@@ -50,45 +48,23 @@ export default function RegisterPage() {
     const password = formData.password
 
     if (!nombre || !apellido || !correo_electronico || !password) {
-      setError("Todos los campos son obligatorios")
       return
     }
 
     if (!isValidEmail(correo_electronico)) {
-      setError("Por favor, ingresa un correo electrónico válido")
       return
     }
 
     if (!isPasswordValid) {
-      setError("La contraseña no cumple con los requisitos de seguridad")
       return
     }
 
-    setLoading(true)
     try {
-      await register({
-        nombre,
-        apellido,
-        correo_electronico,
-        password,
-      })
-      router.push("/dashboard")
+      await signUp(correo_electronico, password, { nombre, apellido })
+      // Redirigir a página de inicio
+      router.push("/")
     } catch (err: unknown) {
-      if (err instanceof Error) {
-        if (
-          err.message.toLowerCase().includes("correo") ||
-          err.message.toLowerCase().includes("email") ||
-          err.message.toLowerCase().includes("existe")
-        ) {
-          setError("El correo ya está en uso. Por favor usa otro.")
-        } else {
-          setError(err.message || "Error al registrar")
-        }
-      } else {
-        setError("Error al registrar")
-      }
-    } finally {
-      setLoading(false)
+      console.error('Error en registro:', err)
     }
   }
 
@@ -174,20 +150,20 @@ export default function RegisterPage() {
                 onChange={(e) => handleInputChange("correo_electronico", e.target.value)}
                 placeholder="Correo electrónico"
                 className={`mt-1 w-full px-3 py-3 border rounded-lg text-base placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-blue-300 focus:border-blue-400 dark:focus:ring-blue-600 dark:focus:border-blue-600 transition-all duration-150 bg-white dark:bg-neutral-900 ${
-                  error.toLowerCase().includes("correo") || error.toLowerCase().includes("email")
+                  error && (error.toLowerCase().includes("correo") || error.toLowerCase().includes("email"))
                     ? "border-red-500 ring-2 ring-red-400"
                     : "border-gray-300 dark:border-neutral-600"
                 }`}
                 required
                 disabled={loading}
-                aria-invalid={!!error && (error.toLowerCase().includes("correo") || error.toLowerCase().includes("email"))}
+                aria-invalid={!!error && error.toLowerCase().includes("correo")}
                 aria-describedby={
-                  error && (error.toLowerCase().includes("correo") || error.toLowerCase().includes("email"))
+                  error && error.toLowerCase().includes("correo")
                     ? "email-error"
                     : undefined
                 }
               />
-              {(error.toLowerCase().includes("correo") || error.toLowerCase().includes("email")) && (
+              {error && (error.toLowerCase().includes("correo") || error.toLowerCase().includes("email")) && (
                 <div
                   id="email-error"
                   className="absolute left-0 top-full mt-1 w-full bg-red-100 border border-red-400 text-red-700 px-3 py-2 rounded shadow-lg animate-fade-in z-20 text-sm flex items-center gap-2"

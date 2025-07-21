@@ -1,233 +1,263 @@
 "use client"
 
-import React, { createContext, useContext, useState, useEffect } from "react"
-
-interface User {
-  id: number
-  nombre: string
-  apellido: string
-  correo_electronico: string
-  is_active: boolean
-}
+import React, { createContext, useContext, useEffect, useState } from 'react'
+import { User, Session, AuthError } from '@supabase/supabase-js'
+import { createClient } from '@/utils/supabase/client'
 
 interface AuthContextType {
   user: User | null
+  session: Session | null
   loading: boolean
   error: string | null
-  login: (correo_electronico: string, password: string) => Promise<void>
-  register: (data: {
-    nombre: string
-    apellido: string
-    correo_electronico: string
-    password: string
-  }) => Promise<void>
-  logout: () => void
-  requestPasswordReset: (correo_electronico: string) => Promise<void>
-  confirmPasswordReset: (token: string, newPassword: string) => Promise<void> // Verificar si tienes esta ruta en backend
-  deleteAccount: () => Promise<void>
+  signUp: (email: string, password: string, userData?: { nombre?: string; apellido?: string }) => Promise<void>
+  signIn: (email: string, password: string) => Promise<void>
+  signOut: () => Promise<void>
+  resetPassword: (email: string) => Promise<void>
+  updateProfile: (data: { nombre?: string; apellido?: string }) => Promise<void>
+  clearError: () => void
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_AUTH_URL || "https://montesion-backend.onrender.com/auth"
-
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
+  const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-
-  async function fetchUser() {
-    const token = localStorage.getItem("access_token")
-    if (!token) {
-      setUser(null)
-      setLoading(false)
-      return
-    }
-
-    try {
-      const response = await fetch(`${API_BASE_URL}/auth`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-
-      if (!response.ok) throw new Error("No se pudo autenticar al usuario")
-
-      const userData = await response.json()
-      setUser(userData)
-    } catch (err) {
-      console.error("Error al obtener el usuario:", err)
-      setUser(null)
-    } finally {
-      setLoading(false)
-    }
-  }
+  
+  const supabase = createClient()
 
   useEffect(() => {
-    fetchUser()
-  }, [])
-
-  async function login(correo_electronico: string, password: string): Promise<void> {
-    setLoading(true)
-    setError(null)
-    try {
-      const response = await fetch(`${API_BASE_URL}/token`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: new URLSearchParams({
-          username: correo_electronico,
-          password,
-        }),
-      })
-
-      if (!response.ok) throw new Error("Credenciales inválidas")
-
-      const data = await response.json()
-      localStorage.setItem("access_token", data.access_token)
-      await fetchUser()
-    } catch (err) {
-      if (err instanceof Error) setError(err.message)
-      else setError("Error desconocido")
-      throw err
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  async function register(data: {
-    nombre: string
-    apellido: string
-    correo_electronico: string
-    password: string
-  }): Promise<void> {
-    setLoading(true)
-    setError(null)
-    try {
-      const response = await fetch(`${API_BASE_URL}/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      })
-
-      if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.detail || "Error al registrar")
+    const initializeAuth = async () => {
+      try {
+        // Obtener sesión inicial
+        const { data: { session }, error } = await supabase.auth.getSession()
+        
+        if (error) {
+          console.error('Error getting session:', error)
+          setError(error.message)
+        } else {
+          setSession(session)
+          setUser(session?.user ?? null)
+        }
+      } catch (error) {
+        console.error('Error initializing auth:', error)
+        setError(error instanceof Error ? error.message : 'Error de inicialización')
+      } finally {
+        setLoading(false)
       }
-
-      await login(data.correo_electronico, data.password)
-    } catch (err) {
-      if (err instanceof Error) setError(err.message)
-      else setError("Error desconocido")
-      throw err
-    } finally {
-      setLoading(false)
     }
-  }
 
-  function logout() {
-    localStorage.removeItem("access_token")
-    setUser(null)
-  }
+    initializeAuth()
 
-  async function requestPasswordReset(correo_electronico: string): Promise<void> {
+    // Escuchar cambios de autenticación
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event: any, session: Session | null) => {
+        setSession(session)
+        setUser(session?.user ?? null)
+        setLoading(false)
+
+        // Manejar eventos específicos
+        if (event === 'SIGNED_IN') {
+          setError(null)
+        } else if (event === 'SIGNED_OUT') {
+          setError(null)
+        } else if (event === 'TOKEN_REFRESHED') {
+          console.log('Token refreshed')
+        }
+      }
+    )
+
+    return () => subscription.unsubscribe()
+  }, [supabase.auth])
+
+  const signUp = async (email: string, password: string, userData?: { nombre?: string; apellido?: string }) => {
     setLoading(true)
     setError(null)
+
     try {
-      const response = await fetch(`${API_BASE_URL}/password-reset`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ correo_electronico }),
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            nombre: userData?.nombre || '',
+            apellido: userData?.apellido || '',
+          }
+        }
       })
 
-      if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.detail || "Error al solicitar reset de contraseña")
+      if (error) throw error
+
+      // Si no hay confirmación automática, mostrar mensaje
+      if (!data.session) {
+        setError('Te hemos enviado un email de confirmación. Por favor, revisa tu bandeja de entrada.')
       }
-    } catch (err) {
-      if (err instanceof Error) setError(err.message)
-      else setError("Error desconocido")
-      throw err
+    } catch (error: any) {
+      console.error('Error signing up:', error)
+      setError(getErrorMessage(error))
+      throw error
     } finally {
       setLoading(false)
     }
   }
 
-  // Nota: Verifica que tengas implementada esta ruta en backend
-  async function confirmPasswordReset(token: string, newPassword: string): Promise<void> {
+  const signIn = async (email: string, password: string) => {
     setLoading(true)
     setError(null)
+
     try {
-      const response = await fetch(`${API_BASE_URL}/password-reset/confirm`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token, new_password: newPassword }),
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
       })
 
-      if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.detail || "Error al confirmar reset de contraseña")
-      }
-    } catch (err) {
-      if (err instanceof Error) setError(err.message)
-      else setError("Error desconocido")
-      throw err
+      if (error) throw error
+
+      // El estado se actualiza automáticamente por onAuthStateChange
+    } catch (error: any) {
+      console.error('Error signing in:', error)
+      setError(getErrorMessage(error))
+      throw error
     } finally {
       setLoading(false)
     }
   }
 
-  async function deleteAccount(): Promise<void> {
-    if (!user) throw new Error("No hay usuario autenticado")
+  const signOut = async () => {
     setLoading(true)
     setError(null)
+
     try {
-      const response = await fetch(`${API_BASE_URL}/delete`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` || "" },
-      })
-
-      if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.detail || "Error al eliminar cuenta")
-      }
-
-      logout()
-    } catch (err) {
-      if (err instanceof Error) setError(err.message)
-      else setError("Error desconocido")
-      throw err
+      const { error } = await supabase.auth.signOut()
+      if (error) throw error
+    } catch (error: any) {
+      console.error('Error signing out:', error)
+      setError(getErrorMessage(error))
+      throw error
     } finally {
       setLoading(false)
     }
+  }
+
+  const resetPassword = async (email: string) => {
+    setLoading(true)
+    setError(null)
+
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/users/reset_password`,
+      })
+
+      if (error) throw error
+
+      setError('Te hemos enviado un enlace para restablecer tu contraseña. Revisa tu email.')
+    } catch (error: any) {
+      console.error('Error resetting password:', error)
+      setError(getErrorMessage(error))
+      throw error
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const updateProfile = async (data: { nombre?: string; apellido?: string }) => {
+    if (!user) throw new Error('No hay usuario autenticado')
+    
+    setLoading(true)
+    setError(null)
+
+    try {
+      // Actualizar metadatos del usuario
+      const { error: userError } = await supabase.auth.updateUser({
+        data: {
+          nombre: data.nombre,
+          apellido: data.apellido,
+        }
+      })
+
+      if (userError) throw userError
+
+      // También actualizar en la tabla de perfiles si existe
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .upsert({
+          id: user.id,
+          nombre: data.nombre,
+          apellido: data.apellido,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', user.id)
+
+      if (profileError) {
+        console.warn('Error updating profile table:', profileError)
+        // No lanzar error aquí, ya que los metadatos se actualizaron
+      }
+    } catch (error: any) {
+      console.error('Error updating profile:', error)
+      setError(getErrorMessage(error))
+      throw error
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const clearError = () => {
+    setError(null)
+  }
+
+  const value: AuthContextType = {
+    user,
+    session,
+    loading,
+    error,
+    signUp,
+    signIn,
+    signOut,
+    resetPassword,
+    updateProfile,
+    clearError,
   }
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        loading,
-        error,
-        login,
-        register,
-        logout,
-        requestPasswordReset,
-        confirmPasswordReset,
-        deleteAccount,
-      }}
-    >
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   )
 }
 
-export function useAuth(): AuthContextType {
+export const useAuth = () => {
   const context = useContext(AuthContext)
-  if (!context) {
-    throw new Error("useAuth debe usarse dentro de un AuthProvider")
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider')
   }
   return context
 }
+
+// Función helper para manejar errores de Supabase
+function getErrorMessage(error: AuthError | Error | any): string {
+  if (!error) return 'Error desconocido'
+
+  // Errores específicos de Supabase Auth
+  switch (error.message) {
+    case 'Invalid login credentials':
+      return 'Credenciales incorrectas. Verifica tu email y contraseña.'
+    case 'Email not confirmed':
+      return 'Debes confirmar tu email antes de iniciar sesión.'
+    case 'User already registered':
+      return 'Este email ya está registrado. Intenta iniciar sesión.'
+    case 'Password should be at least 6 characters':
+      return 'La contraseña debe tener al menos 6 caracteres.'
+    case 'Unable to validate email address: invalid format':
+      return 'El formato del email no es válido.'
+    case 'Email rate limit exceeded':
+      return 'Has enviado demasiados emails. Espera un momento antes de intentar de nuevo.'
+    case 'For security purposes, you can only request this after 60 seconds':
+      return 'Por seguridad, debes esperar 60 segundos antes de intentar de nuevo.'
+    default:
+      return error.message || 'Ha ocurrido un error inesperado.'
+  }
+}
+
+// Tipos para TypeScript (opcional, crear archivo separado si se prefiere)
+export type { AuthContextType }

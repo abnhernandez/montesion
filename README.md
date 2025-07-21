@@ -54,9 +54,10 @@ Una plataforma web moderna y completa para la Iglesia Cristiana Monte Sion, desa
 - **Leaflet** - Mapas alternativos lightweight
 
 ### **Autenticación & Backend**
-- **Sistema de Auth Custom** - JWT tokens
-- **Neon Database** - PostgreSQL serverless
-- **Axios** - Cliente HTTP para APIs
+- **Supabase** - Backend-as-a-Service completo
+- **Supabase Auth** - Sistema de autenticación
+- **PostgreSQL** - Base de datos serverless
+- **Row Level Security** - Seguridad a nivel de fila
 
 ### **Utilidades & Herramientas**
 - **Zod** - Validación de esquemas
@@ -202,19 +203,16 @@ bun install
 ### **3. Configurar Variables de Entorno**
 Crear archivo `.env.local`:
 ```bash
-# Autenticación
-NEXT_PUBLIC_AUTH_URL=montesion-backend.onrender.com/auth
-NEXT_PUBLIC_BACKEND_URL=montesion-backend.onrender.com/docs
+# Supabase Configuration
+NEXT_PUBLIC_SUPABASE_URL=https://tu-proyecto.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=tu_clave_publica_de_supabase
 
-# APIs
-NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=false
-NEXT_PUBLIC_PETICIONES_URL=montesion-backend.onrender.com/peticiones
-
-# Base de datos
-DATABASE_URL=postgresql://usuario:password@host:puerto/database
-
-# Otros
+# Site Configuration
 NEXT_PUBLIC_SITE_URL=https://montesion.me
+
+# APIs Externas
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=tu_clave_google_maps
+NEXT_PUBLIC_PETICIONES_URL=https://montesion.me/peticiones
 ```
 
 ### **4. Ejecutar en Desarrollo**
@@ -322,21 +320,36 @@ El proyecto está configurado para deployment automático en Vercel:
 
 ## 🔒 Autenticación
 
-### **Sistema de Auth**
-- **JWT Tokens** para sesiones
+### **Sistema de Auth con Supabase**
+- **Supabase Auth** para autenticación segura
 - **Registro con email/password**
+- **Confirmación por email**
 - **Recuperación de contraseña**
-- **Validación de formularios con Zod**
+- **Metadatos de usuario personalizados**
+- **Row Level Security (RLS)**
 
-### **Endpoints del Backend**
+### **Funcionalidades disponibles**
 ```typescript
-// Rutas de autenticación
-POST /auth/register     // Registro
-POST /auth/token        // Login
-GET  /auth/auth         // Verificar usuario
-POST /auth/password-reset // Solicitar reset
-POST /auth/password-reset/confirm // Confirmar reset
-DELETE /auth/delete     // Eliminar cuenta
+// Funciones del contexto de autenticación
+signUp(email, password, userData)     // Registro
+signIn(email, password)               // Login
+signOut()                             // Cerrar sesión
+resetPassword(email)                  // Solicitar reset
+updateProfile(data)                   // Actualizar perfil
+```
+
+### **Estructura de Usuario**
+```typescript
+interface User {
+  id: string
+  email: string
+  user_metadata: {
+    nombre?: string
+    apellido?: string
+  }
+  email_confirmed_at?: string
+  created_at: string
+}
 ```
 
 ## 🗺️ Integración de Mapas

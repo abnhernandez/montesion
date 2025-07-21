@@ -10,26 +10,19 @@ import { useRouter } from "next/navigation"
 
 export default function PasswordRecoveryPage() {
   const [email, setEmail] = useState("")
-  const [error, setError] = useState("")
-  const [loading, setLoading] = useState(false)
-  const { requestPasswordReset } = useAuth()
+  const { resetPassword, loading, error } = useAuth()
   const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError("")
-    setLoading(true)
+    
+    if (!email) return
+
     try {
-      await requestPasswordReset(email)
-      router.push("/users/password/check_email") // Ruta opcional tras éxito
+      await resetPassword(email)
+      router.push("/users/password/check_email")
     } catch (err) {
-      if (err instanceof Error) {
-        setError(err.message)
-      } else {
-        setError("Error al enviar el correo de recuperación")
-      }
-    } finally {
-      setLoading(false)
+      console.error('Error en reset de contraseña:', err)
     }
   }
 
@@ -39,6 +32,7 @@ export default function PasswordRecoveryPage() {
         <h1 className="text-2xl font-semibold text-center tracking-tight drop-shadow-sm mb-1 leading-tight">
           Recupera tu contraseña
         </h1>
+        
         {error && (
           <div className="bg-red-100 text-red-800 rounded-md px-4 py-2 text-center text-sm font-medium mb-3">
             {error}

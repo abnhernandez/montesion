@@ -1,14 +1,35 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import { useAuth } from "@/app/auth-context";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 export function BarradeNavegacion() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [dropdown, setDropdown] = useState<string | null>(null);
   const [mobileDropdown, setMobileDropdown] = useState<string | null>(null);
   const [showBible, setShowBible] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
   const dropdownTimeout = useRef<NodeJS.Timeout | null>(null);
+  
+  const { user, signOut, loading } = useAuth();
+
+  // Cerrar menú de usuario cuando se hace clic fuera
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showUserMenu) {
+        const target = event.target as HTMLElement;
+        if (!target.closest('[data-user-menu]')) {
+          setShowUserMenu(false);
+        }
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [showUserMenu]);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -135,8 +156,8 @@ export function BarradeNavegacion() {
               )}
             </div>
           </div>
-          {/* Botón Biblia a la derecha en desktop */}
-          <div className="hidden lg:flex items-center">
+          {/* Botón Biblia y Auth a la derecha en desktop */}
+          <div className="hidden lg:flex items-center space-x-4">
             <button
               onClick={() => setShowBible(true)}
               className="bg-[#222] text-white px-6 py-2 rounded-full text-base hover:bg-primary/10 transition-colors flex items-center gap-2 focus:outline-none"
@@ -145,6 +166,61 @@ export function BarradeNavegacion() {
               <span>Biblia</span>
               <span className="ml-1">📖</span>
             </button>
+            
+            {/* Auth Section */}
+            {user ? (
+              <div className="relative" data-user-menu>
+                <button
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                  className="flex items-center space-x-2 text-sm font-medium text-foreground hover:text-primary transition-colors"
+                >
+                  <Avatar className="h-8 w-8">
+                    <AvatarFallback className="bg-primary text-primary-foreground">
+                      {user.email?.charAt(0).toUpperCase() || 'U'}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="hidden sm:block">
+                    {user.user_metadata?.nombre || user.email?.split('@')[0] || 'Usuario'}
+                  </span>
+                </button>
+                
+                {showUserMenu && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-neutral-800 rounded-lg shadow-lg border border-gray-200 dark:border-neutral-700 py-2 z-50">
+                    <div className="px-4 py-2 border-b border-gray-200 dark:border-neutral-700">
+                      <p className="text-sm font-medium text-gray-900 dark:text-white">
+                        {user.user_metadata?.nombre} {user.user_metadata?.apellido}
+                      </p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        {user.email}
+                      </p>
+                    </div>
+                    <Link
+                      href="/perfil"
+                      className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-neutral-700"
+                      onClick={() => setShowUserMenu(false)}
+                    >
+                      Mi Perfil
+                    </Link>
+                    <button
+                      onClick={() => {
+                        signOut();
+                        setShowUserMenu(false);
+                      }}
+                      disabled={loading}
+                      className="block w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-neutral-700 disabled:opacity-50"
+                    >
+                      {loading ? 'Cerrando...' : 'Cerrar Sesión'}
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link href="/users/sign_in">
+                <Button variant="default" size="sm">
+                  Acceso
+                </Button>
+              </Link>
+            )}
           </div>
           {/* Menú hamburguesa móvil */}
           <div className="lg:hidden flex items-center">
@@ -215,6 +291,57 @@ export function BarradeNavegacion() {
               </div>
             )}
           </div>
+          
+          {/* Auth Section para móvil */}
+          <div className="flex flex-col items-center gap-4 mb-6 w-full">
+            {user ? (
+              <div className="flex flex-col items-center gap-3 w-full">
+                <div className="flex items-center space-x-3 text-white">
+                  <Avatar className="h-12 w-12">
+                    <AvatarFallback className="bg-primary text-primary-foreground text-lg">
+                      {user.email?.charAt(0).toUpperCase() || 'U'}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="text-center">
+                    <p className="text-lg font-medium">
+                      {user.user_metadata?.nombre} {user.user_metadata?.apellido || ''}
+                    </p>
+                    <p className="text-sm text-gray-300">
+                      {user.email}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2 w-full max-w-xs">
+                  <Link
+                    href="/perfil"
+                    onClick={toggleMenu}
+                    className="bg-white/10 text-white px-4 py-2 rounded-lg text-center hover:bg-white/20 transition-colors"
+                  >
+                    Mi Perfil
+                  </Link>
+                  <button
+                    onClick={() => {
+                      signOut();
+                      toggleMenu();
+                    }}
+                    disabled={loading}
+                    className="bg-red-600/80 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors disabled:opacity-50"
+                  >
+                    {loading ? 'Cerrando...' : 'Cerrar Sesión'}
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <Link
+                href="/users/sign_in"
+                onClick={toggleMenu}
+                className="bg-primary text-white px-8 py-3 rounded-lg text-lg font-medium w-full max-w-xs text-center hover:bg-primary/90 transition-colors"
+              >
+                Acceso
+              </Link>
+            )}
+          </div>
+          
           {/* Biblia Button animado */}
           <div className="flex flex-col items-center gap-4 mb-2">
             <button

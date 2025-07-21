@@ -13,50 +13,39 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [correo_electronico, setCorreoElectronico] = useState("")
   const [password, setPassword] = useState("")
-  const [error, setError] = useState("")
-  const [loading, setLoading] = useState(false)
-  const { login, user, loading: authLoading } = useAuth()
+  
+  const { signIn, user, loading, error } = useAuth()
   const router = useRouter()
 
   useEffect(() => {
-    if (!authLoading && user) {
-      router.push("/dashboard")
+    if (user) {
+      router.push("/")
     }
-  }, [user, authLoading, router])
+  }, [user, router])
 
   const isValidEmail = (email: string) => /\S+@\S+\.\S+/.test(email)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError("")
 
     if (!correo_electronico || !password) {
-      setError("Por favor, completa todos los campos")
       return
     }
 
     if (!isValidEmail(correo_electronico)) {
-      setError("Por favor, ingresa un correo electrónico válido")
       return
     }
 
-    setLoading(true)
     try {
-      await login(correo_electronico, password)
-      // La redirección la maneja el useEffect arriba
+      await signIn(correo_electronico, password)
+      // La redirección se maneja en el useEffect
     } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message || "Error al iniciar sesión")
-      } else {
-        setError("Error al iniciar sesión")
-      }
-    } finally {
-      setLoading(false)
+      // El error se maneja en el contexto
+      console.error('Error en login:', err)
     }
   }
 
-  if (authLoading) return <div>Cargando...</div>
-  if (!authLoading && user) return <div>Redirigiendo a dashboard...</div>
+  if (loading) return <div>Cargando...</div>
 
   const inputClass =
     "w-full px-3 py-3 border rounded-lg text-base placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-blue-300 focus:border-blue-400 dark:focus:ring-blue-600 dark:focus:border-blue-600 transition-all duration-150 bg-white dark:bg-neutral-900"
