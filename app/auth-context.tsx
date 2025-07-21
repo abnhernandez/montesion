@@ -26,9 +26,33 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   
-  const supabase = createClient()
+  // Check if we're in the browser and if Supabase environment variables are available
+  const [supabase, setSupabase] = useState<ReturnType<typeof createClient> | null>(null)
 
   useEffect(() => {
+    // Only initialize Supabase on the client side
+    if (typeof window !== 'undefined') {
+      try {
+        const client = createClient()
+        setSupabase(client)
+      } catch (error) {
+        console.error('Failed to initialize Supabase client:', error)
+        setError('Failed to initialize authentication system')
+        setLoading(false)
+        return
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!supabase) {
+      // If we're on the server or Supabase isn't available, just set loading to false
+      if (typeof window !== 'undefined') {
+        setLoading(false)
+      }
+      return
+    }
+
     const initializeAuth = async () => {
       try {
         // Obtener sesión inicial
@@ -70,9 +94,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     )
 
     return () => subscription.unsubscribe()
-  }, [supabase.auth])
+  }, [supabase])
 
   const signUp = async (email: string, password: string, userData?: { nombre?: string; apellido?: string }) => {
+    if (!supabase) {
+      setError('Authentication system not initialized')
+      throw new Error('Authentication system not initialized')
+    }
+
     setLoading(true)
     setError(null)
 
@@ -105,6 +134,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const signIn = async (email: string, password: string) => {
+    if (!supabase) {
+      setError('Authentication system not initialized')
+      throw new Error('Authentication system not initialized')
+    }
+
     setLoading(true)
     setError(null)
 
@@ -128,6 +162,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const signOut = async () => {
+    if (!supabase) {
+      setError('Authentication system not initialized')
+      throw new Error('Authentication system not initialized')
+    }
+
     setLoading(true)
     setError(null)
 
@@ -145,6 +184,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const resetPassword = async (email: string) => {
+    if (!supabase) {
+      setError('Authentication system not initialized')
+      throw new Error('Authentication system not initialized')
+    }
+
     setLoading(true)
     setError(null)
 
@@ -167,6 +211,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const confirmPasswordReset = async (token: string, newPassword: string) => {
+    if (!supabase) {
+      setError('Authentication system not initialized')
+      throw new Error('Authentication system not initialized')
+    }
+
     setLoading(true)
     setError(null)
 
@@ -190,6 +239,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const updateProfile = async (data: { nombre?: string; apellido?: string }) => {
     if (!user) throw new Error('No hay usuario autenticado')
+    if (!supabase) {
+      setError('Authentication system not initialized')
+      throw new Error('Authentication system not initialized')
+    }
     
     setLoading(true)
     setError(null)
