@@ -1,5 +1,9 @@
 import { createClient } from "@/utils/supabase/client";
 import type { PrayerRequest, PrayerRequestInsert } from "@/types/supabase";
+import { 
+  sendPrayerRequestConfirmation, 
+  sendNewPrayerRequestNotification 
+} from './email-service-client';
 
 /**
  * Envía una nueva petición de oración a Supabase
@@ -60,6 +64,27 @@ export async function createPrayerRequest(
     }
 
     console.log('✅ Petición insertada exitosamente:', data);
+    
+    // Enviar emails de confirmación (no bloquear si fallan)
+    Promise.all([
+      // Email de confirmación al usuario
+      sendPrayerRequestConfirmation(
+        prayerRequestData.correo_electronico,
+        prayerRequestData.nombre,
+        ticket,
+        prayerRequestData.asunto
+      ).catch(err => console.warn('⚠️ Error enviando confirmación:', err)),
+      
+      // Notificación al equipo de Monte Sion
+      sendNewPrayerRequestNotification(
+        prayerRequestData.nombre,
+        prayerRequestData.correo_electronico,
+        prayerRequestData.asunto,
+        prayerRequestData.peticion,
+        ticket
+      ).catch(err => console.warn('⚠️ Error enviando notificación:', err))
+    ]);
+    
     return {
       success: true,
       data: data
