@@ -1,7 +1,7 @@
 "use client"
 
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { User, Session, AuthError } from '@supabase/supabase-js'
+import { User, Session, AuthError, AuthChangeEvent } from '@supabase/supabase-js'
 import { createClient } from '@/utils/supabase/client'
 
 interface AuthContextType {
@@ -13,6 +13,7 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<void>
   signOut: () => Promise<void>
   resetPassword: (email: string) => Promise<void>
+  confirmPasswordReset: (token: string, newPassword: string) => Promise<void>
   updateProfile: (data: { nombre?: string; apellido?: string }) => Promise<void>
   clearError: () => void
 }
@@ -52,7 +53,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     // Escuchar cambios de autenticación
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event: any, session: Session | null) => {
+      async (event: AuthChangeEvent, session: Session | null) => {
         setSession(session)
         setUser(session?.user ?? null)
         setLoading(false)
@@ -93,9 +94,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (!data.session) {
         setError('Te hemos enviado un email de confirmación. Por favor, revisa tu bandeja de entrada.')
       }
-    } catch (error: any) {
-      console.error('Error signing up:', error)
-      setError(getErrorMessage(error))
+    } catch (error) {
+      const authError = error as AuthError
+      console.error('Error signing up:', authError)
+      setError(getErrorMessage(authError))
       throw error
     } finally {
       setLoading(false)
@@ -107,7 +109,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setError(null)
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
@@ -115,9 +117,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (error) throw error
 
       // El estado se actualiza automáticamente por onAuthStateChange
-    } catch (error: any) {
-      console.error('Error signing in:', error)
-      setError(getErrorMessage(error))
+    } catch (error) {
+      const authError = error as AuthError
+      console.error('Error signing in:', authError)
+      setError(getErrorMessage(authError))
       throw error
     } finally {
       setLoading(false)
@@ -131,9 +134,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const { error } = await supabase.auth.signOut()
       if (error) throw error
-    } catch (error: any) {
-      console.error('Error signing out:', error)
-      setError(getErrorMessage(error))
+    } catch (error) {
+      const authError = error as AuthError
+      console.error('Error signing out:', authError)
+      setError(getErrorMessage(authError))
       throw error
     } finally {
       setLoading(false)
@@ -152,9 +156,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (error) throw error
 
       setError('Te hemos enviado un enlace para restablecer tu contraseña. Revisa tu email.')
-    } catch (error: any) {
-      console.error('Error resetting password:', error)
-      setError(getErrorMessage(error))
+    } catch (error) {
+      const authError = error as AuthError
+      console.error('Error resetting password:', authError)
+      setError(getErrorMessage(authError))
+      throw error
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const confirmPasswordReset = async (token: string, newPassword: string) => {
+    setLoading(true)
+    setError(null)
+
+    try {
+      const { error } = await supabase.auth.updateUser({
+        password: newPassword
+      })
+
+      if (error) throw error
+
+      setError('Contraseña actualizada exitosamente.')
+    } catch (error) {
+      const authError = error as AuthError
+      console.error('Error confirming password reset:', authError)
+      setError(getErrorMessage(authError))
       throw error
     } finally {
       setLoading(false)
@@ -193,9 +220,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         console.warn('Error updating profile table:', profileError)
         // No lanzar error aquí, ya que los metadatos se actualizaron
       }
-    } catch (error: any) {
-      console.error('Error updating profile:', error)
-      setError(getErrorMessage(error))
+    } catch (error) {
+      const authError = error as AuthError
+      console.error('Error updating profile:', authError)
+      setError(getErrorMessage(authError))
       throw error
     } finally {
       setLoading(false)
@@ -215,6 +243,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signIn,
     signOut,
     resetPassword,
+    confirmPasswordReset,
     updateProfile,
     clearError,
   }
@@ -235,11 +264,13 @@ export const useAuth = () => {
 }
 
 // Función helper para manejar errores de Supabase
-function getErrorMessage(error: AuthError | Error | any): string {
+function getErrorMessage(error: AuthError | Error | unknown): string {
   if (!error) return 'Error desconocido'
 
+  const errorObj = error as AuthError | Error
+  
   // Errores específicos de Supabase Auth
-  switch (error.message) {
+  switch (errorObj.message) {
     case 'Invalid login credentials':
       return 'Credenciales incorrectas. Verifica tu email y contraseña.'
     case 'Email not confirmed':
@@ -255,7 +286,7 @@ function getErrorMessage(error: AuthError | Error | any): string {
     case 'For security purposes, you can only request this after 60 seconds':
       return 'Por seguridad, debes esperar 60 segundos antes de intentar de nuevo.'
     default:
-      return error.message || 'Ha ocurrido un error inesperado.'
+      return errorObj.message || 'Ha ocurrido un error inesperado.'
   }
 }
 

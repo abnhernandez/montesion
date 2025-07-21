@@ -1,17 +1,16 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import BlurText from "../components/ui/BlurText";
 import SpotlightCard from "../components/ui/SpotlightCard";
 import Maps from "../components/ui/maps";
 import Acercade from "../components/ui/acercade";
 import { motion } from "framer-motion";
 import HeroSection from "../components/Conf";
+import { createClient } from '@/utils/supabase/client';
+import { checkSupabaseStatus } from '@/utils/setup-supabase';
 
-
-export default function Page() {
-	const [todos, setTodos] = useState<any[]>([]);
-	
+export default function Page() {	
 	useEffect(() => {
 		const fetchTodos = async () => {
 			// Primero verificar el estado
@@ -20,7 +19,9 @@ export default function Page() {
 			if (status.todos) {
 				const supabase = createClient();
 				const { data } = await supabase.from('todos').select();
-				if (data) setTodos(data);
+				if (data) {
+					console.log('Todos loaded:', data.length);
+				}
 			} else {
 				console.log('ℹ️ Todos table not available yet. Create it manually or run setup script.');
 			}
