@@ -4,6 +4,8 @@ import "./globals.css"
 import { BarradeNavegacion } from "@/components/BarradeNavegacion"
 import Footer from "@/components/Footer"
 import { AuthProvider } from "@/app/auth-context"
+import { Toaster } from "@/components/ui/sonner"
+import { Providers } from "@/components/providers"
 import Head from "next/head"
 
 export const metadata: Metadata = {
@@ -29,12 +31,15 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <body className="antialiased bg-background text-foreground">
-        <AuthProvider>
-          <BarradeNavegacion />
-          <main>{children}</main>
-          <Footer />
-          <SpeedInsights />
-        </AuthProvider>
+        <Providers>
+          <AuthProvider>
+            <BarradeNavegacion />
+            <main>{children}</main>
+            <Footer />
+            <SpeedInsights />
+            <Toaster />
+          </AuthProvider>
+        </Providers>
       </body>
     </html>
   )

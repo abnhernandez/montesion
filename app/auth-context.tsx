@@ -258,20 +258,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (userError) throw userError
 
-      // También actualizar en la tabla de perfiles si existe
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .upsert({
-          id: user.id,
-          nombre: data.nombre,
-          apellido: data.apellido,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('id', user.id)
+      // Intentar actualizar en la tabla de users si existe
+      try {
+        const { error: profileError } = await supabase
+          .from('users')
+          .upsert({
+            id: user.id,
+            email: user.email,
+            nombre: data.nombre,
+            apellido: data.apellido,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', user.id)
 
-      if (profileError) {
-        console.warn('Error updating profile table:', profileError)
-        // No lanzar error aquí, ya que los metadatos se actualizaron
+        if (profileError) {
+          console.warn('Error updating users table:', profileError)
+          // No lanzar error aquí, ya que los metadatos se actualizaron
+        }
+      } catch (dbError) {
+        console.warn('Database table update failed, but metadata was updated:', dbError)
       }
     } catch (error) {
       const authError = error as AuthError
