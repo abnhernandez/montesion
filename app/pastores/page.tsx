@@ -21,7 +21,7 @@ export default function PastoresPage() {
         <section className="w-full max-w-5xl mx-auto flex flex-col md:flex-row items-center md:items-start gap-8 md:gap-16">
           <div className="flex-shrink-0 w-full md:w-2/5 flex justify-center md:justify-end">
             <div className="relative w-full max-w-xs md:max-w-md h-56 md:h-80 flex items-center justify-center overflow-hidden rounded-xl shadow-xl">
-              <span className="absolute inset-0 bg-gradient-to-t from-blue-400 via-yellow-300 to-pink-400 opacity-40"></span>
+              <span className="absolute inset-0 bg-gradient-to-t from-red-400 via-orange-300 to-red-400 opacity-40"></span>
               <Image src="/assets/pastores.svg" alt="Pastores" fill priority className="relative w-full h-full object-cover object-top z-10" style={{borderRadius: '1rem 1rem 0 0'}} />
             </div>
           </div>

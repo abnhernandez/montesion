@@ -7,8 +7,6 @@ import Maps from "../components/ui/maps";
 import Acercade from "../components/ui/acercade";
 import { motion } from "framer-motion";
 import HeroSection from "../components/Conf";
-import { createClient } from '@/utils/supabase/client'
-import { checkSupabaseStatus } from '@/utils/setup-supabase'
 
 
 export default function Page() {
