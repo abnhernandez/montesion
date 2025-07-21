@@ -3,6 +3,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { CheckCircle2, XCircle } from "lucide-react";
 import clsx from "clsx";
+import { createPrayerRequest } from "@/lib/prayer-requests";
 
 type Campos = "nombre" | "correo_electronico" | "asunto" | "peticion";
 
@@ -52,7 +53,7 @@ interface InputProps {
 }
 
 const inputBaseClasses =
-  "w-full p-3 rounded-2xl bg-[var(--color-background)] text-[var(--color-foreground)] placeholder-[var(--color-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--color-foreground)]";
+  "w-full p-3 rounded-2xl bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring";
 
 const InputField: React.FC<InputProps> = ({
   field,
@@ -195,31 +196,19 @@ const PeticionDeOracion = () => {
     setLoading(true);
     setMensajeEnvio(null);
 
-    const API_URL = process.env.NEXT_PUBLIC_PETICIONES_URL || "https://montesion.me/peticiones";
-
     try {
-      const response = await fetch(`${API_URL}/peticion`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ticket: Math.floor(Math.random() * 1000000),
-          nombre: inputs.nombre.trim(),
-          correo_electronico: inputs.correo_electronico.trim(),
-          asunto: inputs.asunto.trim(),
-          peticion: inputs.peticion.trim(),
-        }),
+      // Usar la función auxiliar para crear la petición
+      const result = await createPrayerRequest({
+        nombre: inputs.nombre.trim(),
+        correo_electronico: inputs.correo_electronico.trim(),
+        asunto: inputs.asunto.trim(),
+        peticion: inputs.peticion.trim(),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => null);
-        throw new Error(
-          errorData?.detail || `Error en la petición: ${response.statusText}`
-        );
+      if (!result.success) {
+        throw new Error(result.error || 'Error desconocido al enviar la petición');
       }
 
-      await response.json();
       setMensajeEnvio("Petición enviada con éxito. ¡Gracias!");
       setInputs({ nombre: "", correo_electronico: "", asunto: "", peticion: "" });
       setValidaciones({
@@ -229,28 +218,31 @@ const PeticionDeOracion = () => {
         peticion: "unset",
       });
     } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : "Error desconocido";
-      setMensajeEnvio(`Error al enviar la petición: ${errorMessage}`);
+      console.error('❌ Error al enviar petición:', error);
+      let errorMessage = "Error al enviar la petición";
+      
+      if (error instanceof Error) {
+        errorMessage = error.message;
+        
+        // Proporcionar mensajes más útiles según el tipo de error
+        if (errorMessage.includes('relation "prayer_requests" does not exist')) {
+          errorMessage = "La tabla de peticiones no existe en la base de datos. Por favor contacta al administrador.";
+        } else if (errorMessage.includes('permission denied')) {
+          errorMessage = "No tienes permisos para enviar peticiones. Verifica la configuración de seguridad.";
+        } else if (errorMessage.includes('connection')) {
+          errorMessage = "Error de conexión con la base de datos. Intenta de nuevo en unos momentos.";
+        }
+      }
+      
+      setMensajeEnvio(errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    const root = document.documentElement;
-
-    const applyTheme = (isDark: boolean) => {
-      root.style.setProperty("--color-background", isDark ? "#0a0a0a" : "#ffffff");
-      root.style.setProperty("--color-foreground", isDark ? "#ededed" : "#171717");
-    };
-
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    applyTheme(mediaQuery.matches);
-
-    const listener = (e: MediaQueryListEvent) => applyTheme(e.matches);
-    mediaQuery.addEventListener("change", listener);
-
-    return () => mediaQuery.removeEventListener("change", listener);
+    // El tema se maneja automáticamente por next-themes
+    // No necesitamos manipular CSS variables manualmente
   }, []);
 
   return (
@@ -320,7 +312,7 @@ const PeticionDeOracion = () => {
         )}
 
         <section className="text-left">
-          <p className="opacity-70 text-[var(--color-foreground)] text-justify">
+          <p className="opacity-70 text-muted-foreground text-justify">
             Tu petición de oración será compartida con los voluntarios del Equipo de
             Oración de Monte Sion. Ellos se comprometen a orar por cada petición
             recibida.

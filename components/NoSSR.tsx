@@ -1,0 +1,26 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
+interface NoSSRProps {
+  children: React.ReactNode;
+  fallback?: React.ReactNode;
+}
+
+/**
+ * Componente para evitar errores de hidratación
+ * Renderiza children solo en el cliente
+ */
+export default function NoSSR({ children, fallback = null }: NoSSRProps) {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return <>{fallback}</>;
+  }
+
+  return <>{children}</>;
+}
