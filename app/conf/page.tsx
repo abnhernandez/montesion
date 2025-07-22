@@ -127,12 +127,12 @@ export default function MonteSionConf() {
                   <span className="text-2xl font-bold tracking-wide">Monte Sion</span>
                   <Button
                     variant="outline"
-                    onClick={() => window.open('https://youtube.com/@montesionoaxacatv', '_blank')}
+                    onClick={() => window.open('https://instagram.com/montesionoaxaca', '_blank')}
                     className="font-bold px-3 py-2"
-                    aria-label="Ir al Live"
+                    aria-label="Post Instagram Flyer || Más que vencedores"
                   >
-                    <Youtube className="w-5 h-5" />
-                    Ir al Live
+                    <Instagram className="w-5 h-5" />
+                    Más que vencedores
                   </Button>
                 </div>
               </div>
@@ -217,17 +217,6 @@ export default function MonteSionConf() {
                       Asistir presencial
                     </Button>
                   </Link>
-                  <div className="flex-1">
-                    <Button
-                      variant="assist"
-                      className="w-full py-4 text-lg font-bold tracking-wide"
-                      onClick={() => window.open('https://campusmontesion.online.church/', '_blank')}
-                      aria-label="Asistir Online (Campus Monte Sion)"
-                    >
-                      <UserPlus className="w-5 h-5" />
-                      Asistir Online
-                    </Button>
-                  </div>
                 </div>
               </div>
 
