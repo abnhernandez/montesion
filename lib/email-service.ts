@@ -144,7 +144,7 @@ export async function sendNewPrayerRequestNotification(
         name: 'Sistema Monte Sion',
         address: process.env.EMAIL_FROM || 'noreplymontesion@gmail.com',
       },
-      to: process.env.EMAIL_TO, // Email del equipo
+      to: process.env.EMAIL_TO || 'rootmontesion@gmail.com', // Email del equipo
       subject: `🙏 Nueva Petición de Oración #${ticket}`,
       html: `
         <!DOCTYPE html>
@@ -154,7 +154,7 @@ export async function sendNewPrayerRequestNotification(
           <style>
             body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
             .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background-color: #dc2626; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
+            .header { background-color: #831111; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
             .content { background-color: #fef2f2; padding: 30px; border-radius: 0 0 8px 8px; }
             .info-box { background-color: white; padding: 15px; border-radius: 6px; margin: 15px 0; }
             .petition-box { background-color: #f3f4f6; padding: 20px; border-radius: 6px; margin: 20px 0; }
