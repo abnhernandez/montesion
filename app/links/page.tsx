@@ -13,7 +13,7 @@ const socialLinks = [
   { name: "Facebook", url: "https://facebook.com/montesionoax", icon: <FaFacebook /> },
   { name: "YouTube", url: "https://youtube.com/@montesionoaxacatv", icon: <FaYoutube /> },
   { name: "TikTok", url: "https://tiktok.com/@montesionoaxaca", icon: <FaTiktok /> },
-  { name: "X (Twitter)", url: "https://x.com/montesionoaxaca", icon: <FaXTwitter /> },
+  { name: "X (Twitter)", url: "https://x.com/OaxacaSion33831", icon: <FaXTwitter /> },
   { name: "Pinterest", url: "https://pinterest.com/montesionoaxaca", icon: <FaPinterest /> },
   { name: "Threads", url: "https://www.threads.net/@montesionoaxaca", icon: <FaThreads /> },
 ];
