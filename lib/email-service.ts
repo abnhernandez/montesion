@@ -46,7 +46,7 @@ export async function sendPrayerRequestConfirmation(
             .container { max-width: 600px; margin: 0 auto; padding: 20px; }
             .header { background-color: #831111; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
             .content { background-color: #f8fafc; padding: 30px; border-radius: 0 0 8px 8px; }
-            .ticket { background-color: #dbeafe; padding: 10px; border-radius: 6px; margin: 20px 0; text-align: center; }
+            .ticket { background-color: #fecaca; padding: 10px; border-radius: 6px; margin: 20px 0; text-align: center; }
             .footer { margin-top: 30px; padding-top: 20px; border-top: 2px solid #e5e7eb; font-size: 14px; color: #6b7280; }
           </style>
         </head>

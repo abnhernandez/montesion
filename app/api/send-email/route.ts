@@ -42,9 +42,9 @@ export async function POST(request: NextRequest) {
             <style>
               body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
               .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-              .header { background-color: #2563eb; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
+              .header { background-color: #831111; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
               .content { background-color: #f8fafc; padding: 30px; border-radius: 0 0 8px 8px; }
-              .ticket { background-color: #dbeafe; padding: 10px; border-radius: 6px; margin: 20px 0; text-align: center; }
+              .ticket { background-color: #fecaca; padding: 10px; border-radius: 6px; margin: 20px 0; text-align: center; }
               .footer { margin-top: 30px; padding-top: 20px; border-top: 2px solid #e5e7eb; font-size: 14px; color: #6b7280; }
             </style>
           </head>
@@ -121,7 +121,7 @@ Sitio web: https://montesion.me
           name: 'Sistema Monte Sion',
           address: process.env.EMAIL_FROM || 'noreplymontesion@gmail.com'
         },
-        to: 'ministeriomontesionoaxaca@gmail.com',
+        to: 'rootmontesion@gmail.com',
         subject: `🙏 Nueva Petición de Oración #${ticket}`,
         html: `
           <!DOCTYPE html>
@@ -131,7 +131,7 @@ Sitio web: https://montesion.me
             <style>
               body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
               .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-              .header { background-color: #dc2626; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
+              .header { background-color: #831111; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
               .content { background-color: #fef2f2; padding: 30px; border-radius: 0 0 8px 8px; }
               .info-box { background-color: white; padding: 15px; border-radius: 6px; margin: 15px 0; }
               .petition-box { background-color: #f3f4f6; padding: 20px; border-radius: 6px; margin: 20px 0; }
