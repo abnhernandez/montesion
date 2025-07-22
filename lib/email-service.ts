@@ -79,7 +79,7 @@ export async function sendPrayerRequestConfirmation(
               <strong>Filipenses 4:6</strong></p>
               
               <div class="footer">
-                <p><strong>Monte Sion - Iglesia Cristiana</strong><br>
+                <p><strong>Monte Sion · Iglesia Cristiana</strong><br>
                 Email: ministeriomontesionoaxaca@gmail.com<br>
                 Sitio web: https://montesion.me</p>
 
@@ -106,7 +106,7 @@ Asunto: ${asunto}
 
 "Por nada estéis afanosos, sino sean conocidas vuestras peticiones delante de Dios en toda oración y ruego, con acción de gracias." - Filipenses 4:6
 
-Monte Sion - Iglesia Cristiana
+Monte Sion · Iglesia Cristiana
 Email: ministeriomontesionoaxaca@gmail.com
 Sitio web: https://montesion.me
       `
@@ -172,7 +172,7 @@ export async function sendNewPrayerRequestNotification(
                 <p><strong>Nombre:</strong> ${nombre}</p>
                 <p><strong>Email:</strong> ${correo_electronico}</p>
                 <p><strong>Asunto:</strong> ${asunto}</p>
-                <p><strong>Fecha:</strong> ${new Date().toLocaleDateString('es-ES')}</p>
+                <p><strong>Fecha y Hora:</strong> ${new Date().toLocaleString('es-ES', { timeZone: 'America/Mexico_City', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' })}</p>
               </div>
               
               <div class="petition-box">
