@@ -4,7 +4,7 @@ import type React from "react"
 
 
 import { useState, useEffect } from "react"
-import { MapPin, ExternalLink, Youtube, UserPlus, MessageCircle } from "lucide-react"
+import { MapPin, ExternalLink, Instagram, MessageCircle } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 
