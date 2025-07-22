@@ -207,7 +207,7 @@ export default function MonteSionConf() {
                   La entrada es gratuita, sólo necesitas registrarte para recibir información y acceso.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 mt-4 w-full">
-                  <Link href="https://forms.gle/Cpz4UH1g4sCaVbHK6" target="_blank" rel="noopener" className="flex-1">
+                  <Link href="https://maps.app.goo.gl/8BigxhtzKFNgp6sD9" target="_blank" rel="noopener" className="flex-1">
                     <Button
                       style={{ }}
                       className="w-full py-4 text-lg font-bold tracking-wide border-2 border-[#158331] hover:bg-[#1da851] bg-[#158331] text-white dark:bg-[#115c25] dark:border-[#115c25] dark:hover:bg-[#158331]"
