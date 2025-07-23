@@ -10,7 +10,7 @@ export function useProtectedRoute() {
 
   useEffect(() => {
     if (!loading && !user) {
-      router.push("/auth")
+      router.push("/perfil")
     }
   }, [user, loading, router])
 
