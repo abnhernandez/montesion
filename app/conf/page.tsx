@@ -127,7 +127,7 @@ export default function MonteSionConf() {
                   <span className="text-2xl font-bold tracking-wide">Monte Sion</span>
                   <Button
                     variant="outline"
-                    onClick={() => window.open('https://instagram.com/montesionoaxaca', '_blank')}
+                    onClick={() => window.open('https://instagram.com/p/DMYXrhVJtSV/?igsh=MTkxYmNyYXdmYXNpZA==', '_blank')}
                     className="font-bold px-3 py-2"
                     aria-label="Post Instagram Flyer || Más que vencedores"
                   >
