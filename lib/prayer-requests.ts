@@ -40,8 +40,27 @@ export async function createPrayerRequest(
     // Generar ticket único
     const ticket = Math.floor(Math.random() * 1000000);
     
-    // Remove recaptchaToken from the data before inserting into database
+    // Extract and verify recaptchaToken before inserting into database
     const { recaptchaToken, ...cleanData } = prayerRequestData;
+    
+    // Verify reCAPTCHA token if provided
+    if (recaptchaToken) {
+      console.log('🔒 Verificando token reCAPTCHA Enterprise...');
+      const recaptchaResult = await verifyRecaptchaToken(
+        recaptchaToken,
+        'PRAYER_REQUEST',
+        0.5
+      );
+
+      if (!recaptchaResult.success) {
+        console.error('❌ Verificación reCAPTCHA falló:', recaptchaResult.error);
+        return {
+          success: false,
+          error: 'Error de verificación de seguridad. Por favor, intenta de nuevo.'
+        };
+      }
+      console.log('✅ reCAPTCHA verificado exitosamente. Score:', recaptchaResult.score);
+    }
     
     const dataToInsert: PrayerRequestInsert = {
       ...cleanData,

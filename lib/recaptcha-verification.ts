@@ -26,7 +26,7 @@ export async function verifyRecaptchaToken(
   expectedAction?: string,
   minimumScore: number = 0.5,
   userIpAddress?: string
-): Promise<{ success: boolean; score?: number; error?: string; details?: any }> {
+): Promise<{ success: boolean; score?: number; error?: string; details?: Record<string, unknown> }> {
   try {
     const apiKey = process.env.RECAPTCHA_API_KEY;
     const projectId = process.env.RECAPTCHA_PROJECT_ID || 'crack-muse-466920-q8';
@@ -153,7 +153,9 @@ export async function verifyRecaptchaToken(
     return { 
       success: false, 
       error: 'reCAPTCHA verification error',
-      details: error instanceof Error ? error.message : 'Unknown error'
+      details: { 
+        message: error instanceof Error ? error.message : 'Unknown error'
+      }
     };
   }
 }

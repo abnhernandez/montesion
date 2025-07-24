@@ -1,6 +1,6 @@
 'use client';
 
-import { useRecaptcha, type RecaptchaAction } from '@/hooks/use-recaptcha';
+import { type RecaptchaAction } from '@/hooks/use-recaptcha';
 
 /**
  * Generic function to execute reCAPTCHA for any form
