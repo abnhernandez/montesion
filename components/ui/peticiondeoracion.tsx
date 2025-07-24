@@ -4,6 +4,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import { CheckCircle2, XCircle } from "lucide-react";
 import clsx from "clsx";
 import { createPrayerRequest } from "@/lib/prayer-requests";
+import { useRecaptcha } from "@/hooks/use-recaptcha";
 
 type Campos = "nombre" | "correo_electronico" | "asunto" | "peticion";
 
@@ -157,6 +158,7 @@ const PeticionDeOracion = () => {
 
   const [mensajeEnvio, setMensajeEnvio] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const { executeRecaptcha } = useRecaptcha();
 
   const handleBlur = useCallback((field: Campos, value: string) => {
     if (value.trim() === "") {
@@ -197,12 +199,20 @@ const PeticionDeOracion = () => {
     setMensajeEnvio(null);
 
     try {
+      // Execute reCAPTCHA verification
+      const recaptchaToken = await executeRecaptcha('PRAYER_REQUEST');
+      
+      if (!recaptchaToken) {
+        throw new Error('Error de verificación de seguridad. Por favor, intenta de nuevo.');
+      }
+
       // Usar la función auxiliar para crear la petición
       const result = await createPrayerRequest({
         nombre: inputs.nombre.trim(),
         correo_electronico: inputs.correo_electronico.trim(),
         asunto: inputs.asunto.trim(),
         peticion: inputs.peticion.trim(),
+        recaptchaToken, // Add the reCAPTCHA token
       });
 
       if (!result.success) {

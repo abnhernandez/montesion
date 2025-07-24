@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import { verifyRecaptchaToken } from '@/lib/recaptcha-verification';
 
 // Configuración del transportador SMTP
 const createTransporter = () => {
@@ -16,7 +17,33 @@ const createTransporter = () => {
 
 export async function POST(request: NextRequest) {
   try {
-    const { type, data } = await request.json();
+    const { type, data, recaptchaToken } = await request.json();
+    
+    // Verify reCAPTCHA token if provided
+    if (recaptchaToken) {
+      console.log('🔒 Verificando token reCAPTCHA Enterprise para email...');
+      
+      // Get user IP address for enhanced verification
+      const userIpAddress = request.headers.get('x-forwarded-for') || 
+                           request.headers.get('x-real-ip') || 
+                           'unknown';
+      
+      const recaptchaResult = await verifyRecaptchaToken(
+        recaptchaToken,
+        'EMAIL_SEND',
+        0.5, // Minimum score of 0.5
+        userIpAddress
+      );
+
+      if (!recaptchaResult.success) {
+        console.error('❌ Verificación reCAPTCHA Enterprise falló:', recaptchaResult.error);
+        return NextResponse.json(
+          { success: false, error: 'Error de verificación de seguridad. Por favor, intenta de nuevo.' },
+          { status: 400 }
+        );
+      }
+      console.log('✅ reCAPTCHA Enterprise verificado exitosamente para email. Score:', recaptchaResult.score);
+    }
     
     const transporter = createTransporter();
     

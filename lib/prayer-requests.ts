@@ -4,14 +4,34 @@ import {
   sendPrayerRequestConfirmation, 
   sendNewPrayerRequestNotification 
 } from './email-service-client';
+import { verifyRecaptchaToken } from './recaptcha-verification';
 
 /**
  * Envía una nueva petición de oración a Supabase
  */
 export async function createPrayerRequest(
-  prayerRequestData: Omit<PrayerRequestInsert, 'ticket'>
+  prayerRequestData: Omit<PrayerRequestInsert, 'ticket'> & { recaptchaToken?: string }
 ): Promise<{ success: boolean; data?: PrayerRequest; error?: string }> {
   try {
+    // Verify reCAPTCHA token if provided
+    if (prayerRequestData.recaptchaToken) {
+      console.log('🔒 Verificando token reCAPTCHA...');
+      const recaptchaResult = await verifyRecaptchaToken(
+        prayerRequestData.recaptchaToken,
+        'PRAYER_REQUEST',
+        0.5 // Minimum score of 0.5
+      );
+
+      if (!recaptchaResult.success) {
+        console.error('❌ Verificación reCAPTCHA falló:', recaptchaResult.error);
+        return {
+          success: false,
+          error: 'Error de verificación de seguridad. Por favor, intenta de nuevo.'
+        };
+      }
+      console.log('✅ reCAPTCHA verificado exitosamente. Score:', recaptchaResult.score);
+    }
+
     const supabase = createClient();
     
     // Verificar conexión con Supabase
@@ -20,8 +40,11 @@ export async function createPrayerRequest(
     // Generar ticket único
     const ticket = Math.floor(Math.random() * 1000000);
     
+    // Remove recaptchaToken from the data before inserting into database
+    const { recaptchaToken, ...cleanData } = prayerRequestData;
+    
     const dataToInsert: PrayerRequestInsert = {
-      ...prayerRequestData,
+      ...cleanData,
       ticket,
       status: 'pending'
     };
@@ -69,18 +92,18 @@ export async function createPrayerRequest(
     Promise.all([
       // Email de confirmación al usuario
       sendPrayerRequestConfirmation(
-        prayerRequestData.correo_electronico,
-        prayerRequestData.nombre,
+        cleanData.correo_electronico,
+        cleanData.nombre,
         ticket,
-        prayerRequestData.asunto
+        cleanData.asunto
       ).catch(err => console.warn('⚠️ Error enviando confirmación:', err)),
       
       // Notificación al equipo de Monte Sion
       sendNewPrayerRequestNotification(
-        prayerRequestData.nombre,
-        prayerRequestData.correo_electronico,
-        prayerRequestData.asunto,
-        prayerRequestData.peticion,
+        cleanData.nombre,
+        cleanData.correo_electronico,
+        cleanData.asunto,
+        cleanData.peticion,
         ticket
       ).catch(err => console.warn('⚠️ Error enviando notificación:', err))
     ]);

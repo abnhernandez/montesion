@@ -25,6 +25,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" suppressHydrationWarning>
+      <head>
+        <script src="https://www.google.com/recaptcha/enterprise.js?render=6LewOY4rAAAAAHFM3cVheqX82ITHy0JPNhTj11_B"></script>
+      </head>
       <body className="antialiased bg-background text-foreground">
         <Providers>
           <AuthProvider>

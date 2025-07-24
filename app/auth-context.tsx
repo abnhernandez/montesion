@@ -14,7 +14,21 @@ interface AuthContextType {
   signOut: () => Promise<void>
   resetPassword: (email: string) => Promise<void>
   confirmPasswordReset: (token: string, newPassword: string) => Promise<void>
-  updateProfile: (data: { nombre?: string; apellido?: string }) => Promise<void>
+  updateProfile: (data: { 
+    nombre?: string; 
+    apellido?: string; 
+    username?: string; 
+    rol?: string; 
+    descripcion?: string; 
+    fechaNacimiento?: string; 
+    instagram?: string;
+    twitter?: string; 
+    linkedin?: string; 
+    github?: string; 
+    youtube?: string;
+    tiktok?: string;
+  }) => Promise<void>
+  deleteAccount: () => Promise<void>
   clearError: () => void
 }
 
@@ -237,7 +251,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  const updateProfile = async (data: { nombre?: string; apellido?: string }) => {
+  const updateProfile = async (data: { 
+    nombre?: string; 
+    apellido?: string; 
+    username?: string; 
+    rol?: string; 
+    descripcion?: string; 
+    fechaNacimiento?: string; 
+    twitter?: string; 
+    linkedin?: string; 
+    github?: string; 
+    sitioWeb?: string 
+  }) => {
     if (!user) throw new Error('No hay usuario autenticado')
     if (!supabase) {
       setError('Authentication system not initialized')
@@ -253,6 +278,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         data: {
           nombre: data.nombre,
           apellido: data.apellido,
+          username: data.username,
+          rol: data.rol,
+          descripcion: data.descripcion,
+          fechaNacimiento: data.fechaNacimiento,
+          twitter: data.twitter,
+          linkedin: data.linkedin,
+          github: data.github,
+          sitioWeb: data.sitioWeb,
         }
       })
 
@@ -267,6 +300,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             email: user.email,
             nombre: data.nombre,
             apellido: data.apellido,
+            username: data.username,
+            rol: data.rol,
+            descripcion: data.descripcion,
+            fecha_nacimiento: data.fechaNacimiento,
+            twitter: data.twitter,
+            linkedin: data.linkedin,
+            github: data.github,
+            sitio_web: data.sitioWeb,
             updated_at: new Date().toISOString(),
           })
           .eq('id', user.id)
@@ -288,6 +329,98 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
+  const deleteAccount = async () => {
+    if (!user) throw new Error('No hay usuario autenticado')
+    if (!supabase) {
+      setError('Authentication system not initialized')
+      throw new Error('Authentication system not initialized')
+    }
+    
+    setLoading(true)
+    setError(null)
+
+    try {
+      // Intentar usar la función RPC para eliminación completa
+      try {
+        const { error: rpcError } = await supabase.rpc('request_account_deletion')
+        
+        if (rpcError) {
+          console.warn('RPC request_account_deletion failed:', rpcError)
+          // Intentar con la función básica
+          const { error: basicRpcError } = await supabase.rpc('delete_user')
+          
+          if (basicRpcError) {
+            console.warn('RPC delete_user failed:', basicRpcError)
+            throw basicRpcError
+          }
+        }
+        
+        console.log('Account deletion completed successfully via RPC')
+        
+        // Limpiar estado local inmediatamente
+        setUser(null)
+        setSession(null)
+        
+        return
+        
+      } catch (rpcError) {
+        console.warn('RPC methods failed, falling back to manual deletion:', rpcError)
+      }
+
+      // Método de respaldo: eliminación manual de tablas
+      try {
+        // Eliminar de la tabla users si existe
+        const { error: deleteUserError } = await supabase
+          .from('users')
+          .delete()
+          .eq('id', user.id)
+
+        if (deleteUserError && deleteUserError.code !== 'PGRST116') {
+          console.warn('Error deleting user from users table:', deleteUserError)
+        }
+
+        // Eliminar de otras tablas relacionadas si existen
+        const tables = ['user_courses', 'user_progress', 'user_achievements', 'user_preferences']
+        
+        for (const table of tables) {
+          try {
+            await supabase
+              .from(table)
+              .delete()
+              .eq('user_id', user.id)
+          } catch (tableError) {
+            console.warn(`Table ${table} might not exist or user has no data:`, tableError)
+          }
+        }
+
+        // Cerrar sesión del usuario
+        const { error: signOutError } = await supabase.auth.signOut()
+        
+        if (signOutError) {
+          console.warn('Error signing out:', signOutError)
+        }
+
+        // Limpiar estado local
+        setUser(null)
+        setSession(null)
+        
+        console.info('Account deletion process completed via manual method.')
+
+      } catch (manualError) {
+        console.error('Manual deletion also failed:', manualError)
+        throw manualError
+      }
+      
+    } catch (error) {
+      const authError = error as AuthError
+      console.error('Error deleting account:', authError)
+      setError('Error durante el proceso de eliminación')
+      throw new Error('Ocurrió un error durante el proceso de eliminación de cuenta.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const clearError = () => {
     setError(null)
   }
@@ -303,6 +436,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     resetPassword,
     confirmPasswordReset,
     updateProfile,
+    deleteAccount,
     clearError,
   }
 
