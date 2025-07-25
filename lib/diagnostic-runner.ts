@@ -32,6 +32,6 @@ export async function runSystemDiagnostic() {
 
 // Make it available globally for console debugging
 if (typeof window !== 'undefined') {
-  (window as any).runSystemDiagnostic = runSystemDiagnostic;
+  (window as unknown as Record<string, unknown>).runSystemDiagnostic = runSystemDiagnostic;
   console.log('🔧 Diagnostic function available as: window.runSystemDiagnostic()');
 }

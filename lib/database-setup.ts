@@ -55,7 +55,7 @@ export async function createSampleData() {
     }
     
     return true;
-  } catch (error) {
+  } catch {
     console.log('ℹ️ Sample data creation handled by SQL setup script');
     return true; // This is expected due to RLS policies
   }

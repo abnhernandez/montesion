@@ -47,7 +47,8 @@ export async function createPrayerRequest(
     const ticket = Math.floor(Math.random() * 1000000);
     
     // Extract recaptchaToken before inserting into database (we don't store it)
-    const { recaptchaToken, ...cleanData } = prayerRequestData;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { recaptchaToken: _, ...cleanData } = prayerRequestData;
     
     const dataToInsert: PrayerRequestInsert = {
       ...cleanData,
