@@ -30,3 +30,21 @@ h1, h2, h3, h4, h5, h6 {
 p, span, a {
   font-family: var(--font-mono);
 }
+
+/* Hide reCAPTCHA badge on all pages by default */
+.grecaptcha-badge {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  position: absolute !important;
+  left: -9999px !important;
+}
+
+/* Show reCAPTCHA badge only on pages with forms that need it */
+.show-recaptcha-badge .grecaptcha-badge {
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: fixed !important;
+  left: auto !important;
+  bottom: 14px !important;
+  right: 14px !important;
+}

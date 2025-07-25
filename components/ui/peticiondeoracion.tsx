@@ -335,6 +335,11 @@ const PeticionDeOracion = () => {
             Si tienes alguna pregunta o inquietud, no dudes en contactarnos a través de <br />
             <a href="mailto:ministeriomontesionoaxaca@gmail.com">ministeriomontesionoaxaca@gmail.com</a>.
           </p>
+          
+          {/* Discrete reCAPTCHA notice */}
+          <div className="mt-4 text-xs text-muted-foreground text-center opacity-30">
+            Protegido por reCAPTCHA
+          </div>
         </section>
       </div>
     </main>

@@ -123,7 +123,7 @@ export async function POST(request: Request) {
 - `LOGIN` - For login forms
 - `REGISTER` - For registration forms  
 - `PRAYER_REQUEST` - For prayer request forms
-- `CONTACT_FORM` - For contact forms
+- `CONTACT_FORM` - For contact forms and feedback
 - `EMAIL_SEND` - For email sending
 - `SUBMIT_FORM` - Generic form submission
 
@@ -134,9 +134,13 @@ export async function POST(request: Request) {
 - [x] Email API endpoint (`/api/send-email`)
 - [x] Login form component (`/components/auth/LoginForm.tsx`)
 - [x] Registration form component (`/components/auth/RegisterForm.tsx`)
+- [x] Feedback form (`/app/feedback`)
+- [x] Feedback API endpoint (`/api/feedback`)
 - [x] Global reCAPTCHA script loading
 - [x] TypeScript utilities and hooks
 - [x] Server-side verification
+- [x] Hidden reCAPTCHA badge styling
+- [x] Discrete "protegido por reCAPTCHA" notices
 
 ### 🔄 Ready to Implement
 - [ ] Contact forms (can use existing utilities)
@@ -150,11 +154,14 @@ export async function POST(request: Request) {
 - `hooks/use-recaptcha.tsx` - React hook for reCAPTCHA
 - `lib/recaptcha-verification.ts` - Server-side verification
 - `lib/recaptcha-utils.ts` - Utility functions
+- `app/globals.css` - Hidden reCAPTCHA badge styling
 
 ### Form Updates
 - `components/ui/peticiondeoracion.tsx` - Prayer form with reCAPTCHA
 - `lib/prayer-requests.ts` - Updated to verify reCAPTCHA tokens
 - `app/api/send-email/route.ts` - Email API with reCAPTCHA
+- `app/feedback/page.tsx` - Feedback form with reCAPTCHA
+- `app/api/feedback/route.ts` - Feedback API with reCAPTCHA
 
 ### Example Forms
 - `components/auth/LoginForm.tsx` - Login form example
@@ -167,6 +174,31 @@ export async function POST(request: Request) {
 3. **Score-based Filtering**: Configurable minimum score thresholds
 4. **Action Verification**: Ensures tokens match expected actions
 5. **Error Handling**: Graceful fallbacks for verification failures
+6. **Hidden Badge**: reCAPTCHA badge is hidden by default via CSS
+7. **Discrete Notices**: Subtle "protegido por reCAPTCHA" text on forms
+
+## 🎨 UI/UX Improvements
+
+### Hidden reCAPTCHA Badge
+The reCAPTCHA badge is hidden by default using CSS:
+```css
+.grecaptcha-badge {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  position: absolute !important;
+  left: -9999px !important;
+}
+```
+
+### Discrete Protection Notices
+Forms include subtle protection notices:
+```tsx
+<div className="mt-6 text-xs text-muted-foreground text-center opacity-30">
+  Protegido por reCAPTCHA
+</div>
+```
+
+This provides transparency while maintaining clean UI design.
 
 ## 🚨 Important Notes
 

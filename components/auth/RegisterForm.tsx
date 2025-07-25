@@ -204,8 +204,8 @@ export default function RegisterForm() {
         </Button>
       </form>
       
-      {/* Hidden reCAPTCHA notice - less prominent */}
-      <div className="mt-6 text-xs text-muted-foreground text-center opacity-50">
+      {/* Hidden reCAPTCHA notice - very discrete */}
+      <div className="mt-6 text-xs text-muted-foreground text-center opacity-30">
         Protegido por reCAPTCHA
       </div>
     </div>

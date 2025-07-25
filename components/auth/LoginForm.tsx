@@ -92,8 +92,8 @@ export default function LoginForm() {
         </Button>
       </form>
       
-      <div className="mt-4 text-xs text-muted-foreground text-center">
-        Este formulario está protegido por reCAPTCHA Enterprise.
+      <div className="mt-6 text-xs text-muted-foreground text-center opacity-30">
+        Protegido por reCAPTCHA
       </div>
     </div>
   );

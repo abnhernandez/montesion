@@ -13,10 +13,12 @@ import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Bug, MessageSquare, Lightbulb, Send } from "lucide-react"
 import { toast } from "sonner"
+import { useRecaptcha } from "@/hooks/use-recaptcha"
 
 export default function MinimalFeedbackForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [feedbackType, setFeedbackType] = useState<'bug' | 'feature' | 'general'>('bug')
+  const { executeRecaptcha } = useRecaptcha()
 
   // Detectar el tema del sistema cuando se carga el componente
   useEffect(() => {
@@ -37,34 +39,49 @@ export default function MinimalFeedbackForm() {
     setIsSubmitting(true)
     const form = e.currentTarget
     const formData = new FormData(form)
-    // Construir payload según tipo
-    const payload: {
-      type: string;
-      description: string;
-      title?: string;
-      priority?: string;
-      browser?: string;
-      email?: string;
-      importance?: string;
-      subject?: string;
-    } = { type: feedbackType, description: '' }
-    if (feedbackType === 'bug') {
-      payload.title = (formData.get('title') ?? '') as string
-      payload.description = (formData.get('description') ?? '') as string
-      payload.priority = (formData.get('priority') ?? '') as string
-      payload.browser = (formData.get('browser') ?? '') as string
-      payload.email = (formData.get('email') ?? '') as string
-    } else if (feedbackType === 'feature') {
-      payload.title = (formData.get('title') ?? '') as string
-      payload.description = (formData.get('description') ?? '') as string
-      payload.importance = (formData.get('importance') ?? '') as string
-      payload.email = (formData.get('email') ?? '') as string
-    } else {
-      payload.subject = (formData.get('subject') ?? '') as string
-      payload.description = (formData.get('message') ?? '') as string
-      payload.email = (formData.get('email') ?? '') as string
-    }
+
     try {
+      // Execute reCAPTCHA verification
+      const recaptchaToken = await executeRecaptcha('CONTACT_FORM');
+      
+      if (!recaptchaToken) {
+        console.warn('reCAPTCHA verification failed, but proceeding with feedback');
+      }
+
+      // Construir payload según tipo
+      const payload: {
+        type: string;
+        description: string;
+        title?: string;
+        priority?: string;
+        browser?: string;
+        email?: string;
+        importance?: string;
+        subject?: string;
+        recaptchaToken?: string;
+      } = { 
+        type: feedbackType, 
+        description: '',
+        recaptchaToken: recaptchaToken || 'dev-fallback'
+      }
+
+      if (feedbackType === 'bug') {
+        payload.title = (formData.get('title') ?? '') as string
+        payload.description = (formData.get('description') ?? '') as string
+        payload.priority = (formData.get('priority') ?? '') as string
+        payload.browser = (formData.get('browser') ?? '') as string
+        payload.email = (formData.get('email') ?? '') as string
+      } else if (feedbackType === 'feature') {
+        payload.title = (formData.get('title') ?? '') as string
+        payload.description = (formData.get('description') ?? '') as string
+        payload.importance = (formData.get('importance') ?? '') as string
+        payload.email = (formData.get('email') ?? '') as string
+      } else {
+        payload.subject = (formData.get('subject') ?? '') as string
+        payload.description = (formData.get('message') ?? '') as string
+        payload.email = (formData.get('email') ?? '') as string
+      }
+
       const res = await fetch('/api/feedback', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -383,6 +400,10 @@ export default function MinimalFeedbackForm() {
               </form>
             </TabsContent>
           </Tabs>
+          {/* Discrete reCAPTCHA notice */}
+          <div className="mt-4 text-xs text-muted-foreground text-center opacity-30">
+            Protegido por reCAPTCHA
+          </div>
         </CardContent>
       </Card>
     </div>
