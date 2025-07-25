@@ -134,8 +134,7 @@ export async function POST(request: Request) {
 - [x] Email API endpoint (`/api/send-email`)
 - [x] Login form component (`/components/auth/LoginForm.tsx`)
 - [x] Registration form component (`/components/auth/RegisterForm.tsx`)
-- [x] Feedback form (`/app/feedback`)
-- [x] Feedback API endpoint (`/api/feedback`)
+- [x] Feedback form (`/app/feedback`) - Uses Supabase directly
 - [x] Global reCAPTCHA script loading
 - [x] TypeScript utilities and hooks
 - [x] Server-side verification
@@ -160,8 +159,8 @@ export async function POST(request: Request) {
 - `components/ui/peticiondeoracion.tsx` - Prayer form with reCAPTCHA
 - `lib/prayer-requests.ts` - Updated to verify reCAPTCHA tokens
 - `app/api/send-email/route.ts` - Email API with reCAPTCHA
-- `app/feedback/page.tsx` - Feedback form with reCAPTCHA
-- `app/api/feedback/route.ts` - Feedback API with reCAPTCHA
+- `app/feedback/page.tsx` - Feedback form with reCAPTCHA (uses Supabase)
+- `lib/feedback-requests.ts` - Feedback handling with reCAPTCHA (Supabase)
 
 ### Example Forms
 - `components/auth/LoginForm.tsx` - Login form example

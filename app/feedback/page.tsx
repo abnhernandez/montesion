@@ -14,6 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Bug, MessageSquare, Lightbulb, Send } from "lucide-react"
 import { toast } from "sonner"
 import { useRecaptcha } from "@/hooks/use-recaptcha"
+import { createFeedback } from "@/lib/feedback-requests"
 
 export default function MinimalFeedbackForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -50,14 +51,14 @@ export default function MinimalFeedbackForm() {
 
       // Construir payload según tipo
       const payload: {
-        type: string;
-        description: string;
+        type: 'bug' | 'feature' | 'general';
         title?: string;
-        priority?: string;
+        subject?: string;
+        description: string;
+        priority?: 'low' | 'medium' | 'high';
+        importance?: 'low' | 'medium' | 'high';
         browser?: string;
         email?: string;
-        importance?: string;
-        subject?: string;
         recaptchaToken?: string;
       } = { 
         type: feedbackType, 
@@ -68,13 +69,13 @@ export default function MinimalFeedbackForm() {
       if (feedbackType === 'bug') {
         payload.title = (formData.get('title') ?? '') as string
         payload.description = (formData.get('description') ?? '') as string
-        payload.priority = (formData.get('priority') ?? '') as string
+        payload.priority = (formData.get('priority') ?? 'medium') as 'low' | 'medium' | 'high'
         payload.browser = (formData.get('browser') ?? '') as string
         payload.email = (formData.get('email') ?? '') as string
       } else if (feedbackType === 'feature') {
         payload.title = (formData.get('title') ?? '') as string
         payload.description = (formData.get('description') ?? '') as string
-        payload.importance = (formData.get('importance') ?? '') as string
+        payload.importance = (formData.get('importance') ?? 'medium') as 'low' | 'medium' | 'high'
         payload.email = (formData.get('email') ?? '') as string
       } else {
         payload.subject = (formData.get('subject') ?? '') as string
@@ -82,17 +83,19 @@ export default function MinimalFeedbackForm() {
         payload.email = (formData.get('email') ?? '') as string
       }
 
-      const res = await fetch('/api/feedback', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
-      if (!res.ok) throw new Error('Error al enviar feedback')
-      toast('Gracias por tu feedback')
+      // Use Supabase instead of API endpoint
+      const result = await createFeedback(payload);
+      
+      if (!result.success) {
+        throw new Error(result.error || 'Error desconocido al enviar feedback');
+      }
+
+      toast.success('¡Gracias por tu feedback! Lo hemos recibido correctamente.')
       form.reset()
     } catch (err) {
-      console.error(err)
-      toast.error('Error al enviar, inténtalo de nuevo')
+      console.error('Error enviando feedback:', err)
+      const errorMessage = err instanceof Error ? err.message : 'Error al enviar, inténtalo de nuevo'
+      toast.error(errorMessage)
     } finally {
       setIsSubmitting(false)
     }

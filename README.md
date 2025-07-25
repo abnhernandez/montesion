@@ -19,6 +19,7 @@ Una plataforma web moderna y completa para la Iglesia Cristiana Monte Sion, desa
 - **Sistema de Autenticación**: Registro, login y gestión de usuarios
 - **Localizador de Templos**: Mapa interactivo con Google Maps para encontrar ubicaciones
 - **Peticiones de Oración**: Sistema de envío y gestión de solicitudes espirituales
+- **Sistema de Feedback**: Reporte de bugs, solicitudes de características y comentarios generales
 - **Planificación de Visitas**: Herramientas para que nuevos visitantes se integren
 - **Declaraciones de Fe**: Documentación teológica interactiva con referencias bíblicas
 
