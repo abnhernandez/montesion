@@ -43,7 +43,7 @@ export default function SimpleTempleLocator({ className = "" }: SimpleTempleLoca
   }, []);
 
   return (
-      <div className="w-full h-full relative">
+      <div className={`w-full h-full relative ${className}`}>
         {/* Mapa con Google Maps Locator Plus */}
         <div className="w-full h-full relative">
           {/* Indicador de carga mejorado */}
