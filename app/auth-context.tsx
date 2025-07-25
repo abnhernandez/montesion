@@ -127,15 +127,45 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           data: {
             nombre: userData?.nombre || '',
             apellido: userData?.apellido || '',
-          }
+          },
+          // For development, disable email confirmation
+          emailRedirectTo: undefined
         }
       })
 
-      if (error) throw error
+      if (error) {
+        console.error('Signup error details:', error)
+        
+        // Handle specific errors more gracefully
+        if (error.message.includes('captcha verification process failed')) {
+          console.warn('Captcha verification failed, but user signup may still proceed')
+          setError('Problema con verificación. Intenta de nuevo o contacta soporte.')
+          return
+        }
+        
+        if (error.message.includes('User already registered')) {
+          setError('Este email ya está registrado. ¿Quieres iniciar sesión?')
+          return
+        }
+        
+        if (error.message.includes('Invalid email')) {
+          setError('Por favor verifica que el email sea válido.')
+          return
+        }
+        
+        throw error
+      }
 
-      // Si no hay confirmación automática, mostrar mensaje
-      if (!data.session) {
-        setError('Te hemos enviado un email de confirmación. Por favor, revisa tu bandeja de entrada.')
+      // Check if user was created successfully
+      if (data.user) {
+        console.log('✅ Usuario creado exitosamente:', data.user.id)
+        
+        // Si no hay sesión automática, es porque requiere confirmación
+        if (!data.session) {
+          setError('Cuenta creada exitosamente. Si se requiere confirmación, revisa tu email.')
+        } else {
+          setError('¡Cuenta creada e iniciada sesión exitosamente!')
+        }
       }
     } catch (error) {
       const authError = error as AuthError

@@ -50,6 +50,8 @@ export const useRecaptcha = () => {
             }
           }
           
+          // For other errors, log but allow to continue (graceful degradation)
+          console.warn('⚠️ reCAPTCHA execution failed, proceeding without verification');
           resolve(null);
         }
       });

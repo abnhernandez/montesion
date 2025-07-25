@@ -8,6 +8,9 @@ import { Toaster } from "@/components/ui/sonner"
 import { Providers } from "@/components/providers"
 import Script from "next/script"
 
+// Import diagnostic runner for development
+import "@/lib/diagnostic-runner"
+
 export const metadata: Metadata = {
   title: "Monte Sion · Iglesia Cristiana",
   description: "Monte Sion · Iglesia Cristiana",

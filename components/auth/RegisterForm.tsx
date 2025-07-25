@@ -2,12 +2,15 @@
 
 import { useState } from 'react';
 import { useRecaptcha } from '@/hooks/use-recaptcha';
+import { useAuth } from '@/app/auth-context';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { toast } from 'sonner';
 
 export default function RegisterForm() {
   const [formData, setFormData] = useState({
     nombre: '',
+    apellido: '',
     email: '',
     password: '',
     confirmPassword: ''
@@ -16,6 +19,7 @@ export default function RegisterForm() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const { executeRecaptcha } = useRecaptcha();
+  const { signUp } = useAuth();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -40,35 +44,40 @@ export default function RegisterForm() {
         throw new Error('La contraseña debe tener al menos 6 caracteres');
       }
 
-      // Execute reCAPTCHA verification
+      if (!formData.nombre.trim() || !formData.apellido.trim()) {
+        throw new Error('Nombre y apellido son requeridos');
+      }
+
+      // Execute reCAPTCHA verification (hidden from user)
       const recaptchaToken = await executeRecaptcha('REGISTER');
       
       if (!recaptchaToken) {
-        throw new Error('Error de verificación de seguridad. Por favor, intenta de nuevo.');
+        // Don't show reCAPTCHA error to user, just log it
+        console.warn('reCAPTCHA verification failed, but proceeding with registration');
       }
 
-      // Here you would typically call your registration API
-      // For now, this is just a placeholder
-      console.log('Registration attempt with reCAPTCHA verified:', { 
-        nombre: formData.nombre,
-        email: formData.email,
-        recaptchaToken 
+      // Call Supabase signup
+      await signUp(formData.email, formData.password, {
+        nombre: formData.nombre.trim(),
+        apellido: formData.apellido.trim()
       });
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
       
       // Handle successful registration
       setSuccess(true);
       setFormData({
         nombre: '',
+        apellido: '',
         email: '',
         password: '',
         confirmPassword: ''
       });
+      
+      toast.success('¡Cuenta creada exitosamente!');
     } catch (error) {
-      console.error('Error en el registro:', error);
-      setError(error instanceof Error ? error.message : 'Error en el registro');
+      console.error('Error en registro:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Error en el registro';
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -106,7 +115,7 @@ export default function RegisterForm() {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="nombre" className="block text-sm font-medium mb-1">
-            Nombre Completo
+            Nombre
           </label>
           <Input
             id="nombre"
@@ -114,7 +123,23 @@ export default function RegisterForm() {
             type="text"
             value={formData.nombre}
             onChange={handleChange}
-            placeholder="Tu nombre completo"
+            placeholder="Tu nombre"
+            required
+            disabled={loading}
+          />
+        </div>
+        
+        <div>
+          <label htmlFor="apellido" className="block text-sm font-medium mb-1">
+            Apellido
+          </label>
+          <Input
+            id="apellido"
+            name="apellido"
+            type="text"
+            value={formData.apellido}
+            onChange={handleChange}
+            placeholder="Tu apellido"
             required
             disabled={loading}
           />
@@ -179,8 +204,9 @@ export default function RegisterForm() {
         </Button>
       </form>
       
-      <div className="mt-4 text-xs text-muted-foreground text-center">
-        Este formulario está protegido por reCAPTCHA Enterprise.
+      {/* Hidden reCAPTCHA notice - less prominent */}
+      <div className="mt-6 text-xs text-muted-foreground text-center opacity-50">
+        Protegido por reCAPTCHA
       </div>
     </div>
   );

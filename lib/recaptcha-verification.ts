@@ -32,11 +32,23 @@ export async function verifyRecaptchaToken(
     const projectId = process.env.RECAPTCHA_PROJECT_ID || 'crack-muse-466920-q8';
     
     if (!apiKey) {
-      console.error('RECAPTCHA_API_KEY is not configured');
+      console.warn('RECAPTCHA_API_KEY is not configured - allowing request in development mode');
+      
+      // In development, allow requests to proceed without reCAPTCHA verification
+      if (process.env.NODE_ENV === 'development') {
+        return { success: true, score: 0.9, error: 'Development mode - reCAPTCHA bypassed' };
+      }
+      
       return { success: false, error: 'reCAPTCHA configuration error' };
     }
 
-    if (!token) {
+    if (!token || token === 'dev-fallback') {
+      console.warn('No valid reCAPTCHA token provided - allowing in development mode');
+      
+      if (process.env.NODE_ENV === 'development') {
+        return { success: true, score: 0.8, error: 'Development mode - token fallback' };
+      }
+      
       return { success: false, error: 'No reCAPTCHA token provided' };
     }
 

@@ -216,14 +216,34 @@ export default function Page() {
 				</section>
 				<div id="declaraciondefe-scroll" />
 				<section className="w-full max-w-6xl mx-auto px-2 py-14 flex flex-col items-center">
-				<div className="w-full max-w-2xl mx-auto mb-6">
-					<h3 className="text-3xl font-semibold text-center mb-4">
-						Te esperamos en Monte Sion ❤️
-					</h3>
-				</div>
-					<div className="flex-1 w-full h-[350px] rounded-3xl overflow-hidden shadow-2xl border border-border bg-background">
+					<motion.div
+						initial={{ opacity: 0, y: 20 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.6 }}
+						viewport={{ once: true }}
+						className="w-full max-w-2xl mx-auto mb-8 text-center"
+					>
+						<BlurText
+							text="Te esperamos en Monte Sion ❤️"
+							className="text-3xl md:text-4xl font-bold text-center mb-4"
+							animateBy="words"
+							direction="top"
+						/>
+						<p className="text-lg text-muted-foreground">
+							Encuentra nuestras ubicaciones y planifica tu visita. 
+							Estamos aquí para recibirte con amor y acompañarte en tu crecimiento espiritual.
+						</p>
+					</motion.div>
+					
+					<motion.div
+						initial={{ opacity: 0, y: 30 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.8, delay: 0.2 }}
+						viewport={{ once: true }}
+						className="flex-1 w-full h-[500px] md:h-[600px] rounded-3xl overflow-hidden shadow-2xl border border-border bg-background"
+					>
 						<Maps />
-					</div>
+					</motion.div>
 				</section>
 			</main>
 		</div>

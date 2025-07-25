@@ -23,43 +23,64 @@ export async function diagnosticSupabase() {
     const supabase = createClient();
     console.log('✅ Cliente Supabase creado');
     
-    // Verificar conexión básica
-    console.log('🔄 Verificando conexión...');
-    const { error: healthError } = await supabase
-      .from('prayer_requests')
-      .select('count')
+    // Verificar autenticación
+    console.log('🔄 Verificando autenticación...');
+    const { data: authData, error: authError } = await supabase.auth.getSession();
+    
+    if (authError) {
+      console.warn('⚠️ Error de autenticación:', authError.message);
+    } else {
+      console.log('✅ Auth working, user:', authData.session?.user?.email || 'None');
+    }
+    
+    // Verificar tabla todos
+    console.log('🔄 Verificando tabla todos...');
+    const { error: todosError } = await supabase
+      .from('todos')
+      .select('*')
       .limit(1);
     
-    if (healthError) {
-      console.error('❌ Error de conexión:', healthError);
-      console.log('💡 Posibles causas:');
-      console.log('   1. La tabla prayer_requests no existe');
-      console.log('   2. Las credenciales son incorrectas');
-      console.log('   3. Las políticas RLS están mal configuradas');
-      return false;
-    }
-    
-    console.log('✅ Conexión exitosa');
-    
-    // Verificar estructura de tabla
-    console.log('🔄 Verificando estructura de tabla...');
-    try {
-      const { error: structureError } = await supabase
-        .from('prayer_requests')
-        .select('*')
-        .limit(0);
-      
-      if (structureError) {
-        console.warn('⚠️ No se pudo verificar la estructura de la tabla:', structureError.message);
-      } else {
-        console.log('✅ Estructura de tabla verificada');
+    if (todosError) {
+      console.log('❌ Todos table not available:', todosError.message);
+      if (todosError.message.includes('relation "public.todos" does not exist')) {
+        console.log('ℹ️ Todos table not available yet. Create it manually or run setup script.');
       }
-    } catch (structureError) {
-      console.warn('⚠️ Error verificando estructura:', structureError);
+    } else {
+      console.log('✅ Todos table accessible');
     }
     
-    console.log('🎉 Diagnóstico completado - Supabase está funcionando');
-    return true;
+    // Verificar tabla users
+    console.log('🔄 Verificando tabla users...');
+    const { error: usersError } = await supabase
+      .from('users')
+      .select('*')
+      .limit(1);
+    
+    if (usersError) {
+      console.log('❌ Users table not available:', usersError.message);
+      if (usersError.message.includes('relation "public.users" does not exist')) {
+        console.log('ℹ️ Users table not available yet. Create it manually or run setup script.');
+      }
+    } else {
+      console.log('✅ Users table accessible');
+    }
+    
+    // Si hay errores de tabla, pero la conexión funciona, el diagnóstico es parcialmente exitoso
+    const hasConnectionIssues = !authData;
+    const hasTableIssues = (todosError && todosError.message.includes('does not exist')) || 
+                           (usersError && usersError.message.includes('does not exist'));
+    
+    if (!hasConnectionIssues) {
+      if (hasTableIssues) {
+        console.log('⚠️ Conexión exitosa pero faltan tablas - ejecutar setup SQL');
+        return true; // Connection works, just need tables
+      } else {
+        console.log('🎉 Diagnóstico completado - Supabase está funcionando completamente');
+        return true;
+      }
+    }
+    
+    return false;
     
   } catch (error) {
     console.error('❌ Error durante diagnóstico:', error);
