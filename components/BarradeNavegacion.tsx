@@ -14,7 +14,7 @@ export function BarradeNavegacion() {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const dropdownTimeout = useRef<NodeJS.Timeout | null>(null);
   
-  const { user, signOut, loading } = useAuth();
+  // const { user, signOut, loading } = useAuth();
 
   // Cerrar menú de usuario cuando se hace clic fuera
   useEffect(() => {
