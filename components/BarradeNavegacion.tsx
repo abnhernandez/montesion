@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { useAuth } from "@/app/auth-context";
+// import { useAuth } from "@/app/auth-context";
 // import { Button } from "@/components/ui/button";
 // import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
