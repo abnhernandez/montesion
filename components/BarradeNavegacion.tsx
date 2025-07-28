@@ -215,11 +215,11 @@ export function BarradeNavegacion() {
                 )}
               </div>
             ) : (
-              <Link href="/users/sign_in">
+             /* <Link href="/users/sign_in">
                 <Button variant="default" size="sm">
                   Acceso
                 </Button>
-              </Link>
+              </Link> */
             )}
           </div>
           {/* Menú hamburguesa móvil */}
@@ -332,13 +332,13 @@ export function BarradeNavegacion() {
                 </div>
               </div>
             ) : (
-              <Link
+             /* <Link
                 href="/users/sign_in"
                 onClick={toggleMenu}
                 className="bg-primary text-white px-8 py-3 rounded-lg text-lg font-medium w-full max-w-xs text-center hover:bg-primary/90 transition-colors"
               >
                 Acceso
-              </Link>
+              </Link> */
             )}
           </div>
           
