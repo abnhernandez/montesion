@@ -3,8 +3,8 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useAuth } from "@/app/auth-context";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+// import { Button } from "@/components/ui/button";
+// import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 export function BarradeNavegacion() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
