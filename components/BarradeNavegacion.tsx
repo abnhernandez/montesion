@@ -168,7 +168,7 @@ export function BarradeNavegacion() {
             </button>
             
             {/* Auth Section */}
-            {user ? (
+            {/* {user ? (
               <div className="relative" data-user-menu>
                 <button
                   onClick={() => setShowUserMenu(!showUserMenu)}
@@ -215,13 +215,14 @@ export function BarradeNavegacion() {
                 )}
               </div>
             ) : (
-             /* <Link href="/users/sign_in">
+             <Link href="/users/sign_in">
                 <Button variant="default" size="sm">
                   Acceso
                 </Button>
-              </Link> */
-            )}
+              </Link>
+            )}  */}
           </div>
+
           {/* Menú hamburguesa móvil */}
           <div className="lg:hidden flex items-center">
             <button onClick={toggleMenu} className="text-primary focus:outline-none">
@@ -293,7 +294,7 @@ export function BarradeNavegacion() {
           </div>
           
           {/* Auth Section para móvil */}
-          <div className="flex flex-col items-center gap-4 mb-6 w-full">
+          {/* <div className="flex flex-col items-center gap-4 mb-6 w-full">
             {user ? (
               <div className="flex flex-col items-center gap-3 w-full">
                 <div className="flex items-center space-x-3 text-white">
@@ -332,15 +333,15 @@ export function BarradeNavegacion() {
                 </div>
               </div>
             ) : (
-             /* <Link
+             <Link
                 href="/users/sign_in"
                 onClick={toggleMenu}
                 className="bg-primary text-white px-8 py-3 rounded-lg text-lg font-medium w-full max-w-xs text-center hover:bg-primary/90 transition-colors"
               >
                 Acceso
-              </Link> */
+              </Link>
             )}
-          </div>
+          </div> */}
           
           {/* Biblia Button animado */}
           <div className="flex flex-col items-center gap-4 mb-2">
