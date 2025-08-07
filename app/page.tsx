@@ -3,12 +3,12 @@
 import React, { useEffect } from "react";
 import BlurText from "../components/ui/BlurText";
 import SpotlightCard from "../components/ui/SpotlightCard";
-import Maps from "../components/ui/maps";
 import Acercade from "../components/ui/acercade";
 import { motion } from "framer-motion";
 import HeroSection from "../components/Conf";
 import { createClient } from '@/utils/supabase/client';
 import { checkSupabaseStatus } from '@/utils/setup-supabase';
+import MapsMonteSion from "../components/ui/montesionmaps";
 
 export default function Page() {	
 	useEffect(() => {
@@ -242,7 +242,7 @@ export default function Page() {
 						viewport={{ once: true }}
 						className="flex-1 w-full h-[500px] md:h-[600px] rounded-3xl overflow-hidden shadow-2xl border border-border bg-background"
 					>
-						<Maps />
+						<MapsMonteSion />
 					</motion.div>
 				</section>
 			</main>
