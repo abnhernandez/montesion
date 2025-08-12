@@ -5,7 +5,7 @@ import BlurText from "../components/ui/BlurText";
 import SpotlightCard from "../components/ui/SpotlightCard";
 import Acercade from "../components/ui/acercade";
 import { motion } from "framer-motion";
-import HeroSection from "../components/Conf";
+import HeroSection from "../components/ui/hero";
 import { createClient } from '@/utils/supabase/client';
 import { checkSupabaseStatus } from '@/utils/setup-supabase';
 import MapsMonteSion from "../components/ui/montesionmaps";
