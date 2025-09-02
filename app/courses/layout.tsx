@@ -16,12 +16,6 @@ export default function CoursesLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es">
-      <head>
-        <link rel="canonical" href="https://montesion.me/courses" />
-        <link rel="icon" href="/favicon.ico" />
-      </head>
-      <body>{children}</body>
-    </html>
+    <>{children}</>
   );
 }
