@@ -4,7 +4,6 @@ import React, { useState, useCallback, useEffect } from "react";
 import { CheckCircle2, XCircle } from "lucide-react";
 import clsx from "clsx";
 import { createPrayerRequest } from "@/lib/prayer-requests";
-import { useRecaptcha } from "@/hooks/use-recaptcha";
 
 type Campos = "nombre" | "correo_electronico" | "asunto" | "peticion";
 
@@ -158,7 +157,7 @@ const PeticionDeOracion = () => {
 
   const [mensajeEnvio, setMensajeEnvio] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const { executeRecaptcha } = useRecaptcha();
+  // ...eliminado: hook de recaptcha...
 
   const handleBlur = useCallback((field: Campos, value: string) => {
     if (value.trim() === "") {
@@ -199,21 +198,12 @@ const PeticionDeOracion = () => {
     setMensajeEnvio(null);
 
     try {
-      // Execute reCAPTCHA verification (but don't fail if it doesn't work)
-      const recaptchaToken = await executeRecaptcha('PRAYER_REQUEST');
-      
-      // Don't fail if reCAPTCHA doesn't work - log it but continue
-      if (!recaptchaToken) {
-        console.warn('reCAPTCHA verification failed, but proceeding with prayer request');
-      }
-
       // Usar la función auxiliar para crear la petición
       const result = await createPrayerRequest({
         nombre: inputs.nombre.trim(),
         correo_electronico: inputs.correo_electronico.trim(),
         asunto: inputs.asunto.trim(),
         peticion: inputs.peticion.trim(),
-        recaptchaToken: recaptchaToken || 'dev-fallback', // Provide fallback if reCAPTCHA fails
       });
 
       if (!result.success) {
@@ -336,10 +326,7 @@ const PeticionDeOracion = () => {
             <a href="mailto:ministeriomontesionoaxaca@gmail.com">ministeriomontesionoaxaca@gmail.com</a>.
           </p>
           
-          {/* Discrete reCAPTCHA notice */}
-          <div className="mt-4 text-xs text-muted-foreground text-center opacity-30">
-            Protegido por reCAPTCHA
-          </div>
+          {/* Eliminado mensaje de protección reCAPTCHA */}
         </section>
       </div>
     </main>

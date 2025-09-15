@@ -61,18 +61,17 @@ export default function AboutPage() {
               imageSrc="./assets/congregacion-vistageneneral.webp"
               altText="Congregación Monte Sion"
               captionText="Congregación Monte Sion"
-              containerHeight="700px"
-              containerWidth="1000px"
-              imageHeight="300px"
-              imageWidth="500px"
+              containerHeight="400px"
+              containerWidth="100%"
+              imageHeight="100%"
+              imageWidth="100%"
               rotateAmplitude={12}
               scaleOnHover={1.2}
               showMobileWarning={false}
               showTooltip={true}
               displayOverlayContent={true}
               overlayContent={
-              <p className="tilted-card-demo-text">
-              </p>
+                <p className="tilted-card-demo-text"></p>
               }
             />
             </motion.div>
@@ -114,18 +113,17 @@ export default function AboutPage() {
               imageSrc="/assets/congregacion-adorando.webp"
               altText="Adoración - Monte Sion"
               captionText="Adoración - Monte Sion"
-              containerHeight="500px"
-              containerWidth="1000px"
-              imageHeight="300px"
-              imageWidth="500px"
+              containerHeight="400px"
+              containerWidth="100%"
+              imageHeight="100%"
+              imageWidth="100%"
               rotateAmplitude={12}
               scaleOnHover={1.2}
               showMobileWarning={false}
               showTooltip={true}
               displayOverlayContent={true}
               overlayContent={
-              <p className="tilted-card-demo-text">
-              </p>
+                <p className="tilted-card-demo-text"></p>
               }
             />
           </motion.div>

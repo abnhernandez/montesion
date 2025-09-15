@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
-import { verifyRecaptchaToken } from '@/lib/recaptcha-verification';
 
 // Configuración del transportador SMTP
 const createTransporter = () => {
   return nodemailer.createTransport({
     host: process.env.SMTP_HOST,
-    port: parseInt(process.env.SMTP_PORT || '587'),
+    port: Number(process.env.SMTP_PORT) || 587,
     secure: false,
     auth: {
       user: process.env.SMTP_USER,
@@ -17,47 +16,18 @@ const createTransporter = () => {
 
 export async function POST(request: NextRequest) {
   try {
-    const { type, data, recaptchaToken } = await request.json();
-    
-    // Verify reCAPTCHA token if provided
-    if (recaptchaToken) {
-      console.log('🔒 Verificando token reCAPTCHA Enterprise para email...');
-      
-      // Get user IP address for enhanced verification
-      const userIpAddress = request.headers.get('x-forwarded-for') || 
-                           request.headers.get('x-real-ip') || 
-                           'unknown';
-      
-      const recaptchaResult = await verifyRecaptchaToken(
-        recaptchaToken,
-        'EMAIL_SEND',
-        0.5, // Minimum score of 0.5
-        userIpAddress
-      );
+    const { type, data } = await request.json();
 
-      if (!recaptchaResult.success) {
-        console.error('❌ Verificación reCAPTCHA Enterprise falló:', recaptchaResult.error);
-        return NextResponse.json(
-          { success: false, error: 'Error de verificación de seguridad. Por favor, intenta de nuevo.' },
-          { status: 400 }
-        );
-      }
-      console.log('✅ reCAPTCHA Enterprise verificado exitosamente para email. Score:', recaptchaResult.score);
-    }
-    
     const transporter = createTransporter();
-    
-    // Verificar configuración
     await transporter.verify();
-    
+
     if (type === 'confirmation') {
       // Email de confirmación al usuario
       const { toEmail, nombre, ticket, asunto } = data;
-      
       const mailOptions = {
         from: {
           name: 'Monte Sion - Peticiones de Oración',
-          address: process.env.EMAIL_FROM || 'noreplymontesion@gmail.com'
+          address: process.env.EMAIL_FROM || 'noreplymontesion@gmail.com',
         },
         to: toEmail,
         subject: `Confirmación de Petición de Oración #${ticket}`,
@@ -81,17 +51,13 @@ export async function POST(request: NextRequest) {
                 <h1>🙏 Monte Sion</h1>
                 <p>Confirmación de Petición de Oración</p>
               </div>
-              
               <div class="content">
                 <p>Estimado/a <strong>${nombre}</strong>,</p>
-                
                 <p>Hemos recibido tu petición de oración y queremos confirmarte que está en nuestras oraciones.</p>
-                
                 <div class="ticket">
                   <strong>Número de Ticket: #${ticket}</strong><br>
                   <em>Asunto: ${asunto}</em>
                 </div>
-                
                 <p><strong>¿Qué sigue ahora?</strong></p>
                 <ul>
                   <li>✅ Tu petición ha sido registrada en nuestro sistema</li>
@@ -99,15 +65,12 @@ export async function POST(request: NextRequest) {
                   <li>💝 Mantendremos tu petición en confidencialidad total</li>
                   <li>📧 Te contactaremos si necesitamos más información</li>
                 </ul>
-                
                 <p><em>"Por nada estéis afanosos, sino sean conocidas vuestras peticiones delante de Dios en toda oración y ruego, con acción de gracias."</em><br>
                 <strong>Filipenses 4:6</strong></p>
-                
                 <div class="footer">
                   <p><strong>Monte Sion · Iglesia Cristiana</strong><br>
                   Email: ministeriomontesionoaxaca@gmail.com<br>
                   Sitio web: https://montesion.me</p>
-                  
                   <p><small>Por favor, no respondas a este correo. Este es un email automático de confirmación. Si no solicitaste una petición de oración, por favor ignora este mensaje.</small></p>
                 </div>
               </div>
@@ -115,38 +78,15 @@ export async function POST(request: NextRequest) {
           </body>
           </html>
         `,
-        text: `
-Estimado/a ${nombre},
-
-Hemos recibido tu petición de oración y queremos confirmarte que está en nuestras oraciones.
-
-Número de Ticket: #${ticket}
-Asunto: ${asunto}
-
-¿Qué sigue ahora?
-- Tu petición ha sido registrada en nuestro sistema
-- Nuestro equipo de oración comenzará a orar por tu petición  
-- Mantendremos tu petición en confidencialidad total
-- Te contactaremos si necesitamos más información
-
-"Por nada estéis afanosos, sino sean conocidas vuestras peticiones delante de Dios en toda oración y ruego, con acción de gracias." - Filipenses 4:6
-
-Monte Sion · Iglesia Cristiana
-Email: ministeriomontesionoaxaca@gmail.com
-Sitio web: https://montesion.me
-        `
       };
-
       await transporter.sendMail(mailOptions);
-      
     } else if (type === 'notification') {
       // Notificación al equipo
       const { nombre, correo_electronico, asunto, peticion, ticket } = data;
-      
       const mailOptions = {
         from: {
           name: 'Sistema Monte Sion',
-          address: process.env.EMAIL_FROM || 'noreplymontesion@gmail.com'
+          address: process.env.EMAIL_FROM || 'noreplymontesion@gmail.com',
         },
         to: 'rootmontesion@gmail.com',
         subject: `🙏 Nueva Petición de Oración #${ticket}`,
@@ -170,7 +110,6 @@ Sitio web: https://montesion.me
                 <h1>🙏 Nueva Petición de Oración</h1>
                 <p>Ticket #${ticket}</p>
               </div>
-              
               <div class="content">
                 <div class="info-box">
                   <p><strong>Nombre:</strong> ${nombre}</p>
@@ -178,33 +117,29 @@ Sitio web: https://montesion.me
                   <p><strong>Asunto:</strong> ${asunto}</p>
                   <p><strong>Fecha y Hora:</strong> ${new Date().toLocaleString('es-ES', { timeZone: 'America/Mexico_City', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' })}</p>
                 </div>
-                
                 <div class="petition-box">
                   <h3>Petición:</h3>
                   <p>${peticion}</p>
                 </div>
-                
                 <p><small>Esta notificación se envió automáticamente desde el sistema web de Monte Sion.</small></p>
               </div>
             </div>
           </body>
           </html>
-        `
+        `,
       };
-
       await transporter.sendMail(mailOptions);
     }
-    
     return NextResponse.json({ success: true });
-    
   } catch (error) {
     console.error('❌ Error enviando email:', error);
     return NextResponse.json(
-      { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Error desconocido'
+      {
+        success: false,
+        error: error instanceof Error ? error.message : 'Error desconocido',
       },
       { status: 500 }
     );
   }
 }
+// ...existing code...

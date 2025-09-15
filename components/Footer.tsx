@@ -12,7 +12,7 @@ export default function Footer() {
           {/* Identidad */}
           <div className="flex flex-col items-center md:items-start gap-3">
             <Image
-              src="/isotipo_montesion.webp"
+              src="/assets/isotipo_montesion.webp"
               alt="Monte Sion Logo"
               width={56}
               height={56}

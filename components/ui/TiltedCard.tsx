@@ -30,8 +30,8 @@ export default function TiltedCard({
   captionText = "",
   containerHeight = "300px",
   containerWidth = "100%",
-  imageHeight = "300px",
-  imageWidth = "300px",
+  // imageHeight = "100%",
+  // imageWidth = "100%",
   scaleOnHover = 1.1,
   rotateAmplitude = 14,
   showMobileWarning = true,
@@ -91,7 +91,7 @@ export default function TiltedCard({
   return (
     <figure
       ref={ref}
-      className="relative w-full h-full [perspective:800px] flex flex-col items-center justify-center"
+      className="relative w-full h-full [perspective:800px] flex flex-col"
       style={{
         height: containerHeight,
         width: containerWidth,
@@ -106,11 +106,10 @@ export default function TiltedCard({
         </div>
       )}
 
+      {/* Imagen ocupa toda la parte superior */}
       <motion.div
-        className="relative [transform-style:preserve-3d]"
+        className="flex-1 relative [transform-style:preserve-3d]"
         style={{
-          width: imageWidth,
-          height: imageHeight,
           rotateX,
           rotateY,
           scale,
@@ -120,10 +119,10 @@ export default function TiltedCard({
           <motion.img
             src={imageSrc}
             alt={altText}
-            className="absolute top-0 left-0 object-cover rounded-[15px] will-change-transform [transform:translateZ(0)]"
+            className="w-full h-full object-cover rounded-t-[15px] will-change-transform [transform:translateZ(0)]"
             style={{
-              width: imageWidth,
-              height: imageHeight,
+              minHeight: 0,
+              minWidth: 0,
             }}
           />
         )}
@@ -137,6 +136,7 @@ export default function TiltedCard({
         )}
       </motion.div>
 
+      {/* Pie de tarjeta, si aplica */}
       {showTooltip && (
         <motion.figcaption
           className="pointer-events-none absolute left-0 top-0 rounded-[4px] bg-white px-[10px] py-[4px] text-[10px] text-[#2d2d2d] opacity-0 z-[3] hidden sm:block"

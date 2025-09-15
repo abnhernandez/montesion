@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRecaptcha } from '@/hooks/use-recaptcha';
+// ...eliminado: import de useRecaptcha...
 import { useAuth } from '@/app/auth-context';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -18,7 +18,7 @@ export default function RegisterForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-  const { executeRecaptcha } = useRecaptcha();
+  // ...eliminado: hook de recaptcha...
   const { signUp } = useAuth();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,13 +48,7 @@ export default function RegisterForm() {
         throw new Error('Nombre y apellido son requeridos');
       }
 
-      // Execute reCAPTCHA verification (hidden from user)
-      const recaptchaToken = await executeRecaptcha('REGISTER');
-      
-      if (!recaptchaToken) {
-        // Don't show reCAPTCHA error to user, just log it
-        console.warn('reCAPTCHA verification failed, but proceeding with registration');
-      }
+  // ...eliminada lógica de reCAPTCHA...
 
       // Call Supabase signup
       await signUp(formData.email, formData.password, {
@@ -204,10 +198,7 @@ export default function RegisterForm() {
         </Button>
       </form>
       
-      {/* Hidden reCAPTCHA notice - very discrete */}
-      <div className="mt-6 text-xs text-muted-foreground text-center opacity-30">
-        Protegido por reCAPTCHA
-      </div>
+  {/* Eliminado mensaje de protección reCAPTCHA */}
     </div>
   );
 }

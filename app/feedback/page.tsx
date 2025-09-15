@@ -13,13 +13,11 @@ import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Bug, MessageSquare, Lightbulb, Send } from "lucide-react"
 import { toast } from "sonner"
-import { useRecaptcha } from "@/hooks/use-recaptcha"
 import { createFeedback } from "@/lib/feedback-requests"
 
 export default function MinimalFeedbackForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [feedbackType, setFeedbackType] = useState<'bug' | 'feature' | 'general'>('bug')
-  const { executeRecaptcha } = useRecaptcha()
 
   // Detectar el tema del sistema cuando se carga el componente
   useEffect(() => {
@@ -42,13 +40,6 @@ export default function MinimalFeedbackForm() {
     const formData = new FormData(form)
 
     try {
-      // Execute reCAPTCHA verification
-      const recaptchaToken = await executeRecaptcha('CONTACT_FORM');
-      
-      if (!recaptchaToken) {
-        console.warn('reCAPTCHA verification failed, but proceeding with feedback');
-      }
-
       // Construir payload según tipo
       const payload: {
         type: 'bug' | 'feature' | 'general';
@@ -59,11 +50,9 @@ export default function MinimalFeedbackForm() {
         importance?: 'low' | 'medium' | 'high';
         browser?: string;
         email?: string;
-        recaptchaToken?: string;
       } = { 
         type: feedbackType, 
-        description: '',
-        recaptchaToken: recaptchaToken || 'dev-fallback'
+        description: ''
       }
 
       if (feedbackType === 'bug') {

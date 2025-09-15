@@ -4,40 +4,14 @@ import {
   sendPrayerRequestConfirmation, 
   sendNewPrayerRequestNotification 
 } from './email-service-client';
-import { verifyRecaptchaToken } from './recaptcha-verification';
 
 /**
  * Envía una nueva petición de oración a Supabase
  */
 export async function createPrayerRequest(
-  prayerRequestData: Omit<PrayerRequestInsert, 'ticket'> & { recaptchaToken?: string }
+  prayerRequestData: Omit<PrayerRequestInsert, 'ticket'>
 ): Promise<{ success: boolean; data?: PrayerRequest; error?: string }> {
   try {
-    // Verify reCAPTCHA token if provided
-    if (prayerRequestData.recaptchaToken) {
-      console.log('🔒 Verificando token reCAPTCHA...');
-      const recaptchaResult = await verifyRecaptchaToken(
-        prayerRequestData.recaptchaToken,
-        'PRAYER_REQUEST',
-        0.5 // Minimum score of 0.5
-      );
-
-      if (!recaptchaResult.success) {
-        console.warn('⚠️ Verificación reCAPTCHA falló:', recaptchaResult.error);
-        // Don't fail the prayer request if it's a development/configuration issue
-        if (process.env.NODE_ENV === 'development') {
-          console.log('🔧 Desarrollo: Continuando sin verificación reCAPTCHA');
-        } else {
-          return {
-            success: false,
-            error: 'Error de verificación de seguridad. Por favor, intenta de nuevo.'
-          };
-        }
-      } else {
-        console.log('✅ reCAPTCHA verificado exitosamente. Score:', recaptchaResult.score);
-      }
-    }
-
     const supabase = createClient();
     
     // Verificar conexión con Supabase
@@ -46,12 +20,8 @@ export async function createPrayerRequest(
     // Generar ticket único
     const ticket = Math.floor(Math.random() * 1000000);
     
-    // Extract recaptchaToken before inserting into database (we don't store it)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { recaptchaToken: _, ...cleanData } = prayerRequestData;
-    
     const dataToInsert: PrayerRequestInsert = {
-      ...cleanData,
+      ...prayerRequestData,
       ticket,
       status: 'pending'
     };
@@ -94,18 +64,18 @@ export async function createPrayerRequest(
     try {
       console.log('📧 Enviando email de confirmación...');
       await sendPrayerRequestConfirmation(
-        cleanData.correo_electronico,
-        cleanData.nombre,
+        prayerRequestData.correo_electronico,
+        prayerRequestData.nombre,
         ticket,
-        cleanData.asunto
+        prayerRequestData.asunto
       );
       console.log('✅ Email de confirmación enviado');
       
       await sendNewPrayerRequestNotification(
-        cleanData.nombre,
-        cleanData.correo_electronico,
-        cleanData.asunto,
-        cleanData.peticion,
+        prayerRequestData.nombre,
+        prayerRequestData.correo_electronico,
+        prayerRequestData.asunto,
+        prayerRequestData.peticion,
         ticket
       );
       console.log('✅ Notificación enviada al administrador');

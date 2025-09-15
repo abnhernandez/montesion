@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRecaptcha } from '@/hooks/use-recaptcha';
+// ...eliminado: import de useRecaptcha...
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
@@ -10,7 +10,7 @@ export default function LoginForm() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { executeRecaptcha } = useRecaptcha();
+  // ...eliminado: hook de recaptcha...
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,22 +18,11 @@ export default function LoginForm() {
     setError(null);
 
     try {
-      // Execute reCAPTCHA verification
-      const recaptchaToken = await executeRecaptcha('LOGIN');
-      
-      if (!recaptchaToken) {
-        throw new Error('Error de verificación de seguridad. Por favor, intenta de nuevo.');
-      }
-
-      // Here you would typically call your authentication API
-      // For now, this is just a placeholder
-      console.log('Login attempt with reCAPTCHA verified:', { email, recaptchaToken });
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Handle successful login
-      alert('¡Inicio de sesión exitoso!');
+  // Aquí iría la llamada a tu API de autenticación
+  // Simulación de llamada a API
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  // Manejar login exitoso
+  alert('¡Inicio de sesión exitoso!');
     } catch (error) {
       console.error('Error en el inicio de sesión:', error);
       setError(error instanceof Error ? error.message : 'Error en el inicio de sesión');
@@ -92,9 +81,7 @@ export default function LoginForm() {
         </Button>
       </form>
       
-      <div className="mt-6 text-xs text-muted-foreground text-center opacity-30">
-        Protegido por reCAPTCHA
-      </div>
+  {/* Eliminado mensaje de protección reCAPTCHA */}
     </div>
   );
 }

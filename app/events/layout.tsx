@@ -10,18 +10,11 @@ export const metadata: Metadata = {
   },
 };
 
-export default function EventsLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+
+export default function EventsLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es">
-      <head>
-        <link rel="canonical" href="https://montesion.me/events" />
-        <link rel="icon" href="/favicon.ico" />
-      </head>
-      <body>{children}</body>
-    </html>
+    <div>
+      {children}
+    </div>
   );
 }

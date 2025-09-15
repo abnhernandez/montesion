@@ -1,50 +1,20 @@
 import { createClient } from "@/utils/supabase/client";
 import type { Feedback, FeedbackInsert } from "@/types/supabase";
-import { verifyRecaptchaToken } from './recaptcha-verification';
 
 /**
  * Envía nuevo feedback a Supabase
  */
 export async function createFeedback(
-  feedbackData: FeedbackInsert & { recaptchaToken?: string }
+  feedbackData: FeedbackInsert
 ): Promise<{ success: boolean; data?: Feedback; error?: string }> {
   try {
-    // Verify reCAPTCHA token if provided
-    if (feedbackData.recaptchaToken) {
-      console.log('🔒 Verificando token reCAPTCHA para feedback...');
-      const recaptchaResult = await verifyRecaptchaToken(
-        feedbackData.recaptchaToken,
-        'CONTACT_FORM',
-        0.5 // Minimum score of 0.5
-      );
-
-      if (!recaptchaResult.success) {
-        console.warn('⚠️ Verificación reCAPTCHA falló:', recaptchaResult.error);
-        // Don't fail the feedback if it's a development/configuration issue
-        if (process.env.NODE_ENV === 'development') {
-          console.log('🔧 Desarrollo: Continuando sin verificación reCAPTCHA');
-        } else {
-          return {
-            success: false,
-            error: 'Error de verificación de seguridad. Por favor, intenta de nuevo.'
-          };
-        }
-      } else {
-        console.log('✅ reCAPTCHA verificado exitosamente. Score:', recaptchaResult.score);
-      }
-    }
-
     const supabase = createClient();
     
     // Verificar conexión con Supabase
     console.log('🔍 Intentando conectar a Supabase para feedback...');
     
-    // Extract recaptchaToken before inserting into database (we don't store it)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { recaptchaToken: _, ...cleanData } = feedbackData;
-    
     const dataToInsert: FeedbackInsert = {
-      ...cleanData,
+      ...feedbackData,
       status: 'pending'
     };
     
