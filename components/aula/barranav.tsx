@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
-import { Play, PlayCircle, List, Bookmark, Award } from "lucide-react";
+import { Play, PlayCircle, List, Bookmark, Award, Calendar} from "lucide-react";
 
 type NavItem = {
   label: string;
@@ -13,7 +13,7 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
-  {
+    {
     label: "Mi actividad",
     href: "/usuarios/mis_cursos",
     icon: <PlayCircle className="w-[22px] h-[22px]" />,
@@ -42,6 +42,12 @@ const navItems: NavItem[] = [
     href: "/usuarios/mis_certificados",
     icon: <Award className="w-[22px] h-[22px]" />,
     iconActive: <Award className="w-[22px] h-[22px]" />,
+  },
+  {
+    label: "Agenda",
+    href: "/agenda",
+    icon: <Calendar className="w-[22px] h-[22px]" />,
+    iconActive: <Calendar className="w-[22px] h-[22px]" />,
   },
 ];
 

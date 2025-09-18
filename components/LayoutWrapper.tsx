@@ -8,7 +8,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
   const pathname = usePathname();
 
   // Lista de rutas donde ocultar navbar y footer
-  const hideLayoutRoutes = ['/usuarios', '/login', '/registro'];
+  const hideLayoutRoutes = ['/usuarios', '/login', '/registro', '/agenda'];
 
   const shouldHideLayout = hideLayoutRoutes.some((path) => pathname.startsWith(path));
 

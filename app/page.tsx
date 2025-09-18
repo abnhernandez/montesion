@@ -1,35 +1,14 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import BlurText from "../components/ui/BlurText";
 import SpotlightCard from "../components/ui/SpotlightCard";
 import Acercade from "../components/ui/acercade";
 import { motion } from "framer-motion";
 import HeroSection from "../components/ui/hero";
-import { createClient } from '@/utils/supabase/client';
-import { checkSupabaseStatus } from '@/utils/setup-supabase';
 import MapsMonteSion from "../components/ui/montesionmaps";
 
 export default function Page() {	
-	useEffect(() => {
-		const fetchTodos = async () => {
-			// Primero verificar el estado
-			const status = await checkSupabaseStatus();
-			
-			if (status.todos) {
-				const supabase = createClient();
-				const { data } = await supabase.from('todos').select();
-				if (data) {
-					console.log('Todos loaded:', data.length);
-				}
-			} else {
-				console.log('ℹ️ Todos table not available yet. Create it manually or run setup script.');
-			}
-		};
-		
-		fetchTodos();
-	}, []);
-
 	return (
 		<div className="min-h-screen flex flex-col bg-background text-foreground transition-colors duration-500">
 			<main className="flex-1 flex flex-col items-center justify-center relative overflow-x-hidden">

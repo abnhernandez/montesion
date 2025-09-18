@@ -8,6 +8,7 @@ export function middleware(request: NextRequest) {
   // Mapa de rutas internas a URLs externas
   const redirects: Record<string, string> = {
     '/usuarios': 'https://montesion.me/usuarios/mis_cursos',
+    '/agenda': 'https://youtube.com/@montesionoaxaca',
     '/yt': 'https://youtube.com/@montesionoaxaca',
     '/youtube': 'https://youtube.com/@montesionoaxaca',
     '/ig': 'https://instagram.com/montesionoaxaca',
@@ -32,5 +33,5 @@ export function middleware(request: NextRequest) {
 
 // Limita el middleware solo a las rutas que necesitas
 export const config = {
-  matcher: ['/usuarios', '/yt', '/youtube', '/ig', '/instagram', '/discord', '/replay/quien-es-Dios', '/replay/como-buscar-a-Dios', '/replay/como-honrar-a-Dios', '/replay/uncion-del-Espiritu-Santo', '/replay/la-gran-comision', '/en-vivo/live'],
+  matcher: ['/usuarios', '/agenda', '/yt', '/youtube', '/ig', '/instagram', '/discord', '/replay/quien-es-Dios', '/replay/como-buscar-a-Dios', '/replay/como-honrar-a-Dios', '/replay/uncion-del-Espiritu-Santo', '/replay/la-gran-comision', '/en-vivo/live'],
 }

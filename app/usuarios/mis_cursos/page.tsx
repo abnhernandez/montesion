@@ -1,9 +1,11 @@
 'use client'
 
 import { useEffect, useMemo, useState } from "react";
+import BannerAlert from "@/components/ui/BannerAlert";
 import { createClient } from '@supabase/supabase-js';
 import { useSearchParams } from "next/navigation";
 import BienvenidaUsuarios from "@/components/aula/bienvenida_usuarios";
+import Navbar from "@/components/aula/navbar";
 import BarranavAula from "@/components/aula/barranav";
 import MisBootcamps from "@/components/aula/misbootcamps";
 import Aviso from "@/components/aula/aviso";
@@ -46,6 +48,9 @@ export default function MisCursosPage() {
   const [error, setError] = useState<string | null>(null);
   const searchParams = useSearchParams();
   const viewFavoritos = useMemo(() => searchParams?.get("favoritos") === "true", [searchParams]);
+
+  // Mostrar banner si viene de redirección por login ya iniciado
+  const showBanner = searchParams?.get("alert") === "already-logged-in";
 
   useEffect(() => {
     async function fetchAll() {
@@ -165,131 +170,139 @@ export default function MisCursosPage() {
 
 
   return (
-    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-screen">
-      {!viewFavoritos && (
-        <div>
-          <BienvenidaUsuarios username={username} />
-        </div>
+    <>
+      {showBanner && (
+        <>
+          <BannerAlert message="Ya iniciaste sesión." duration={4000} />
+        </>
       )}
-      <div className={`flex flex-col items-center space-y-4 sm:space-y-6 ${viewFavoritos ? 'mt-8 sm:mt-12' : ''}`}>
-        <BarranavAula />
-      </div>
-
-      {loading && (
-        <div className="space-y-8">
-          <div className="animate-pulse rounded-xl h-12 w-1/3 mx-auto" />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[...Array(8)].map((_, i) => (
-              <div key={i} className="animate-pulse rounded-xl h-40 w-full" />
-            ))}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-screen">
+        {!viewFavoritos && (
+          <div>
+            <Navbar/>
+            <BienvenidaUsuarios username={username} />
           </div>
+        )}
+        <div className={`flex flex-col items-center space-y-4 sm:space-y-6 ${viewFavoritos ? 'mt-8 sm:mt-12' : ''}`}>
+          <BarranavAula />
         </div>
-      )}
 
-      {error && (
-        <div className="text-center py-4 font-semibold text-lg">{error}</div>
-      )}
+        {loading && (
+          <div className="space-y-8">
+            <div className="animate-pulse rounded-xl h-12 w-1/3 mx-auto" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[...Array(8)].map((_, i) => (
+                <div key={i} className="animate-pulse rounded-xl h-40 w-full" />
+              ))}
+            </div>
+          </div>
+        )}
 
-      {!loading && !error && (
-        <div className="space-y-10">
-          {viewFavoritos ? (
-            <section>
-              <h2 className="text-3xl font-extrabold mb-6">Mi lista</h2>
-              {favoritos.length === 0 ? (
-                <div className="flex flex-col items-center text-center py-8">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/assets/assets-favoritos.png" alt="Mi lista vacía" className="w-[420px] max-w-full mb-6" />
-                  <p className="text-lg mb-6">Aún no has agregado ningún curso</p>
-                  <a href="/cursos" className="inline-flex items-center justify-center px-6 py-3 rounded-full bg-emerald-500 text-white font-semibold hover:bg-emerald-600 transition-colors">
-                    Explorar librería
-                  </a>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {favoritos.map(f => (
-                    <article key={f.id} className="rounded-2xl overflow-hidden shadow-sm border bg-white">
-                      <div className="h-28 bg-gradient-to-b from-slate-900 to-slate-800 relative flex items-center justify-center">
-                        <div className="w-16 h-16 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
-                          {f.image ? (
-                            // eslint-disable-next-line @next/next/no-img-element
-                            <img src={f.image} alt={f.title} className="w-10 h-10 object-contain" />
-                          ) : (
-                            <span className="text-white text-lg">🎓</span>
+        {error && (
+          <div className="text-center py-4 font-semibold text-lg">{error}</div>
+        )}
+
+        {!loading && !error && (
+          <div className="space-y-10">
+            {viewFavoritos ? (
+              <section>
+                <h2 className="text-3xl font-extrabold mb-6">Mi lista</h2>
+                {favoritos.length === 0 ? (
+                  <div className="flex flex-col items-center text-center py-8">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="/assets/assets-favoritos.png" alt="Mi lista vacía" className="w-[420px] max-w-full mb-6" />
+                    <p className="text-lg mb-6">Aún no has agregado ningún curso</p>
+                    <a href="/cursos" className="inline-flex items-center justify-center px-6 py-3 rounded-full bg-emerald-500 text-white font-semibold hover:bg-emerald-600 transition-colors">
+                      Explorar librería
+                    </a>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {favoritos.map(f => (
+                      <article key={f.id} className="rounded-2xl overflow-hidden shadow-sm border bg-white">
+                        <div className="h-28 bg-gradient-to-b from-slate-900 to-slate-800 relative flex items-center justify-center">
+                          <div className="w-16 h-16 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
+                            {f.image ? (
+                              // eslint-disable-next-line @next/next/no-img-element
+                              <img src={f.image} alt={f.title} className="w-10 h-10 object-contain" />
+                            ) : (
+                              <span className="text-white text-lg">🎓</span>
+                            )}
+                          </div>
+                          <div className="absolute left-4 right-4 bottom-0 h-3 rounded-full bg-emerald-400" />
+                        </div>
+                        <div className="p-5">
+                          <h3 className="text-lg font-semibold mb-2">{f.title}</h3>
+                          <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
+                            {typeof f.students === 'number' && (
+                              <span>{f.students} Estudiantes</span>
+                            )}
+                          </div>
+                          {f.teacher && (
+                            <div className="text-sm">Por: {f.teacher}</div>
                           )}
                         </div>
-                        <div className="absolute left-4 right-4 bottom-0 h-3 rounded-full bg-emerald-400" />
-                      </div>
-                      <div className="p-5">
-                        <h3 className="text-lg font-semibold mb-2">{f.title}</h3>
-                        <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
-                          {typeof f.students === 'number' && (
-                            <span>{f.students} Estudiantes</span>
-                          )}
-                        </div>
-                        {f.teacher && (
-                          <div className="text-sm">Por: {f.teacher}</div>
-                        )}
-                      </div>
-                    </article>
-                  ))}
-                </div>
-              )}
-            </section>
-          ) : (
-          <section>
-            {bootcamps.length > 0 && (
-              <MisBootcamps bootcamps={bootcamps} />
+                      </article>
+                    ))}
+                  </div>
+                )}
+              </section>
+            ) : (
+              <section>
+                {bootcamps.length > 0 && (
+                  <MisBootcamps bootcamps={bootcamps} />
+                )}
+              </section>
             )}
-          </section>
-          )}
 
-          {!viewFavoritos && aviso && (
-            <section>
-              <Aviso {...aviso} />
-            </section>
-          )}
-
-          {!viewFavoritos && (
-            <>
+            {!viewFavoritos && aviso && (
               <section>
-                <h2 className="text-xl font-bold mb-4">Cursos Populares</h2>
-                {cursosPopulares.length > 0 && (
-                  <div className="sm:grid-cols-2">
-                    <CursosPopulares cursos={cursosPopulares} />
-                  </div>
-                )}
+                <Aviso {...aviso} />
               </section>
+            )}
 
-              <section>
-                <h2 className="text-xl font-bold mb-4">Replays de Bootcamps</h2>
-                {replays.length > 0 && (
-                  <div className="sm:grid-cols-2">
-                    <BootcampsReplays bootcamps={replays} />
-                  </div>
-                )}
-              </section>
+            {!viewFavoritos && (
+              <>
+                <section>
+                  <h2 className="text-xl font-bold mb-4">Cursos Populares</h2>
+                  {cursosPopulares.length > 0 && (
+                    <div className="sm:grid-cols-2">
+                      <CursosPopulares cursos={cursosPopulares} />
+                    </div>
+                  )}
+                </section>
 
-              <section>
-                <h2 className="text-xl font-bold mb-4">Rutas de Aprendizaje</h2>
-                {rutas.length > 0 && (
-                  <div className="sm:grid-cols-2">
-                    <RutasAprendizaje rutas={rutas} />
-                  </div>
-                )}
-              </section>
+                <section>
+                  <h2 className="text-xl font-bold mb-4">Replays de Bootcamps</h2>
+                  {replays.length > 0 && (
+                    <div className="sm:grid-cols-2">
+                      <BootcampsReplays bootcamps={replays} />
+                    </div>
+                  )}
+                </section>
 
-              <section>
-                <h2 className="text-xl font-bold mb-4">Cursos Nuevos</h2>
-                {cursosNuevos.length > 0 && (
-                  <div className="sm:grid-cols-2">
-                    <CursosNuevos cursos={cursosNuevos} />
-                  </div>
-                )}
-              </section>
-            </>
-          )}
-        </div>
-      )}
-    </main>
+                <section>
+                  <h2 className="text-xl font-bold mb-4">Rutas de Aprendizaje</h2>
+                  {rutas.length > 0 && (
+                    <div className="sm:grid-cols-2">
+                      <RutasAprendizaje rutas={rutas} />
+                    </div>
+                  )}
+                </section>
+
+                <section>
+                  <h2 className="text-xl font-bold mb-4">Cursos Nuevos</h2>
+                  {cursosNuevos.length > 0 && (
+                    <div className="sm:grid-cols-2">
+                      <CursosNuevos cursos={cursosNuevos} />
+                    </div>
+                  )}
+                </section>
+              </>
+            )}
+          </div>
+        )}
+      </main>
+    </>
   );
 }
