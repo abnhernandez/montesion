@@ -5,6 +5,7 @@ import BannerAlert from "@/components/ui/BannerAlert";
 import { createClient } from '@supabase/supabase-js';
 import { useSearchParams } from "next/navigation";
 import BienvenidaUsuarios from "@/components/aula/bienvenida_usuarios";
+import Navbar from "@/components/aula/navbar";
 import BarranavAula from "@/components/aula/barranav";
 import MisBootcamps from "@/components/aula/misbootcamps";
 import Aviso from "@/components/aula/aviso";
@@ -178,6 +179,7 @@ export default function MisCursosPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-screen">
         {!viewFavoritos && (
           <div>
+            <Navbar/>
             <BienvenidaUsuarios username={username} />
           </div>
         )}
