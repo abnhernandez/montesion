@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { useEffect, useState, useRef } from "react"
 import { createClient } from "@supabase/supabase-js"
 import { ChevronDown, Menu, X, Search } from "lucide-react"
@@ -85,10 +86,13 @@ export function BarradeNavegacion() {
         {/* Logo */}
         <div className="flex items-center gap-2">
           <Link href="/" className="flex items-center gap-2">
-            <img
+            <Image
               src="https://dfbowysefibjlbmmizlq.supabase.co/storage/v1/object/public/assets/logo_minimalist_modern.png"
               alt="Logo Montesion"
+              width={40}
+              height={40}
               className="h-10 w-10 rounded-full object-cover"
+              priority
             />
             <span className="font-bold text-lg">montesion</span>
           </Link>
@@ -120,9 +124,11 @@ export function BarradeNavegacion() {
                   onClick={() => setAvatarMenuOpen((v) => !v)}
                   aria-label="Abrir menú de usuario"
                 >
-                  <img
+                  <Image
                     src="https://dfbowysefibjlbmmizlq.supabase.co/storage/v1/object/public/assets/isotipo_montesion.webp"
                     alt="Avatar usuario"
+                    width={48}
+                    height={48}
                     className="h-12 w-12 rounded-full border-2 border-purple-300 shadow-md object-cover"
                     style={{ background: '#fff' }}
                   />
