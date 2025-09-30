@@ -19,7 +19,8 @@ export function middleware(request: NextRequest) {
     '/replay/como-honrar-a-Dios': 'https://youtu.be/F7BUqRX1WT0',
     '/replay/uncion-del-Espiritu-Santo': 'https://youtu.be/rTCGZufgONY',
     '/replay/la-gran-comision': 'https://youtu.be/tO9luxZK1xI',
-    '/en-vivo/live': 'https://www.youtube.com/@montesionoaxaca/live'
+    '/en-vivo/live': 'https://www.youtube.com/@montesionoaxaca/live',
+    '/conf': 'https://www.youtube.com/@montesionoaxaca/live'
   }
 
   const destination = redirects[pathname]
@@ -33,5 +34,5 @@ export function middleware(request: NextRequest) {
 
 // Limita el middleware solo a las rutas que necesitas
 export const config = {
-  matcher: ['/usuarios', '/agenda', '/yt', '/youtube', '/ig', '/instagram', '/discord', '/replay/quien-es-Dios', '/replay/como-buscar-a-Dios', '/replay/como-honrar-a-Dios', '/replay/uncion-del-Espiritu-Santo', '/replay/la-gran-comision', '/en-vivo/live'],
+  matcher: ['/usuarios', '/agenda', '/yt', '/youtube', '/ig', '/instagram', '/discord', '/replay/quien-es-Dios', '/replay/como-buscar-a-Dios', '/replay/como-honrar-a-Dios', '/replay/uncion-del-Espiritu-Santo', '/replay/la-gran-comision', '/en-vivo/live', '/conf'],
 }
