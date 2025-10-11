@@ -2,8 +2,9 @@
 
 import { useEffect, useMemo, useState } from "react";
 import BannerAlert from "@/components/ui/BannerAlert";
-import { createClient } from '@supabase/supabase-js';
-import { useSearchParams } from "next/navigation";
+import { createClient } from '@/utils/supabase/client';
+import { useAuth } from '@/app/auth-context';
+import { useSearchParams, useRouter } from "next/navigation";
 import BienvenidaUsuarios from "@/components/aula/bienvenida_usuarios";
 import Navbar from "@/components/aula/navbar";
 import BarranavAula from "@/components/aula/barranav";
@@ -21,10 +22,7 @@ import type { BootcampReplay } from "@/components/aula/replays";
 import type { RutaAprendizaje } from "@/components/aula/rutasaprendizaje";
 import type { CursoNuevo } from "@/components/aula/cursosnuevos";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const supabase = createClient(supabaseUrl, supabaseKey);
-
+// Create supabase client inside the component via useMemo to reuse the project's helper
 
 type Favorito = {
   id: string;
@@ -52,12 +50,49 @@ export default function MisCursosPage() {
   // Mostrar banner si viene de redirección por login ya iniciado
   const showBanner = searchParams?.get("alert") === "already-logged-in";
 
+  // Use centralized auth context
+  const { user, loading: authLoading } = useAuth();
+
+  const router = useRouter();
+  // Create supabase client using project helper (memoized)
+  const supabase: ReturnType<typeof createClient> | null = useMemo(() => {
+    try {
+      return createClient();
+    } catch (err) {
+      console.warn('Could not create supabase client:', err)
+      return null
+    }
+  }, []);
+
   useEffect(() => {
+    // Redirect unauthenticated users to the sign-in page
+    if (!authLoading && !user) {
+      // preserve redirect back to this page after login
+      const redirectTo = encodeURIComponent('/usuarios/mis_cursos')
+      router.replace(`/users/sign_in?redirect=${redirectTo}`)
+      return
+    }
+
     async function fetchAll() {
       setLoading(true);
       setError(null);
       try {
-        const { data: { user } } = await supabase.auth.getUser();
+        // Wait until auth initializes
+        if (authLoading) return;
+
+        // If there's no user (e.g. unauthenticated), don't attempt to fetch private data
+        if (!user) {
+          setLoading(false)
+          return
+        }
+
+        // Ensure supabase client exists before calling DB
+        if (!supabase) {
+          console.warn('Supabase client not available in MisCursosPage')
+          setLoading(false)
+          return
+        }
+
         setUsername(user?.user_metadata?.username || user?.email || "Usuario");
 
         if (viewFavoritos) {
@@ -164,7 +199,7 @@ export default function MisCursosPage() {
       setLoading(false);
     }
     fetchAll();
-  }, [viewFavoritos]);
+  }, [viewFavoritos, authLoading, user, supabase, router]);
 
 
 
@@ -187,16 +222,7 @@ export default function MisCursosPage() {
           <BarranavAula />
         </div>
 
-        {loading && (
-          <div className="space-y-8">
-            <div className="animate-pulse rounded-xl h-12 w-1/3 mx-auto" />
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[...Array(8)].map((_, i) => (
-                <div key={i} className="animate-pulse rounded-xl h-40 w-full" />
-              ))}
-            </div>
-          </div>
-        )}
+          {/* Spinner de carga eliminado */}
 
         {error && (
           <div className="text-center py-4 font-semibold text-lg">{error}</div>

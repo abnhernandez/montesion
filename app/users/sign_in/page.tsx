@@ -9,49 +9,74 @@ import { useAuth } from "@/app/auth-context"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 
+
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [correo_electronico, setCorreoElectronico] = useState("")
   const [password, setPassword] = useState("")
-  
-  const { signIn, user, loading, error } = useAuth()
+  const [error, setError] = useState("")
+  const [loading, setLoading] = useState(false)
   const router = useRouter()
-
-  useEffect(() => {
-    if (user) {
-      router.push("/")
-    }
-  }, [user, router])
-
-  const isValidEmail = (email: string) => /\S+@\S+\.\S+/.test(email)
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    if (!correo_electronico || !password) {
-      return
-    }
-
-    if (!isValidEmail(correo_electronico)) {
-      return
-    }
-
-    try {
-      await signIn(correo_electronico, password)
-      // La redirección se maneja en el useEffect
-    } catch (err: unknown) {
-      // El error se maneja en el contexto
-      console.error('Error en login:', err)
-    }
-  }
-
-  if (loading) return <div>Cargando...</div>
+  const { signIn, user } = useAuth() || {}
 
   const inputClass =
     "w-full px-3 py-3 border rounded-lg text-base placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-blue-300 focus:border-blue-400 dark:focus:ring-blue-600 dark:focus:border-blue-600 transition-all duration-150 bg-white dark:bg-neutral-900"
 
+  // Redirigir si el usuario ya está autenticado
+  useEffect(() => {
+    if (user) {
+      router.replace("/usuarios/mis_cursos")
+    }
+  }, [user, router])
+
+  function isValidEmail(email: string) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+  }
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    setError("")
+
+    if (!isValidEmail(correo_electronico)) {
+      setError("Ingresa un correo electrónico válido.")
+      return
+    }
+    if (!password) {
+      setError("Ingresa tu contraseña.")
+      return
+    }
+
+    setLoading(true)
+    try {
+      if (signIn) {
+        await signIn(correo_electronico, password)
+        router.push("/")
+      } else {
+        setError("Error de autenticación. Intenta más tarde.")
+      }
+    } catch (err: unknown) {
+      const e = err as Error
+      setError((e && e.message) || "Error al iniciar sesión.")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Splash screen mientras loading
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground">
+        <img src="/favicon.ico" alt="Monte Sion" className="w-16 h-16 mb-6" />
+        <h1 className="text-2xl font-bold mb-2">Monte Sion</h1>
+        <p className="text-base text-muted-foreground">Cargando...</p>
+      </div>
+    );
+  }
+  // Si el usuario está autenticado, no renderizar nada
+  if (user) return null
+
   return (
-    <div className="min-h-screen bg-background text-foreground transition-colors duration-300 flex items-center justify-center">
+ <div className="min-h-screen bg-background text-foreground transition-colors duration-300 flex items-center justify-center">
       <main className="w-full max-w-md px-4 space-y-7 z-10">
         <h1 className="text-3xl font-semibold text-center tracking-tight drop-shadow-sm">
           Inicia sesión

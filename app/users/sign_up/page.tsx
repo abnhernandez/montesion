@@ -1,12 +1,12 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { useAuth } from "@/app/auth-context"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Eye, EyeOff, CheckCircle, XCircle } from "lucide-react"
-import { useAuth } from "@/app/auth-context"
-import { useRouter } from "next/navigation"
 import Link from "next/link"
 
 export default function RegisterPage() {
@@ -18,9 +18,15 @@ export default function RegisterPage() {
     password: "",
   })
   const [passwordFocused, setPasswordFocused] = useState(false)
-  
-  const { signUp, loading, error } = useAuth()
   const router = useRouter()
+  const { signUp, loading, error, user } = useAuth() || {}
+
+  // Redirigir si el usuario ya está autenticado
+  useEffect(() => {
+    if (user) {
+      router.replace("/usuarios/mis_cursos")
+    }
+  }, [user, router])
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
@@ -78,6 +84,19 @@ export default function RegisterPage() {
       {children}
     </li>
   )
+
+  // Splash screen mientras loading
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground">
+        <img src="/favicon.ico" alt="Monte Sion" className="w-16 h-16 mb-6" />
+        <h1 className="text-2xl font-bold mb-2">Monte Sion</h1>
+        <p className="text-base text-muted-foreground">Cargando...</p>
+      </div>
+    );
+  }
+  // Si el usuario está autenticado, no renderizar nada
+  if (user) return null
 
   return (
     <div className="min-h-screen bg-background text-foreground transition-colors duration-300 flex items-center justify-center relative">

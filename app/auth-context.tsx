@@ -1,6 +1,6 @@
 "use client"
 
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import React, { createContext, useContext, useEffect, useState, useCallback } from 'react'
 import { User, Session, AuthError, AuthChangeEvent } from '@supabase/supabase-js'
 import { createClient } from '@/utils/supabase/client'
 
@@ -43,6 +43,41 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Check if we're in the browser and if Supabase environment variables are available
   const [supabase, setSupabase] = useState<ReturnType<typeof createClient> | null>(null)
 
+  // Upsert the user's profile into the public.profiles table
+  const upsertProfile = useCallback(async (userParam: User | null) => {
+    if (!userParam) return
+    // Try server-side upsert via API route that uses service_role key
+    try {
+      const res = await fetch('/api/profiles/upsert', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: userParam.id,
+          email: userParam.email,
+          metadata: userParam.user_metadata,
+        }),
+      })
+
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}))
+        console.warn('Server profile upsert failed:', res.status, body)
+        // fallback: try client-side upsert if supabase client exists
+        if (supabase) {
+          await supabase.from('profiles').upsert({ id: userParam.id, email: userParam.email }).select()
+        }
+      }
+    } catch (err) {
+      console.warn('Failed to call server profile upsert, falling back to client upsert:', err)
+      if (supabase) {
+        try {
+          await supabase.from('profiles').upsert({ id: userParam.id, email: userParam.email }).select()
+        } catch (e) {
+          console.warn('Client upsert also failed:', e)
+        }
+      }
+    }
+  }, [supabase])
+
   useEffect(() => {
     // Only initialize Supabase on the client side
     if (typeof window !== 'undefined') {
@@ -78,6 +113,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         } else {
           setSession(session)
           setUser(session?.user ?? null)
+          // Ensure there's a profile row for the signed-in user
+          await upsertProfile(session?.user ?? null)
         }
       } catch (error) {
         console.error('Error initializing auth:', error)
@@ -99,6 +136,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         // Manejar eventos específicos
         if (event === 'SIGNED_IN') {
           setError(null)
+          // Upsert profile when user signs in (handles oauth/provider or fresh sign-in)
+          await upsertProfile(session?.user ?? null)
         } else if (event === 'SIGNED_OUT') {
           setError(null)
         } else if (event === 'TOKEN_REFRESHED') {
@@ -108,7 +147,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     )
 
     return () => subscription.unsubscribe()
-  }, [supabase])
+  }, [supabase, upsertProfile])
 
   const signUp = async (email: string, password: string, userData?: { nombre?: string; apellido?: string }) => {
     if (!supabase) {

@@ -1,6 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/app/auth-context";
 import BlurText from "../components/ui/BlurText";
 import SpotlightCard from "../components/ui/SpotlightCard";
 import Acercade from "../components/ui/acercade";
@@ -9,6 +11,17 @@ import HeroSection from "../components/ui/hero";
 import MapsMonteSion from "../components/ui/montesionmaps";
 
 export default function Page() {	
+	const router = useRouter();
+	const { user } = useAuth() || {};
+
+	useEffect(() => {
+		if (user) {
+			router.replace("/usuarios/mis_cursos");
+		}
+	}, [user, router]);
+	// Si el usuario está autenticado, no renderizar nada
+	if (user) return null;
+
 	return (
 		<div className="min-h-screen flex flex-col bg-background text-foreground transition-colors duration-500">
 			<main className="flex-1 flex flex-col items-center justify-center relative overflow-x-hidden">
@@ -33,7 +46,7 @@ export default function Page() {
 							style={{ userSelect: 'none', pointerEvents: 'auto' }}
 							onContextMenu={e => { if (window.innerWidth < 768) e.preventDefault(); }}
 						>
-							{[
+							{[ 
 								{
 									icon: "👥",
 									text: "Comunidad Cristiana",
@@ -213,7 +226,7 @@ export default function Page() {
 							Estamos aquí para recibirte con amor y acompañarte en tu crecimiento espiritual.
 						</p>
 					</motion.div>
-					
+                    
 					<motion.div
 						initial={{ opacity: 0, y: 30 }}
 						whileInView={{ opacity: 1, y: 0 }}

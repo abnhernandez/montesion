@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/app/auth-context";
 import { createClient } from '@supabase/supabase-js';
 import BarranavAula from "@/components/aula/barranav";
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -15,6 +17,15 @@ interface Bootcamp {
 }
 
 export default function MisBootcampsPage() {
+  const router = useRouter();
+  const { user, loading: authLoading } = useAuth() || {};
+  // Redirigir si no está autenticado
+  useEffect(() => {
+    if (authLoading) return;
+    if (!user) {
+      router.replace("/users/sign_in");
+    }
+  }, [user, authLoading, router]);
   const [bootcamps, setBootcamps] = useState<Bootcamp[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -37,6 +48,9 @@ export default function MisBootcampsPage() {
     }
     fetchBootcamps();
   }, []);
+
+  // Si no hay usuario, no renderizar nada
+  if (!user) return null;
 
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

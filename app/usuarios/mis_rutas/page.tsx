@@ -1,6 +1,8 @@
 'use client'
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/app/auth-context";
 import { createClient } from '@supabase/supabase-js';
 import RutasAprendizaje, { type RutaAprendizaje } from "@/components/aula/rutasaprendizaje";
 import BarranavAula from "@/components/aula/barranav";
@@ -10,6 +12,15 @@ const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 export default function MisRutasPage() {
+  const router = useRouter();
+  const { user, loading: authLoading } = useAuth() || {};
+  // Redirigir si no está autenticado
+  useEffect(() => {
+    if (authLoading) return;
+    if (!user) {
+      router.replace("/users/sign_in");
+    }
+  }, [user, authLoading, router]);
   const [rutas, setRutas] = useState<RutaAprendizaje[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -57,9 +68,12 @@ export default function MisRutasPage() {
     cargarRutas();
   }, []);
 
+  // Si no hay usuario, no renderizar nada
+  if (!user) return null;
+
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-screen">
-    <div className="flex flex-col items-center py-8 sm:py-12 space-y-4 sm:space-y-6">
+      <div className="flex flex-col items-center py-8 sm:py-12 space-y-4 sm:space-y-6">
         <BarranavAula />
       </div>
       <h1 className="text-2xl sm:text-3xl font-extrabold mb-4 sm:mb-6">Mis rutas de aprendizaje</h1>
