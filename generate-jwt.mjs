@@ -31,8 +31,8 @@ async function main() {
 
   const jwt = await jwtBuilder.sign(secret);
 
-  console.log('JWT generado:');
-  console.log(jwt);
+  // JWT generado (silenciado en logs)
+  // Output intentionally not printed to console in production.
 }
 
 main();

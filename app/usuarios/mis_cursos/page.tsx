@@ -222,8 +222,6 @@ export default function MisCursosPage() {
           <BarranavAula />
         </div>
 
-          {/* Spinner de carga eliminado */}
-
         {error && (
           <div className="text-center py-4 font-semibold text-lg">{error}</div>
         )}

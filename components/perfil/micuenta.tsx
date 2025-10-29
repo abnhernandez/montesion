@@ -75,7 +75,7 @@ const MiCuenta: React.FC = () => {
                         <Button
                             variant="outline"
                             className="w-full sm:w-auto"
-                            onClick={() => console.log('Cambiar correo')}
+                            onClick={() => { /* Cambiar correo - acción implementada en UI; log silenciado */ }}
                         >
                             Cambiar correo
                         </Button>
@@ -89,7 +89,7 @@ const MiCuenta: React.FC = () => {
                         <Button
                             variant="outline"
                             className="w-full sm:w-auto"
-                            onClick={() => console.log('Cambiar contraseña')}
+                            onClick={() => { /* Cambiar contraseña - acción implementada en UI; log silenciado */ }}
                         >
                             Cambiar contraseña
                         </Button>

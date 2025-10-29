@@ -46,35 +46,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Upsert the user's profile into the public.profiles table
   const upsertProfile = useCallback(async (userParam: User | null) => {
     if (!userParam) return
-    // Try server-side upsert via API route that uses service_role key
-    try {
-      const res = await fetch('/api/profiles/upsert', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          id: userParam.id,
-          email: userParam.email,
-          metadata: userParam.user_metadata,
-        }),
-      })
+    // Prefer client-side upsert (uses anon key). In many projects the DB trigger
+    // already creates the profile on auth insert, so this is a best-effort attempt
+    // to ensure a profile row exists for older users or edge-cases.
+    if (!supabase) {
+      // No client available (server-side rendering), nothing to do.
+      return
+    }
 
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}))
-        console.warn('Server profile upsert failed:', res.status, body)
-        // fallback: try client-side upsert if supabase client exists
-        if (supabase) {
-          await supabase.from('profiles').upsert({ id: userParam.id, email: userParam.email }).select()
-        }
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .upsert({ id: userParam.id, email: userParam.email })
+        .select()
+
+      if (error) {
+        // Log but don't fail the app; triggers likely cover profile creation.
+        console.warn('Client profile upsert failed:', error)
       }
-    } catch (err) {
-      console.warn('Failed to call server profile upsert, falling back to client upsert:', err)
-      if (supabase) {
-        try {
-          await supabase.from('profiles').upsert({ id: userParam.id, email: userParam.email }).select()
-        } catch (e) {
-          console.warn('Client upsert also failed:', e)
-        }
-      }
+    } catch (e) {
+      console.warn('Client profile upsert exception:', e)
     }
   }, [supabase])
 
@@ -141,7 +132,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         } else if (event === 'SIGNED_OUT') {
           setError(null)
         } else if (event === 'TOKEN_REFRESHED') {
-          console.log('Token refreshed')
+          // token refreshed event handled silently
         }
       }
     )
@@ -159,47 +150,59 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setError(null)
 
     try {
+  // Build options object conditionally to avoid sending empty metadata
+  // Use a stricter type instead of `any` to satisfy ESLint/TS rules
+  const options: { data?: Record<string, string> } = {}
+      if (userData && (userData.nombre || userData.apellido)) {
+        options.data = {}
+        if (userData.nombre) options.data.nombre = userData.nombre
+        if (userData.apellido) options.data.apellido = userData.apellido
+      }
+      // Keep explicit redirect behavior controlled by the caller if needed
+      // options.emailRedirectTo = undefined
+
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
-        options: {
-          data: {
-            nombre: userData?.nombre || '',
-            apellido: userData?.apellido || '',
-          },
-          // For development, disable email confirmation
-          emailRedirectTo: undefined
-        }
+        options: Object.keys(options).length ? options : undefined,
       })
 
       if (error) {
         console.error('Signup error details:', error)
         
         // Handle specific errors more gracefully
-        if (error.message.includes('captcha verification process failed')) {
+        const msg = String(error.message || '')
+
+        if (msg.includes('captcha verification process failed')) {
           console.warn('Captcha verification failed, but user signup may still proceed')
           setError('Problema con verificación. Intenta de nuevo o contacta soporte.')
-          return
+          throw error
         }
-        
-        if (error.message.includes('User already registered')) {
+
+        if (msg.includes('User already registered')) {
           setError('Este email ya está registrado. ¿Quieres iniciar sesión?')
-          return
+          throw error
         }
-        
-        if (error.message.includes('Invalid email')) {
+
+        if (msg.includes('Invalid email')) {
           setError('Por favor verifica que el email sea válido.')
-          return
+          throw error
         }
-        
+
+        if (msg.includes('Database error saving new user')) {
+          // More helpful Spanish message for this particular Supabase/GoTrue error
+          setError(
+            'Error interno al crear la cuenta: fallo al guardar el usuario en la base de datos. Revisa los triggers/constraints en Supabase o contacta al administrador.'
+          )
+          throw error
+        }
+
         throw error
       }
 
       // Check if user was created successfully
       if (data.user) {
-        console.log('✅ Usuario creado exitosamente:', data.user.id)
-        
-        // Si no hay sesión automática, es porque requiere confirmación
+        // Usuario creado exitosamente (silenciado)
         if (!data.session) {
           setError('Cuenta creada exitosamente. Si se requiere confirmación, revisa tu email.')
         } else {
@@ -424,7 +427,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           }
         }
         
-        console.log('Account deletion completed successfully via RPC')
+  // Account deletion completed via RPC (silenciado)
         
         // Limpiar estado local inmediatamente
         setUser(null)
@@ -546,6 +549,8 @@ function getErrorMessage(error: AuthError | Error | unknown): string {
       return 'Has enviado demasiados emails. Espera un momento antes de intentar de nuevo.'
     case 'For security purposes, you can only request this after 60 seconds':
       return 'Por seguridad, debes esperar 60 segundos antes de intentar de nuevo.'
+    case 'Database error saving new user':
+      return 'Error interno al crear la cuenta: no se pudo guardar el usuario en la base de datos. Contacta al administrador.'
     default:
       return errorObj.message || 'Ha ocurrido un error inesperado.'
   }

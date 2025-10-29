@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Eye, EyeOff, CheckCircle, XCircle } from "lucide-react"
 import Link from "next/link"
+import Image from 'next/image'
 
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false)
@@ -89,7 +90,7 @@ export default function RegisterPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground">
-        <img src="/favicon.ico" alt="Monte Sion" className="w-16 h-16 mb-6" />
+        <Image src="/favicon.ico" alt="Monte Sion" width={64} height={64} className="w-16 h-16 mb-6" />
         <h1 className="text-2xl font-bold mb-2">Monte Sion</h1>
         <p className="text-base text-muted-foreground">Cargando...</p>
       </div>

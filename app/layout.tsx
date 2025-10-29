@@ -8,9 +8,6 @@ import { Toaster } from '@/components/ui/sonner';
 import { Providers } from '@/components/providers';
 import LayoutWrapper from '@/components/LayoutWrapper';
 
-// Import diagnostic runner for development
-import '@/lib/diagnostic-runner';
-
 export const metadata: Metadata = {
   title: 'Monte Sion · Iglesia Cristiana',
   description: 'Monte Sion · Iglesia Cristiana',

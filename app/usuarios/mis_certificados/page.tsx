@@ -198,8 +198,7 @@ export default function MisCertificadosPage() {
                     if (cert.descarga_url) {
                       window.open(cert.descarga_url, '_blank');
                     } else {
-                      // Generar PDF o descarga
-                      console.log('Descargar certificado:', cert.id);
+                      // Generar PDF o descarga (silenciado)
                     }
                   }}
                 >

@@ -3,7 +3,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { CheckCircle2, XCircle } from "lucide-react";
 import clsx from "clsx";
-import { createPrayerRequest } from "@/lib/prayer-requests";
 
 type Campos = "nombre" | "correo_electronico" | "asunto" | "peticion";
 
@@ -42,6 +41,32 @@ const validarTodosCampos = (inputs: Record<Campos, string>): Record<Campos, "val
   asunto: validarCampo("asunto", inputs.asunto) ? "valid" : "invalid",
   peticion: validarCampo("peticion", inputs.peticion) ? "valid" : "invalid",
 });
+
+// Función auxiliar para enviar la petición al route server local (/api/peticiones)
+const createPrayerRequest = async (payload: {
+  nombre: string;
+  correo_electronico: string;
+  asunto: string;
+  peticion: string;
+}): Promise<{ success: boolean; error?: string }> => {
+  try {
+    const resp = await fetch('/api/peticiones', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await resp.json().catch(() => ({}));
+
+    if (!resp.ok) {
+      return { success: false, error: data?.error || data?.message || `HTTP ${resp.status}` };
+    }
+
+    return { success: true };
+  } catch (error: unknown) {
+    return { success: false, error: error instanceof Error ? error.message : String(error) };
+  }
+};
 
 interface InputProps {
   field: Campos;
