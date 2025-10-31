@@ -34,21 +34,101 @@ export default function MisBootcampsPage() {
     async function fetchBootcamps() {
       setLoading(true);
       setError(null);
-      const { data, error } = await supabase.from('bootcamps').select('*').eq('activo', true);
-      if (error) setError('Error al cargar bootcamps');
-      setBootcamps(
-        (data || []).map((b: Record<string, unknown>) => ({
-          id: String(b.id),
-          title: String(b.titulo || b.title),
-          description: String(b.descripcion || b.description),
-          image: String(b.imagen_url || b.image),
-        }))
-      );
-      setLoading(false);
-    }
-    fetchBootcamps();
-  }, []);
 
+      try {
+        // Esperar que auth esté listo
+        if (authLoading) return;
+
+        // Si no hay usuario, no intentar obtener datos privados
+        if (!user) {
+          setLoading(false);
+          return;
+        }
+
+        // 1) Intentar obtener inscripciones junto con los datos del bootcamp (join) para ahorrar queries
+        type JoinedRow = {
+          progreso?: number;
+          completado?: boolean;
+          bootcamp?: Record<string, unknown> | null;
+        };
+
+        let bootcampRows: Record<string, unknown>[] = [];
+
+        try {
+          // Intentar select relacional: alias 'bootcamp' desde fk bootcamp_id
+          const { data: joined, error: joinErr } = await supabase
+            .from('inscripciones_bootcamps')
+            .select('progreso, completado, bootcamp:bootcamp_id(id, titulo, descripcion, imagen_url, estudiantes, activo)')
+            .eq('user_id', user.id);
+
+          if (!joinErr && joined && Array.isArray(joined) && joined.length > 0) {
+            // Supabase may return nested arrays for the joined table; normalize shape
+            const rowsRaw = joined as unknown as Record<string, unknown>[];
+            const rows: JoinedRow[] = rowsRaw.map(r => {
+              // r.bootcamp may be an array (if fk produces array) or object
+              const rObj = r as Record<string, unknown>;
+              const bootRaw = rObj['bootcamp'] as unknown;
+              const bootObj = Array.isArray(bootRaw) ? (bootRaw[0] as Record<string, unknown>) : (bootRaw as Record<string, unknown> | undefined);
+              return {
+                progreso: rObj['progreso'] as number | undefined,
+                completado: rObj['completado'] as boolean | undefined,
+                bootcamp: (bootObj as Record<string, unknown>) || null,
+              };
+            });
+            // Extraer sólo los bootcamps activos y acompañarlos con progreso/completado
+            const mapped: Record<string, unknown>[] = rows
+              .map(r => ({ ...((r.bootcamp as Record<string, unknown>) || {}), progreso: r.progreso, completado: r.completado }))
+              .filter((b: Record<string, unknown>) => Boolean(b) && (b['activo'] === undefined || b['activo'] === true));
+
+            // Priorizar: items con progreso>0 primero, luego completados, luego por progreso desc, luego por estudiantes desc
+            mapped.sort((a: Record<string, unknown>, b: Record<string, unknown>) => {
+              const aProg = Number(a['progreso'] || 0);
+              const bProg = Number(b['progreso'] || 0);
+              const aComp = Boolean(a['completado']) ? 1 : 0;
+              const bComp = Boolean(b['completado']) ? 1 : 0;
+              if ((aProg > 0) !== (bProg > 0)) return (bProg > 0 ? 1 : 0) - (aProg > 0 ? 1 : 0);
+              if (aComp !== bComp) return bComp - aComp;
+              if (aProg !== bProg) return bProg - aProg;
+              return Number(b['estudiantes'] || 0) - Number(a['estudiantes'] || 0);
+            });
+
+            bootcampRows = mapped as Record<string, unknown>[];
+          }
+        } catch (e) {
+          console.warn('Join select failed, will fallback to ids approach', e);
+        }
+
+        // 2) Si no encontró inscripciones o no devolvió filas, usar catálogo general ordenado por popularidad
+        if (!bootcampRows || bootcampRows.length === 0) {
+          const { data: catalogData, error } = await supabase
+            .from('bootcamps')
+            .select('*')
+            .eq('activo', true)
+            .order('estudiantes', { ascending: false })
+            .limit(12);
+          if (error) throw error;
+          bootcampRows = catalogData as Record<string, unknown>[];
+        }
+
+        setBootcamps(
+          (bootcampRows || []).map((b: Record<string, unknown>) => ({
+            id: String(b.id || b.bootcamp_id || b.course_id),
+            title: String(b.titulo || b.title || b.nombre || ''),
+            description: String(b.descripcion || b.description || b.summary || ''),
+            image: String(b.imagen_url || b.image || b.thumbnail || ''),
+          }))
+        );
+      } catch (err) {
+        console.error('fetchBootcamps error', err);
+        setError('Error al cargar bootcamps');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchBootcamps();
+  }, [user, authLoading]);
+ 
   // Si no hay usuario, no renderizar nada
   if (!user) return null;
 
@@ -81,4 +161,5 @@ export default function MisBootcampsPage() {
       )}
     </main>
   );
+
 }

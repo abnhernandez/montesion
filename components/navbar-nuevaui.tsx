@@ -5,6 +5,7 @@ import Image from "next/image"
 import { useEffect, useState, useRef } from "react"
 import { createClient } from "@supabase/supabase-js"
 import { ChevronDown, Menu, X, Search } from "lucide-react"
+import { displayNameFrom } from "@/lib/utils"
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ""
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ""
@@ -24,7 +25,7 @@ export function BarradeNavegacion() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!_mounted) return;
       if (user) {
-        setUsername(user.user_metadata?.username || user.email || "Usuario");
+          setUsername(displayNameFrom(user.user_metadata?.username || user.email) || "Usuario");
         setIsAuthenticated(true);
       } else {
         setIsAuthenticated(false);
@@ -35,7 +36,7 @@ export function BarradeNavegacion() {
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!_mounted) return;
       if (session?.user) {
-        setUsername(session.user.user_metadata?.username || session.user.email || "Usuario");
+        setUsername(displayNameFrom(session.user.user_metadata?.username || session.user.email) || "Usuario");
         setIsAuthenticated(true);
       } else {
         setIsAuthenticated(false);

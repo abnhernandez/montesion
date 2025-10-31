@@ -6,6 +6,7 @@ import { createClient } from '@/utils/supabase/client';
 import { useAuth } from '@/app/auth-context';
 import { useSearchParams, useRouter } from "next/navigation";
 import BienvenidaUsuarios from "@/components/aula/bienvenida_usuarios";
+import { displayNameFrom } from "@/lib/utils";
 import Navbar from "@/components/aula/navbar";
 import BarranavAula from "@/components/aula/barranav";
 import MisBootcamps from "@/components/aula/misbootcamps";
@@ -93,7 +94,7 @@ export default function MisCursosPage() {
           return
         }
 
-        setUsername(user?.user_metadata?.username || user?.email || "Usuario");
+  setUsername(displayNameFrom(user?.user_metadata?.username || user?.email) || "Usuario");
 
         if (viewFavoritos) {
           // Vista Mi lista (favoritos): si falla, mostramos landing vacía
@@ -118,21 +119,77 @@ export default function MisCursosPage() {
             }
           }
         } else {
-          const [
-            { data: bootcampsData },
-            { data: avisoData },
-            { data: cursosPopularesData },
-            { data: replaysData },
-            { data: rutasData },
-            { data: cursosNuevosData }
-          ] = await Promise.all([
-            supabase.from('bootcamps').select('*').eq('activo', true),
-            supabase.from('avisos').select('*').eq('destacado', true).single(),
-            supabase.from('cursos_populares').select('*'),
-            supabase.from('bootcamp_replays').select('*'),
-            supabase.from('rutas_aprendizaje').select('*'),
-            supabase.from('cursos_nuevos').select('*'),
-          ]);
+
+          // Helper: intenta obtener registros específicos del usuario y si no hay, carga el catálogo general
+          async function fetchUserOrGeneral(userId: string | undefined, userTable: string, generalTable: string, generalFilter?: { key: string; value: unknown }): Promise<Record<string, unknown>[]> {
+            if (!supabase) return [];
+            if (userId) {
+              try {
+                const userRes = await supabase.from(userTable).select('*').eq('user_id', userId);
+                if (!userRes.error && userRes.data && (userRes.data as Record<string, unknown>[]).length > 0) {
+                  return userRes.data as Record<string, unknown>[];
+                }
+              } catch {
+                // ignore and fallback to general
+              }
+            }
+
+            try {
+              let genQuery = supabase.from(generalTable).select('*');
+              if (generalFilter) genQuery = genQuery.eq(generalFilter.key, generalFilter.value as unknown);
+              const genRes = await genQuery;
+              return (genRes.data as Record<string, unknown>[]) || [];
+            } catch {
+              return [];
+            }
+          }
+
+          // Obtener bootcamps preferentemente desde inscripciones (tabla confirmada: inscripciones_bootcamps)
+          let bootcampsData: Record<string, unknown>[] = [];
+          if (supabase && user?.id) {
+                try {
+                  // Intentar join directamente desde inscripciones a bootcamp para obtener progreso/completado y los datos del catálogo
+                  const { data: joined, error: joinErr } = await supabase
+                    .from('inscripciones_bootcamps')
+                    .select('progreso, completado, bootcamp:bootcamp_id(id, titulo, descripcion, imagen_url, estudiantes, activo)')
+                    .eq('user_id', user.id);
+                  if (!joinErr && Array.isArray(joined) && joined.length > 0) {
+                    const rowsRaw = joined as unknown as Record<string, unknown>[];
+                    const mapped: Record<string, unknown>[] = rowsRaw.map(r => {
+                      const rObj = r as Record<string, unknown>;
+                      const bootRaw = rObj['bootcamp'] as unknown;
+                      const bootObj = Array.isArray(bootRaw) ? (bootRaw[0] as Record<string, unknown>) : (bootRaw as Record<string, unknown> | undefined);
+                      return { ...((bootObj as Record<string, unknown>) || {}), progreso: rObj['progreso'], completado: rObj['completado'] } as Record<string, unknown>;
+                    }).filter(b => Boolean(b) && (b['activo'] === undefined || b['activo'] === true));
+
+                    mapped.sort((a: Record<string, unknown>, b: Record<string, unknown>) => {
+                      const aProg = Number(a['progreso'] || 0);
+                      const bProg = Number(b['progreso'] || 0);
+                      const aComp = Boolean(a['completado']) ? 1 : 0;
+                      const bComp = Boolean(b['completado']) ? 1 : 0;
+                      if ((aProg > 0) !== (bProg > 0)) return (bProg > 0 ? 1 : 0) - (aProg > 0 ? 1 : 0);
+                      if (aComp !== bComp) return bComp - aComp;
+                      if (aProg !== bProg) return bProg - aProg;
+                      return Number(b['estudiantes'] || 0) - Number(a['estudiantes'] || 0);
+                    });
+
+                    bootcampsData = mapped;
+                  }
+                } catch (err) {
+                  console.warn('Error loading inscripciones_bootcamps', err);
+                  bootcampsData = [];
+                }
+          }
+
+          // Si no obtuvo bootcamps desde inscripciones, fallback al helper (tablas user-scoped o catálogo general)
+          if (!bootcampsData || (Array.isArray(bootcampsData) && bootcampsData.length === 0)) {
+            bootcampsData = await fetchUserOrGeneral(user?.id, 'bootcamps_usuarios', 'bootcamps', { key: 'activo', value: true });
+          }
+          const avisoData = (await supabase.from('avisos').select('*').eq('destacado', true).single()).data;
+          const cursosPopularesData = await fetchUserOrGeneral(user?.id, 'cursos_populares_usuarios', 'cursos_populares');
+          const replaysData = await fetchUserOrGeneral(user?.id, 'bootcamp_replays_usuarios', 'bootcamp_replays');
+          const rutasData = await fetchUserOrGeneral(user?.id, 'rutas_aprendizaje_usuarios', 'rutas_aprendizaje');
+          const cursosNuevosData = await fetchUserOrGeneral(user?.id, 'cursos_nuevos_usuarios', 'cursos_nuevos');
 
           setBootcamps((bootcampsData || []).map((b: Record<string, unknown>) => ({
             id: String(b.id),

@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+// import { displayNameFrom } from "@/lib/utils";
 // import { useAuth } from "@/app/auth-context";
 // import { Button } from "@/components/ui/button";
 // import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -180,7 +181,7 @@ export function BarradeNavegacion() {
                     </AvatarFallback>
                   </Avatar>
                   <span className="hidden sm:block">
-                    {user.user_metadata?.nombre || user.email?.split('@')[0] || 'Usuario'}
+                    {user.user_metadata?.nombre || displayNameFrom(user.email) || 'Usuario'}
                   </span>
                 </button>
                 
@@ -191,7 +192,7 @@ export function BarradeNavegacion() {
                         {user.user_metadata?.nombre} {user.user_metadata?.apellido}
                       </p>
                       <p className="text-xs text-gray-500 dark:text-gray-400">
-                        {user.email}
+                        {displayNameFrom(user.email)}
                       </p>
                     </div>
                     <Link

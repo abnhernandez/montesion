@@ -68,8 +68,7 @@ export default function RegisterPage() {
 
     try {
       await signUp(correo_electronico, password, { nombre, apellido })
-      // Redirigir a página de inicio
-      router.push("/")
+      router.push("/users/confirm")
     } catch (err: unknown) {
       console.error('Error en registro:', err)
     }
