@@ -4,6 +4,27 @@
 
 ---
 
+## [1.13.1] - 2026-04-02
+
+### 🔐 Seguridad
+- Se activo proteccion real para rutas privadas `/usuarios` en middleware.
+- Se incorporo validacion de redirect seguro post-login para prevenir open redirects.
+- Se agregaron headers de seguridad base en `next.config.ts` (CSP, HSTS, X-Frame-Options, Referrer-Policy, Permissions-Policy).
+
+### 🧱 Refactorizacion
+- Se consolido el cliente de Supabase para reducir duplicidad y deuda tecnica.
+- Se migraron componentes con inicializacion manual de Supabase al cliente compartido.
+- Se removio uso legacy de `createClientComponentClient` en modulo de pagos.
+
+### ✅ Calidad
+- Se corrigieron errores de lint bloqueantes en modulos de comunidad.
+- Se valido build de produccion exitoso con Next.js 15.
+
+### 📚 Documentacion
+- README reescrito con enfoque de portafolio profesional.
+- Arquitectura tecnica alineada al estado real del codigo.
+- Se agregaron guias: plan de ejecucion, checklist de evidencias y flujo Git.
+
 ## [1.1.0] - 07/07/2025
 
 ### ✨ Nuevas Características

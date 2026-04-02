@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Eye, EyeOff } from "lucide-react"
 import { useAuth } from "@/app/auth-context"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import Image from 'next/image'
 
@@ -18,6 +18,7 @@ export default function LoginPage() {
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const searchParams = useSearchParams()
   const { signIn, user } = useAuth() || {}
 
   const inputClass =
@@ -32,6 +33,18 @@ export default function LoginPage() {
 
   function isValidEmail(email: string) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+  }
+
+  function getSafeRedirectPath() {
+    const redirect = searchParams.get('redirect')
+    if (!redirect) return '/'
+
+    // Prevent open redirects by allowing only internal absolute paths.
+    if (!redirect.startsWith('/') || redirect.startsWith('//')) {
+      return '/'
+    }
+
+    return redirect
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -51,7 +64,7 @@ export default function LoginPage() {
     try {
       if (signIn) {
         await signIn(correo_electronico, password)
-        router.push("/")
+        router.push(getSafeRedirectPath())
       } else {
         setError("Error de autenticación. Intenta más tarde.")
       }

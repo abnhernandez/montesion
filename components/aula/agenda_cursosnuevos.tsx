@@ -1,13 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { createClient } from '@supabase/supabase-js'
-
-// Crear el cliente de Supabase (coloca tus credenciales)
-const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
+import { supabase } from '@/lib/supabase-client'
 
 interface Instructor {
         name: string;

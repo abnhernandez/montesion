@@ -1,9 +1,10 @@
-'use client'
+ 'use client'
 
 import { FaWhatsapp } from "react-icons/fa";
 import { FaMapMarkedAlt } from "react-icons/fa";
 import { HelpCircle } from "lucide-react";
 import { useState } from "react";
+import Link from 'next/link';
 
 const whatsappNumber = "5586449993";
 const whatsappMsg = encodeURIComponent(
@@ -175,8 +176,8 @@ export default function PlanificaVisitaPage() {
               >
                 <span className="text-2xl">×</span>
               </button>
-              <div className="text-xs text-gray-500 dark:text-gray-400 text-center">
-                Si tienes alguna pregunta o necesitas más información, visita nuestra sección de <a href="/faq" className="underline text-[#831111] dark:text-[#e57373] hover:text-[#a13a3a] dark:hover:text-[#ffb3b3]">Preguntas Frecuentes</a> o no dudes en contactarnos.
+                <div className="text-xs text-gray-500 dark:text-gray-400 text-center">
+                Si tienes alguna pregunta o necesitas más información, visita nuestra sección de <Link href="/faq" className="underline text-[#831111] dark:text-[#e57373] hover:text-[#a13a3a] dark:hover:text-[#ffb3b3]">Preguntas Frecuentes</Link> o no dudes en contactarnos.
               </div>
               <div className="flex items-center gap-2 text-[#831111] dark:text-[#e57373] text-2xl font-semibold text-center">
                 <HelpCircle className="w-7 h-7 text-[#831111] dark:text-[#e57373]" />

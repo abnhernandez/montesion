@@ -3,11 +3,9 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/auth-context";
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from '@/lib/supabase-client';
 import BarranavAula from "@/components/aula/barranav";
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const supabase = createClient(supabaseUrl, supabaseKey);
+import Image from 'next/image';
 
 interface Bootcamp {
   id: string;
@@ -146,8 +144,18 @@ export default function MisBootcampsPage() {
           {bootcamps.map(b => (
             <div key={b.id} className="rounded-2xl shadow border overflow-hidden flex flex-col">
               <div className="h-48 w-full flex items-center justify-center bg-gray-100">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={b.image} alt={b.title} className="object-contain h-32" />
+                {b.image ? (
+                  <Image
+                    src={b.image}
+                    alt={b.title}
+                    width={400}
+                    height={160}
+                    className="object-contain h-32"
+                    unoptimized
+                  />
+                ) : (
+                  <div className="text-gray-400">No image</div>
+                )}
               </div>
               <div className="p-6 flex-1 flex flex-col justify-between">
                 <div>

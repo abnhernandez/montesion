@@ -1,4 +1,5 @@
 import React from "react";
+import Image from 'next/image';
 
 export type Bootcamp = {
   id: string;
@@ -19,8 +20,9 @@ const MisBootcamps: React.FC<MisBootcampsProps> = ({ bootcamps }) => {
       {bootcamps.map((b) => (
         <div key={b.id} className="rounded-xl shadow-sm border flex-shrink-0 w-72">
           <div className="rounded-t-xl overflow-hidden h-36 relative">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={b.image} alt={b.title} className="object-cover w-full h-full" />
+            {b.image ? (
+              <Image src={b.image} alt={b.title} fill className="object-cover w-full h-full" unoptimized />
+            ) : null}
             {b.badge && (
               <span className="absolute top-2 left-2 text-xs font-bold px-2 py-1 rounded">{b.badge}</span>
             )}

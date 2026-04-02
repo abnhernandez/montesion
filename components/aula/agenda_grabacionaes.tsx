@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { createClient } from '@supabase/supabase-js';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Clock } from 'lucide-react';
+import { supabase } from '@/lib/supabase-client';
 
 // Define the types for our recording data
 interface Recording {
@@ -13,12 +13,6 @@ interface Recording {
     recording_url: string;
     created_at: string;
 }
-
-// Initialize Supabase client
-const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
 
 export default function AgendaGrabaciones() {
     const [recordings, setRecordings] = useState<Recording[]>([]);

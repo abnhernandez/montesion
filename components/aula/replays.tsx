@@ -1,4 +1,5 @@
 import React from "react";
+import Image from 'next/image';
 
 export type BootcampReplay = {
   id: string;
@@ -22,8 +23,9 @@ const BootcampsReplays: React.FC<BootcampsReplaysProps> = ({ bootcamps }) => {
       {bootcamps.map(b => (
         <div key={b.id} className="rounded-xl shadow-sm border flex-shrink-0 w-72">
           <div className="rounded-t-xl overflow-hidden h-32 flex items-center justify-center">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={b.image} alt={b.title} className="w-100% h-100% object-contain" />
+            {b.image ? (
+              <Image src={b.image} alt={b.title} fill className="object-contain" unoptimized />
+            ) : null}
           </div>
           <div className="p-4">
             <div className="font-semibold text-lg mb-2">{b.title}</div>

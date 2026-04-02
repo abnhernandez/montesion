@@ -3,13 +3,9 @@
 import Link from "next/link"
 import Image from "next/image"
 import { useEffect, useState, useRef } from "react"
-import { createClient } from "@supabase/supabase-js"
 import { ChevronDown, Menu, X, Search } from "lucide-react"
 import { displayNameFrom } from "@/lib/utils"
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ""
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ""
-const supabase = createClient(supabaseUrl, supabaseAnonKey)
+import { supabase } from "@/lib/supabase-client"
 
 export function BarradeNavegacion() {
   const [username, setUsername] = useState<string>("")

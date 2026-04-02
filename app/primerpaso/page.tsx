@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from "react";
+import Link from 'next/link';
 import { CaminoDeCrecimiento } from "@/components/ui/discipleshipIcons";
 
 export default function PrimerPasoPage() {
@@ -28,14 +29,14 @@ export default function PrimerPasoPage() {
             El <span className="font-semibold text-primary">Primer Paso</span> es una experiencia diseñada para quienes desean conocer más sobre la fe, la iglesia y cómo integrarse a nuestra familia. Aquí te acompañamos, resolvemos tus dudas y te ayudamos a dar ese gran primer paso en tu camino espiritual.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 items-center">
-            <a
+            <Link
               href="/contact"
               className="group relative inline-flex items-center px-8 py-4 rounded-full bg-primary text-primary-foreground font-semibold text-lg shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-105 hover:bg-primary/90"
             >
               <span className="mr-2">💬</span>
               Quiero más información
               <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary to-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></div>
-            </a>
+            </Link>
             <a
               href="https://forms.gle/f4ca3hi8LtXNFxp37"
               target="_blank"
@@ -274,20 +275,20 @@ export default function PrimerPasoPage() {
             {
               icon: <span className="w-8 h-8 flex items-center justify-center mr-3 text-purple-600">🚀</span>,
               question: "¿Qué sucede después?",
-              answer: (
+                answer: (
                 <span>
-                  Te invitamos a seguir creciendo en comunidad, como enseña Hebreos 10:24-25: <span className="italic">&quot;Y considerémonos unos a otros para estimularnos al amor y a las buenas obras... no dejando de congregarnos&quot;</span>. Además, puedes consultar más preguntas generales en <a href="/faq" className="text-primary underline">/faq</a>.
+                  Te invitamos a seguir creciendo en comunidad, como enseña Hebreos 10:24-25: <span className="italic">&quot;Y considerémonos unos a otros para estimularnos al amor y a las buenas obras... no dejando de congregarnos&quot;</span>. Además, puedes consultar más preguntas generales en <Link href="/faq" className="text-primary underline">/faq</Link>.
                 </span>
-              ),
+                ),
             },
             {
               icon: <span className="w-8 h-8 flex items-center justify-center mr-3 text-blue-600">⏰</span>,
               question: "¿Cuánto tiempo dura?",
-              answer: (
+                answer: (
                 <span>
-                  La reunión de bienvenida es breve, pero el caminar con Cristo es para toda la vida. &quot;Enseñándoles que guarden todas las cosas que os he mandado&quot; (Mateo 28:20). Si tienes más dudas, visita <a href="/faq" className="text-primary underline">/faq</a>.
+                  La reunión de bienvenida es breve, pero el caminar con Cristo es para toda la vida. &quot;Enseñándoles que guarden todas las cosas que os he mandado&quot; (Mateo 28:20). Si tienes más dudas, visita <Link href="/faq" className="text-primary underline">/faq</Link>.
                 </span>
-              ),
+                ),
             },
           ].map((faq, idx) => (
             <div key={idx} className="group rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden bg-card/50">

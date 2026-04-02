@@ -22,6 +22,8 @@ import type { CursoPopular } from "@/components/aula/cursospopulares";
 import type { BootcampReplay } from "@/components/aula/replays";
 import type { RutaAprendizaje } from "@/components/aula/rutasaprendizaje";
 import type { CursoNuevo } from "@/components/aula/cursosnuevos";
+import Image from 'next/image';
+import Link from 'next/link';
 
 // Create supabase client inside the component via useMemo to reuse the project's helper
 
@@ -290,12 +292,11 @@ export default function MisCursosPage() {
                 <h2 className="text-3xl font-extrabold mb-6">Mi lista</h2>
                 {favoritos.length === 0 ? (
                   <div className="flex flex-col items-center text-center py-8">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src="/assets/assets-favoritos.png" alt="Mi lista vacía" className="w-[420px] max-w-full mb-6" />
+                    <Image src="/assets/assets-favoritos.png" alt="Mi lista vacía" width={420} height={280} className="w-[420px] max-w-full mb-6" />
                     <p className="text-lg mb-6">Aún no has agregado ningún curso</p>
-                    <a href="/cursos" className="inline-flex items-center justify-center px-6 py-3 rounded-full bg-emerald-500 text-white font-semibold hover:bg-emerald-600 transition-colors">
+                    <Link href="/cursos" className="inline-flex items-center justify-center px-6 py-3 rounded-full bg-emerald-500 text-white font-semibold hover:bg-emerald-600 transition-colors">
                       Explorar librería
-                    </a>
+                    </Link>
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -304,8 +305,7 @@ export default function MisCursosPage() {
                         <div className="h-28 bg-gradient-to-b from-slate-900 to-slate-800 relative flex items-center justify-center">
                           <div className="w-16 h-16 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
                             {f.image ? (
-                              // eslint-disable-next-line @next/next/no-img-element
-                              <img src={f.image} alt={f.title} className="w-10 h-10 object-contain" />
+                              <Image src={f.image} alt={f.title} width={40} height={40} className="w-10 h-10 object-contain" unoptimized />
                             ) : (
                               <span className="text-white text-lg">🎓</span>
                             )}

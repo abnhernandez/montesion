@@ -1,4 +1,5 @@
 import React from "react";
+import Image from 'next/image';
 
 export type CursoNuevo = {
   id: string;
@@ -18,8 +19,9 @@ const CursosNuevos: React.FC<CursosNuevosProps> = ({ cursos }) => (
       {cursos.map(c => (
         <div key={c.id} className="rounded-xl shadow-sm border flex-shrink-0 w-72">
           <div className="rounded-t-xl overflow-hidden h-32 flex items-center justify-center">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={c.image} alt={c.title} className="w-16 h-16 object-contain" />
+            {c.image ? (
+              <Image src={c.image} alt={c.title} width={64} height={64} className="w-16 h-16 object-contain" unoptimized />
+            ) : null}
           </div>
           <div className="p-4">
             <div className="font-semibold text-lg mb-2">{c.title}</div>

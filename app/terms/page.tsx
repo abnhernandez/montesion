@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function TermsPage() {
   return (
     <main className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground px-4">
@@ -16,7 +18,7 @@ export default function TermsPage() {
           </section>
           <section>
             <h2 className="font-semibold text-lg mb-1">2. Crear cuenta</h2>
-            <p>Para acceder a ciertos servicios, es necesario registrarse con datos válidos y mantenerlos actualizados. Consulta nuestro <a href="/privacy" className="underline hover:text-primary">Aviso de Privacidad</a> para saber cómo protegemos tus datos.</p>
+            <p>Para acceder a ciertos servicios, es necesario registrarse con datos válidos y mantenerlos actualizados. Consulta nuestro <Link href="/privacy" className="underline hover:text-primary">Aviso de Privacidad</Link> para saber cómo protegemos tus datos.</p>
           </section>
           <section>
             <h2 className="font-semibold text-lg mb-1">3. Acceso a la cuenta personal</h2>

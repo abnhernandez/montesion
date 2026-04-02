@@ -1,4 +1,5 @@
 import React from "react";
+import Image from 'next/image';
 
 export type CursoPopular = {
   id: string;
@@ -22,8 +23,9 @@ const CursosPopulares: React.FC<CursosPopularesProps> = ({ cursos }) => {
       {cursos.map(c => (
         <div key={c.id} className="rounded-xl shadow-sm border flex-shrink-0 w-72">
           <div className="rounded-t-xl overflow-hidden h-32 relative flex items-center justify-center">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={c.image} alt={c.title} className="w-16 h-16 object-contain" />
+            {c.image ? (
+              <Image src={c.image} alt={c.title} width={64} height={64} className="w-16 h-16 object-contain" unoptimized />
+            ) : null}
             {c.top && (
               <span className="absolute top-2 right-2 text-xs font-bold px-2 py-1 rounded">Curso TOP</span>
             )}
@@ -36,8 +38,9 @@ const CursosPopulares: React.FC<CursosPopularesProps> = ({ cursos }) => {
               <span className="ml-2">{c.students} Estudiantes</span>
             </div>
             <div className="flex items-center gap-2">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={c.teacherAvatar} alt={c.teacher} className="w-6 h-6 rounded-full" />
+              {c.teacherAvatar ? (
+                <Image src={c.teacherAvatar} alt={c.teacher} width={24} height={24} className="w-6 h-6 rounded-full" unoptimized />
+              ) : null}
               <span>{c.teacher}</span>
             </div>
           </div>

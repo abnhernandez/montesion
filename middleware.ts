@@ -9,23 +9,27 @@ export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
 
   // 1) Protect /usuarios routes for authenticated users
-  // if (pathname.startsWith('/usuarios')) {
-  //   const token =
-  //     req.cookies.get('sb-access-token')?.value ||
-  //     req.cookies.get('sb-refresh-token')?.value ||
-  //     req.cookies.get('supabase-auth-token')?.value ||
-  //     req.cookies.get('supabase-session')?.value ||
-  //     null
+  if (pathname.startsWith('/usuarios')) {
+    const hasLegacyToken =
+      !!req.cookies.get('sb-access-token')?.value ||
+      !!req.cookies.get('sb-refresh-token')?.value ||
+      !!req.cookies.get('supabase-auth-token')?.value ||
+      !!req.cookies.get('supabase-session')?.value
 
-  //   if (!token) {
-  //     const signInUrl = new URL('/users/sign_in', req.url)
-  //     signInUrl.searchParams.set('redirect', pathname)
-  //     return NextResponse.redirect(signInUrl)
-  //   }
+    // Supabase SSR usually stores auth in a cookie like: sb-<project-ref>-auth-token
+    const hasSupabaseSsrCookie = req
+      .cookies
+      .getAll()
+      .some((cookie) => cookie.name.startsWith('sb-') && cookie.name.endsWith('-auth-token'))
 
-    // If authenticated, allow access to usuarios routes and skip further redirects
-  //   return NextResponse.next()
-  // }
+    if (!hasLegacyToken && !hasSupabaseSsrCookie) {
+      const signInUrl = new URL('/users/sign_in', req.url)
+      signInUrl.searchParams.set('redirect', `${pathname}${req.nextUrl.search}`)
+      return NextResponse.redirect(signInUrl)
+    }
+
+    return NextResponse.next()
+  }
 
   // 2) Redirect map for specific public routes
   const redirects: Record<string, string> = {

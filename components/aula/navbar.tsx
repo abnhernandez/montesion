@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { supabase } from '../../lib/supabase-client';
 
 
@@ -83,7 +84,7 @@ const Navbar = () => {
                         {openDropdown === 'aprende' && aprendeOptions.length > 0 && (
                             <div className="absolute left-0 mt-2 bg-white rounded-xl shadow-lg py-2 px-4 min-w-[180px] z-50 flex flex-col gap-2">
                                 {aprendeOptions.map((opt: Option) => (
-                                    <a key={opt.id} href={opt.href} className="hover:underline text-gray-900 py-1 px-2 rounded-lg">{opt.label}</a>
+                                    <Link key={opt.id} href={opt.href} className="hover:underline text-gray-900 py-1 px-2 rounded-lg">{opt.label}</Link>
                                 ))}
                             </div>
                         )}
@@ -99,7 +100,7 @@ const Navbar = () => {
                         {openDropdown === 'productos' && productosOptions.length > 0 && (
                             <div className="absolute left-0 mt-2 bg-white rounded-xl shadow-lg py-2 px-4 min-w-[180px] z-50 flex flex-col gap-2">
                                 {productosOptions.map((opt: Option) => (
-                                    <a key={opt.id} href={opt.href} className="hover:underline text-gray-900 py-1 px-2 rounded-lg">{opt.label}</a>
+                                    <Link key={opt.id} href={opt.href} className="hover:underline text-gray-900 py-1 px-2 rounded-lg">{opt.label}</Link>
                                 ))}
                             </div>
                         )}
@@ -115,10 +116,19 @@ const Navbar = () => {
                         {openDropdown === 'convocatorias' && convocatoriasOptions.length > 0 && (
                             <div className="absolute left-0 mt-2 bg-white rounded-xl shadow-lg py-2 px-4 min-w-[180px] z-50 flex flex-col gap-2">
                                 {convocatoriasOptions.map((opt: Option) => (
-                                    <a key={opt.id} href={opt.href} className="hover:underline text-gray-900 py-1 px-2 rounded-lg">{opt.label}</a>
+                                    <Link key={opt.id} href={opt.href} className="hover:underline text-gray-900 py-1 px-2 rounded-lg">{opt.label}</Link>
                                 ))}
                             </div>
                         )}
+                    </div>
+                    {/* Comunidad link (nuevo) */}
+                    <div className="relative">
+                        <Link href="/aula/comunidad" className="flex items-center space-x-2 font-bold hover:underline">
+                            <span>Comunidad</span>
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v14m7-7H5" />
+                            </svg>
+                        </Link>
                     </div>
                     {/* Buscador */}
                     <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden ml-3 relative">
@@ -140,7 +150,7 @@ const Navbar = () => {
                             <div className="absolute top-12 left-0 w-full bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-xl shadow-lg z-50 max-h-72 overflow-y-auto animate-fade-in">
                                 {filteredSuggestions.length > 0 ? (
                                     filteredSuggestions.map((opt) => (
-                                        <a
+                                        <Link
                                             key={opt.id + '-' + opt.group}
                                             href={opt.href}
                                             className="block px-5 py-2 hover:bg-gray-100 dark:hover:bg-neutral-800 text-gray-900 dark:text-gray-100 text-[1.1rem] rounded-xl"
@@ -148,7 +158,7 @@ const Navbar = () => {
                                         >
                                             <span className="font-semibold text-primary mr-2">{opt.label}</span>
                                             <span className="text-xs text-gray-500 dark:text-gray-400">({opt.group})</span>
-                                        </a>
+                                        </Link>
                                     ))
                                 ) : (
                                     <div className="px-5 py-2 text-gray-500 dark:text-gray-400">Sin resultados</div>

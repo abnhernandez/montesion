@@ -1,15 +1,11 @@
-'use client'
+ 'use client'
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/auth-context";
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from '@/lib/supabase-client';
 import BarranavAula from "@/components/aula/barranav";
 import { Download, Star } from "lucide-react";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const supabase = createClient(supabaseUrl, supabaseKey);
 
 type Certificado = {
   id: string;
@@ -19,6 +15,10 @@ type Certificado = {
   codigo: string;
   nombre_usuario: string;
   descarga_url?: string;
+};
+
+type UserMetadata = {
+  nombre?: string;
 };
 
 const categorias = [
@@ -50,14 +50,18 @@ export default function MisCertificadosPage() {
     async function cargarCertificados() {
       setLoading(true);
       setError(null);
-      try {
-        const { data: { user } } = await supabase.auth.getUser();
-        const userId = user?.id;
 
-        if (!userId) {
+      try {
+        // Esperar a que auth esté listo
+        if (authLoading) return;
+
+        if (!user) {
           setError('Usuario no autenticado');
+          setLoading(false);
           return;
         }
+
+        const userId = user.id;
 
         // Consultar certificados del usuario
         const { data, error } = await supabase
@@ -67,24 +71,27 @@ export default function MisCertificadosPage() {
 
         if (error) throw error;
 
+        const metadata = (user.user_metadata as UserMetadata | undefined) || {};
         const mapeados: Certificado[] = (data || []).map((c: Record<string, unknown>) => ({
           id: String(c.id),
           titulo: String(c.titulo || c.title),
           tipo: (c.tipo as 'curso' | 'bootcamp' | 'ruta' | 'replay' | 'evento' | 'laboratorio') || 'curso',
           fecha: String(c.fecha_completado || c.fecha),
           codigo: String(c.codigo_certificado || c.codigo),
-          nombre_usuario: String(c.nombre_usuario || user.user_metadata?.nombre || 'Usuario'),
-          descarga_url: String(c.descarga_url || c.url_descarga),
+          nombre_usuario: String(c.nombre_usuario || metadata.nombre || 'Usuario'),
+          descarga_url: String(c.descarga_url || c.url_descarga || ''),
         }));
 
         setCertificados(mapeados);
-      } catch {
+      } catch (err) {
+        console.error('cargarCertificados error', err);
         setError('No se pudieron cargar los certificados.');
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     }
     cargarCertificados();
-  }, []);
+  }, [user, authLoading]);
 
   const certificadosFiltrados = categoriaActiva === 'todos' 
     ? certificados 

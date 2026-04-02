@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { Database } from '@/types/supabase'
+import { supabase } from '@/lib/supabase-client'
 
 
 
@@ -15,7 +14,6 @@ interface Payment {
 export default function Pagos() {
     const [payments, setPayments] = useState<Payment[]>([])
     const [loading, setLoading] = useState(true)
-    const supabase = createClientComponentClient<Database>()
 
     useEffect(() => {
         const fetchPayments = async () => {
@@ -40,7 +38,7 @@ export default function Pagos() {
         }
 
         fetchPayments()
-    }, [supabase])
+    }, [])
 
     if (loading) {
         return <div>Cargando pagos...</div>

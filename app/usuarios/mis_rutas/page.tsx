@@ -3,13 +3,9 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/auth-context";
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from '@/lib/supabase-client';
 import RutasAprendizaje, { type RutaAprendizaje } from "@/components/aula/rutasaprendizaje";
 import BarranavAula from "@/components/aula/barranav";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const supabase = createClient(supabaseUrl, supabaseKey);
 
 export default function MisRutasPage() {
   const router = useRouter();
@@ -30,17 +26,22 @@ export default function MisRutasPage() {
       setLoading(true);
       setError(null);
       try {
-        const { data: auth } = await supabase.auth.getUser();
-        const userId = auth.user?.id;
+        // Esperar a que auth esté listo
+        if (authLoading) return;
+
+        if (!user) {
+          // No hay usuario autenticado: cargar catálogo general
+          // 1) Intentar obtener rutas específicas del usuario (si la tabla existe) solo si hay user
+        }
 
         // 1) Intentar obtener rutas específicas del usuario, si existe tabla user-scoped
         let rutasUsuario: Record<string, unknown>[] | null = null;
 
-        if (userId) {
+        if (user?.id) {
           const { data, error } = await supabase
             .from('rutas_aprendizaje_usuarios')
             .select('*')
-            .eq('user_id', userId);
+            .eq('user_id', user.id);
           if (!error) rutasUsuario = data as Record<string, unknown>[];
         }
 
@@ -66,7 +67,7 @@ export default function MisRutasPage() {
       setLoading(false);
     }
     cargarRutas();
-  }, []);
+  }, [user, authLoading]);
 
   // Si no hay usuario, no renderizar nada
   if (!user) return null;
