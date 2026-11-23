@@ -11,17 +11,17 @@ const logoUrl = supabaseUrl
 const redesSociales = [
   {
     nombre: "Instagram",
-    href: "",
+    href: "https://instagram.com/montesionoaxaca",
     color: "bg-gradient-to-tr from-[#FEDA75] via-[#D62976] to-[#4F5BD5]",
   },
   {
     nombre: "Facebook",
-    href: "",
+    href: "https://facebook.com/montesionoax",
     color: "bg-[#1877F2]",
   },
   {
     nombre: "YouTube",
-    href: "",
+    href: "https://youtube.com/@montesionoaxaca",
     color: "bg-[#FF0000]",
   },
 ];
