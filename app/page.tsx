@@ -2,8 +2,15 @@ import ServicesSection from "@/components/ServicesSection";
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 import VisitSection from "@/components/VisitSection";
 import ReviewsSection from "@/components/ReviewsSection";
+import type { Metadata } from "next";
 
 export const instant = false;
+
+export const metadata: Metadata = {
+  verification: {
+    google: "ApdbPC4MvQspFzKc_vfDzBxCOQa-_vQKhZO61Qy_auc",
+  },
+};
 
 const videoUrl = supabaseUrl
   ? `${supabaseUrl}/storage/v1/object/public/media/hero.mp4`
