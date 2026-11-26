@@ -1,0 +1,3 @@
+import {z} from 'zod';import {parsePhoneNumberFromString} from 'libphonenumber-js';
+export function ageOf(s:string){if(!/^\d{4}-\d{2}-\d{2}$/.test(s))return -1;const d=new Date(s+'T00:00:00Z'),n=new Date();if(!Number.isFinite(+d)||d.toISOString().slice(0,10)!==s||d>n)return -1;return n.getUTCFullYear()-d.getUTCFullYear()-((n.toISOString().slice(5,10)<s.slice(5))?1:0)}
+export const schema=z.object({name:z.string().trim().min(2).max(120),birth:z.string().refine(s=>ageOf(s)>=12&&ageOf(s)<=125),civil:z.literal('soltero'),country:z.string().regex(/^[A-Z]{2}$/),email:z.email().max(254),phone:z.string().max(25).refine(s=>!!parsePhoneNumberFromString(s)?.isValid()&&s.startsWith('+')),consent:z.literal(true),token:z.string().min(1).max(4096)}).strict();
