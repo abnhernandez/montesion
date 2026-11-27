@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { mobile } from './lib/device';
+import { mobile } from '../../lib/device';
 
 export function proxy(r: NextRequest) {
 	if (mobile(r.headers)) return NextResponse.next();
